@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.EditProfileFragment">
+        <ScrollView
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:fillViewport="true"
+            android:scrollbars="vertical"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Profilio informacija"
+                    android:textAlignment="center"
+                    android:textSize="30sp" />
+                <TableLayout
+                    android:id="@+id/tableLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/firstName_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Vardas" />
+
+                        <EditText
+                            android:id="@+id/firstName_et"
+                            android:layout_width="181dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="textPersonName"
+                            android:text="Jonas" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/lastName_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Pavardė" />
+
+                        <EditText
+                            android:id="@+id/lastName_et"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="textPersonName"
+                            android:text="Jonaitis" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/username_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Vartotojo vardas" />
+
+                        <EditText
+                            android:id="@+id/username_et"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="textPersonName"
+                            android:text="vartotojas1" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/photo_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingStart="30dp"
+                            android:text="Nuotrauka" />
+
+                        <EditText
+                            android:id="@+id/photo_et"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="textPersonName"
+                            android:text="photo.jpg" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/address_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Adresas" />
+
+                        <EditText
+                            android:id="@+id/address_et"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="textPersonName"
+                            android:text="Liepu g. 85-22, Kaunas" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/diet_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Mityba" />
+
+                        <Spinner
+                            android:id="@+id/diet_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/dietChange_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Mitybos keitimas į" />
+
+                        <Spinner
+                            android:id="@+id/dietChange_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:id="@+id/breakfastTime_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Pusryčių laikas" />
+
+                        <TimePicker
+                            android:id="@+id/breakfast_dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:timePickerMode="spinner"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:id="@+id/lunckTime_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Pietų laikas" />
+
+                        <TimePicker
+                            android:id="@+id/lunch_dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:timePickerMode="spinner"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:id="@+id/dinnerTime_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Vakarienės laikas" />
+
+                        <TimePicker
+                            android:id="@+id/dinner_dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:timePickerMode="spinner"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:id="@+id/wakingUpTime_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Atsibudimo laikas" />
+
+                        <TimePicker
+                            android:id="@+id/wakingUpTime_dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:timePickerMode="spinner"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:id="@+id/sleepingTime_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Miego laikas" />
+
+                        <TimePicker
+                            android:id="@+id/sleepingTime_dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:timePickerMode="spinner"/>
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:id="@+id/transport_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Transportas" />
+
+                        <RadioGroup
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                            <RadioButton
+                                android:id="@+id/car_rb"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Automobilis" />
+
+                            <RadioButton
+                                android:id="@+id/bicycle_rb"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Dviratis" />
+                        </RadioGroup>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:id="@+id/workingDayTrips_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Darbo dienų kelionių kiekis" />
+
+                        <EditText
+                            android:id="@+id/workingDayTrips_etn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:text="5"/>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:id="@+id/workingDayTransport_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Darbo dienų kelionių transportas" />
+
+                        <Spinner
+                            android:id="@+id/workingDayTransport_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:id="@+id/weekendTrips_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Savaitgalio kelionių kiekis" />
+
+                        <EditText
+                            android:id="@+id/weekendTrips_etn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:text="5"/>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:id="@+id/weekendDayTransport_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Savaitgalio kelionių transportas" />
+
+                        <Spinner
+                            android:id="@+id/weekendDayTransport_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:id="@+id/takingShowerPerWeek_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Maudymosi duše kiekis per savaitę" />
+
+                        <EditText
+                            android:id="@+id/takingShowerPerWeek_etn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:text="5"/>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+
+                        <TextView
+                            android:id="@+id/showerTime_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Vidutinis maudymosi duše laikas" />
+
+                        <EditText
+                            android:id="@+id/showerTime_etn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:text="5"/>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/takingBathPerWeek_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="Maudymosi vonioj kiekis per savaitę" />
+
+                        <EditText
+                            android:id="@+id/takingBathPerWeek_etn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:text="5"/>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:id="@+id/update_b"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#4CAF50"
+
+                            android:text="Saugoti"
+                            android:textSize="18sp" />
+
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
