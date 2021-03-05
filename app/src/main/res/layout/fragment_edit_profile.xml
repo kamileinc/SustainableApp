@@ -56,8 +56,7 @@
                             android:layout_width="181dp"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="textPersonName"
-                            android:text="Jonas" />
+                            android:inputType="textPersonName" />
                     </TableRow>
 
                     <TableRow
@@ -77,29 +76,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="textPersonName"
-                            android:text="Jonaitis" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/username_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:paddingLeft="30dp"
-                            android:text="Vartotojo vardas" />
-
-                        <EditText
-                            android:id="@+id/username_et"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:inputType="textPersonName"
-                            android:text="vartotojas1" />
+                            android:inputType="textPersonName" />
                     </TableRow>
 
                     <TableRow
@@ -119,8 +96,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="textPersonName"
-                            android:text="photo.jpg" />
+                            android:inputType="textPersonName" />
                     </TableRow>
 
                     <TableRow
@@ -140,8 +116,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="textPersonName"
-                            android:text="Liepu g. 85-22, Kaunas" />
+                            android:inputType="textPersonName" />
                     </TableRow>
 
                     <TableRow
@@ -325,8 +300,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="number"
-                            android:text="5"/>
+                            android:inputType="number" />
 
                     </TableRow>
 
@@ -366,8 +340,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="number"
-                            android:text="5"/>
+                            android:inputType="number" />
 
                     </TableRow>
 
@@ -407,8 +380,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="number"
-                            android:text="5"/>
+                            android:inputType="number" />
 
                     </TableRow>
 
@@ -429,8 +401,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="number"
-                            android:text="5"/>
+                            android:inputType="number" />
 
                     </TableRow>
 
@@ -451,8 +422,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="number"
-                            android:text="5"/>
+                            android:inputType="number" />
 
                     </TableRow>
 

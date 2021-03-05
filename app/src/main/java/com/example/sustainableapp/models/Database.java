@@ -23,6 +23,8 @@ public class Database extends Application {
     ArrayList userList = new ArrayList<>();
     String u ="";
     String p = "";
+    String id = "";
+    User us;
     //REGISTER
     public boolean saveUser(User u) {
         try {
@@ -180,5 +182,163 @@ public class Database extends Application {
             }
         });
     }
+    public void getProfileData(final String userID) {
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("users");
+            //u = username;
+            //p = password;
+            id = userID;
+            ArrayList<String> err= null;
+            //Log.i("mano", "getprofiledata database");
+            readData3(new FireBaseCallback() {
+                @Override
+                public void onCallback(List<User> list) {
+                    if (list.isEmpty()){
+                        UserController.checkUserNotFound(list, err, "profile");
+                        Log.i("mano", "profilis nerastas");
+                    }
+                    else {
+                        Log.i("mano", "profilis rastas");
+                        UserController.checkUserFound(list, err, "profile");
+                    }
+                }
+            });
+        }
+        catch(Error e) {
+        }
+    }
+    public void getProfileDataForEdit(final String userID) {
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("users");
+            //u = username;
+            //p = password;
+            id = userID;
+            ArrayList<String> err= null;
+            //Log.i("mano", "getprofiledata database");
+            readData3(new FireBaseCallback() {
+                @Override
+                public void onCallback(List<User> list) {
+                    if (list.isEmpty()){
+                        UserController.checkUserNotFound(list, err, "profileEdit");
+                        Log.i("mano", "profilis nerastas");
+                    }
+                    else {
+                        Log.i("mano", "profilis rastas");
+                        UserController.checkUserFound(list, err, "profileEdit");
+                    }
+                }
+            });
+        }
+        catch(Error e) {
+        }
+    }
+    public void readData3(final FireBaseCallback fireBaseCallback){
+        //Log.i("mano", "getprofiledata readdata3: " + id);
+        Query findProfile = reference.orderByChild("id").equalTo(id);
+        findProfile.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    //Log.i("mano", "snapshot exists");
+                    for(DataSnapshot ds : snapshot.getChildren()) {
+                        String idFromDB = ds.getKey();
+                        User  user = ds.getValue(User.class);
+                        String firstNameFromDB = user.getFirstName();
+                        String lastNameFromDB = user.getLastName();
+                        String usernameFromDB = user.getUsername();
+                        String photoFromDB = user.getPhoto();
+                        String addressFromDB = user.getAddress();
+                        String dietFromDB = user.getDiet();
+                        String dietChangeFromDB = user.getDietChange();
+                        String breakfastTimeFromDB = user.getBreakfastTime();
+                        String lunchTimeFromDB = user.getLunchTime();
+                        String dinnerTimeFromDB = user.getDinnerTime();
+                        String wakingUpTimeFromDB = user.getWakingUpTime();
+                        String sleepingTimeFromDB = user.getSleepingTime();
+                        String transportFromDB = user.getTransport();
+                        String workingDayTripsFromDB = user.getWorkingDayTrips();
+                        String workingDayTransportFromDB = user.getWorkingDayTransport();
+                        String weekendDayTripsFromDB = user.getWeekendDayTrips();
+                        String weekendDayTransportFromDB = user.getWeekendDayTransport();
+                        String takingShowerPerWeekFromDB = user.getTakingShowerPerWeek();
+                        String showerTimeFromDB = user.getShowerTime();
+                        String takingBathPerWeekFromDB = user.getTakingBathPerWeek();
 
+                        //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
+
+                        User us = new User(idFromDB, firstNameFromDB, lastNameFromDB, usernameFromDB, photoFromDB, addressFromDB,
+                                dietFromDB, dietChangeFromDB, breakfastTimeFromDB, lunchTimeFromDB, dinnerTimeFromDB,
+                                wakingUpTimeFromDB, sleepingTimeFromDB, transportFromDB, workingDayTripsFromDB, workingDayTransportFromDB,
+                                weekendDayTripsFromDB, weekendDayTransportFromDB, takingShowerPerWeekFromDB, showerTimeFromDB, takingBathPerWeekFromDB, "");
+                        // Log.i("mano", "" + us.toString());
+                        userList = new ArrayList<>();
+                        userList.add(us);
+                    }
+                }
+                else {
+                    //Log.i("mano", "snapshot DOES NOT exist");
+                }
+                fireBaseCallback.onCallback(userList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void editUser(User user) {
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("users");
+            us = user;
+            editData(new FireBaseCallback2() {
+                @Override
+                public void onCallback() {
+                    UserController.checkUserEdited();
+                }
+            });
+        }
+        catch(Error e) {
+        }
+    }
+    public void editData(final FireBaseCallback2 fireBaseCallback2){
+        Query query = reference.orderByChild("id").equalTo(us.getId());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for(DataSnapshot editableUser: snapshot.getChildren()){
+                    // broccoli.getRef().child("price").setValue(20);
+                    editableUser.getRef().child("firstName").setValue(us.getFirstName());
+                    editableUser.getRef().child("lastName").setValue(us.getLastName());
+                    editableUser.getRef().child("photo").setValue(us.getPhoto());
+                    editableUser.getRef().child("diet").setValue(us.getDiet());
+                    editableUser.getRef().child("dietChange").setValue(us.getDietChange());
+                    editableUser.getRef().child("breakfastTime").setValue(us.getBreakfastTime());
+                    editableUser.getRef().child("lunchTime").setValue(us.getLunchTime());
+                    editableUser.getRef().child("dinnerTime").setValue(us.getDinnerTime());
+                    editableUser.getRef().child("wakingUpTime").setValue(us.getWakingUpTime());
+                    editableUser.getRef().child("sleepingTime").setValue(us.getSleepingTime());
+                    editableUser.getRef().child("workingDayTrips").setValue(us.getWorkingDayTrips());
+                    editableUser.getRef().child("workingDayTransport").setValue(us.getWorkingDayTransport());
+                    editableUser.getRef().child("weekendDayTrips").setValue(us.getWeekendDayTrips());
+                    editableUser.getRef().child("weekendDayTransport").setValue(us.getWeekendDayTransport());
+                    editableUser.getRef().child("takingShowerPerWeek").setValue(us.getTakingShowerPerWeek());
+                    editableUser.getRef().child("showerTime").setValue(us.getShowerTime());
+                    editableUser.getRef().child("takingBathPerWeek").setValue(us.getTakingBathPerWeek());
+                }
+                fireBaseCallback2.onCallback();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                throw databaseError.toException();
+            }
+        });
+    }
+    public interface FireBaseCallback2 {
+        void onCallback();
+    }
 }

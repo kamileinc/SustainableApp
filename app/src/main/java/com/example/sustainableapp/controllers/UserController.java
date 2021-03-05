@@ -5,7 +5,9 @@ import android.util.Log;
 
 import com.example.sustainableapp.models.Database;
 import com.example.sustainableapp.models.User;
+import com.example.sustainableapp.views.EditProfileFragment;
 import com.example.sustainableapp.views.LoginActivity;
+import com.example.sustainableapp.views.ProfileFragment;
 import com.example.sustainableapp.views.RegisterActivity;
 
 import java.nio.charset.StandardCharsets;
@@ -27,7 +29,16 @@ public class UserController extends Application {
         else if (activity.equals("register")) {
             RegisterActivity.checkUserFound(list, errors);
         }
+        else if (activity.equals("profile")) {
+            ProfileFragment.checkUserFound(list);
+        }
+        else if (activity.equals("profileEdit")) {
+            EditProfileFragment.checkUserFound(list);
+        }
 
+    }
+    public static void checkUserEdited() {
+        EditProfileFragment.checkUserEdited();
     }
 
     public static void checkUserNotFound(List<User> list, ArrayList<String> errors, String activity) {
@@ -36,6 +47,12 @@ public class UserController extends Application {
         }
         else if (activity.equals("register")) {
             RegisterActivity.checkUserNotFound(list, errors);
+        }
+        else if (activity.equals("profile")) {
+            ProfileFragment.checkUserNotFound(list);
+        }
+        else if (activity.equals("profileEdit")) {
+            EditProfileFragment.checkUserNotFound(list);
         }
     }
 
@@ -53,7 +70,7 @@ public class UserController extends Application {
         }
         return false;
     }
-    public List<String> validateUser(User u, String pass2) {
+    public List<String> validateUser(User u, String pass2, String purpose) {
         ArrayList<String> errors = new ArrayList();
         errors.add(validateString(u.getFirstName()));
         errors.add(validateString(u.getLastName()));
@@ -71,20 +88,21 @@ public class UserController extends Application {
         errors.add(validateInt(u.getShowerTime()));
         errors.add(validateInt(u.getTakingBathPerWeek()));
         //slaptazodis
-        errors.add(validatePassword(u.getPassword(), pass2));
+        if (!purpose.equals("edit")) {
+            errors.add(validatePassword(u.getPassword(), pass2));
         /*
         for (int i = 0; i <al.size(); i++) {
             if (!validateString((String) al.get(i))) {
                 return false;
             }
         }*/
-        if (validateUsername(u.getUsername()).equals("")) {
-            Database db = new Database();
-            errors.add(validateUsername(u.getUsername()));
-            db.findUserByLogin(u.getUsername(), errors);
-        }
-        else {
-            errors.add(validateUsername(u.getUsername()));
+            if (validateUsername(u.getUsername()).equals("")) {
+                Database db = new Database();
+                errors.add(validateUsername(u.getUsername()));
+                db.findUserByLogin(u.getUsername(), errors);
+            } else {
+                errors.add(validateUsername(u.getUsername()));
+            }
         }
         //username
         return errors;
@@ -135,8 +153,8 @@ public class UserController extends Application {
             return "";
         }
     }
-    private String validateTime(String s, String s2) {
-        String[] sArr = s.split(":", 1);
+    private String validateTimes(String s, String s2) {
+        String[] sArr = s.split(":", 3);
         int h1 = Integer.parseInt(sArr[0]);
         int m1 = Integer.parseInt(sArr[1]);
         String[] s2Arr = s2.split(":", 1);
@@ -159,6 +177,38 @@ public class UserController extends Application {
         else {
             return "";
         }
+    }
+    public String formatTime(String s) {
+        String[] sArr = s.split(":", 3);
+        int h1 = Integer.parseInt(sArr[0]);
+        int m1 = Integer.parseInt(sArr[1]);
+        String result = "";
+
+        if (sArr[0].length()==1) {
+            result = result + "0" + sArr[0] + ":";
+        }
+        else if (sArr[0].length()==2) {
+            result = result + sArr[0] + ":";
+        }
+        if (sArr[1].length()==1) {
+            result = result + "0" + sArr[1];
+        }
+        else if (sArr[1].length()==2) {
+            result = result + sArr[1];
+        }
+
+        return result;
+
+    }
+    public ArrayList<Integer> getHourAndMinutes(String s) {
+        ArrayList<Integer> arr = new ArrayList();
+        String[] sArr = s.split(":", 3);
+        int h1 = Integer.parseInt(sArr[0]);
+        int m1 = Integer.parseInt(sArr[1]);
+        arr.add(h1);
+        arr.add(m1);
+        return arr;
+
     }
     public boolean passwordWithSpecChar(String s) {
         Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
@@ -317,7 +367,8 @@ public class UserController extends Application {
     }
     public void validateUserForAddingToDB(User u, String pass2) {
         //&& validatePassword(u.getPassword())
-        List<String> errors = validateUser(u, pass2);
+        String purpose = "create";
+        List<String> errors = validateUser(u, pass2, purpose);
             Log.i("mano", "validated, username:" + u.getUsername());
     }
 /*
@@ -347,6 +398,31 @@ public class UserController extends Application {
         Log.i("mano", "username: " + un + ", pass: " + password.length());
         Log.i("mano", "Check user in db2");
         db.findUserByLogin(un, p, errors);
+        return true;
+
+
+    }
+    public boolean getProfile(String userId) {
+        //Log.i("mano", "getprofiledata uc");
+        Database db = new Database();
+        final String id = userId;
+        db.getProfileData(id);
+        return true;
+
+
+    }
+    public boolean getProfileForEdit(String userId) {
+        //Log.i("mano", "getprofiledata uc");
+        Database db = new Database();
+        final String id = userId;
+        db.getProfileDataForEdit(id);
+        return true;
+
+
+    }
+    public boolean editUser(User u) {
+        Database db = new Database();
+        db.editUser(u);
         return true;
 
 
