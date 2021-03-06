@@ -30,6 +30,7 @@ public class UserActivity extends AppCompatActivity {
         userID = intent.getStringExtra("userID");
         Log.i("mano", "activity: " + userID);
         openFragment(new WheelFragment());
+        //openFragment(new EditProfileFragment());
     }
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -40,6 +41,7 @@ public class UserActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -70,6 +72,7 @@ public class UserActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i ("mano", "pasirinktas menu komponentas");

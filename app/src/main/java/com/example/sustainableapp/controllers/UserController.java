@@ -77,10 +77,11 @@ public class UserController extends Application {
         errors.add(validateString(u.getPhoto()));
         errors.add(validateString(u.getAddress()));
         // laikai
-        //errors.add(validateTime(u.getBreakfastTime(), u.getLunchTime()));
-        //errors.add(validateTime(u.getLunchTime(), u.getDinnerTime()));
-        errors.add("");
-        errors.add("");
+        errors.add(validateTimes(u.getBreakfastTime(), u.getLunchTime()));
+        errors.add(validateTimes(u.getLunchTime(), u.getDinnerTime()));
+        errors.add(validateSleepingTime(u.getWakingUpTime(), u.getSleepingTime()));
+        //errors.add("");
+        //errors.add("");
         //skaičiai
         errors.add(validateInt(u.getWorkingDayTrips()));
         errors.add(validateInt(u.getWeekendDayTrips()));
@@ -157,9 +158,11 @@ public class UserController extends Application {
         String[] sArr = s.split(":", 3);
         int h1 = Integer.parseInt(sArr[0]);
         int m1 = Integer.parseInt(sArr[1]);
-        String[] s2Arr = s2.split(":", 1);
-        int h2 = Integer.parseInt(sArr[0]);
-        int m2 = Integer.parseInt(sArr[1]);
+        String[] s2Arr = s2.split(":", 3);
+        int h2 = Integer.parseInt(s2Arr[0]);
+        int m2 = Integer.parseInt(s2Arr[1]);
+        Log.i("laikas", "h1 = " + h1 + ", m1 = " + m1);
+        Log.i("laikas", "h2 = " + h2 + ", m2 = " + m2);
         if (h2 <h1) {
             return "Laikas negali būt mažesnis už praeitą įvestą laiką";
         }
@@ -173,6 +176,23 @@ public class UserController extends Application {
             else {
                 return "";
             }
+        }
+        else {
+            return "";
+        }
+    }
+    private String validateSleepingTime(String s, String s2) {
+        String[] sArr = s.split(":", 3);
+        int h1 = Integer.parseInt(sArr[0]);
+        int m1 = Integer.parseInt(sArr[1]);
+        String[] s2Arr = s2.split(":", 3);
+        int h2 = Integer.parseInt(s2Arr[0]);
+        int m2 = Integer.parseInt(s2Arr[1]);
+        Log.i("laikas", "h1 = " + h1 + ", m1 = " + m1);
+        Log.i("laikas", "h2 = " + h2 + ", m2 = " + m2);
+
+        if (h2==h1 && m2 == m1) {
+            return "Laikas negali sutapti su praeitu įvestu laiku";
         }
         else {
             return "";

@@ -321,6 +321,7 @@ public class Database extends Application {
                     editableUser.getRef().child("dinnerTime").setValue(us.getDinnerTime());
                     editableUser.getRef().child("wakingUpTime").setValue(us.getWakingUpTime());
                     editableUser.getRef().child("sleepingTime").setValue(us.getSleepingTime());
+                    editableUser.getRef().child("transport").setValue(us.getTransport());
                     editableUser.getRef().child("workingDayTrips").setValue(us.getWorkingDayTrips());
                     editableUser.getRef().child("workingDayTransport").setValue(us.getWorkingDayTransport());
                     editableUser.getRef().child("weekendDayTrips").setValue(us.getWeekendDayTrips());

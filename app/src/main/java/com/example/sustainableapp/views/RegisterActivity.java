@@ -1,6 +1,7 @@
 package com.example.sustainableapp.views;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -28,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     Spinner dietS, dietChangeS, workingDayTransportS, weekendDayTransportS;
     String breakfastTime, lunchTime, dinnerTime, wakingUpTime, sleepingTime;
     TimePicker breakfast_dp, lunch_dp, dinner_dp, wakingUp_dp, sleeping_dp;
+    TextView lunchTime_tv, dinnerTime_tv, sleepingTime_tv;
     int hour, minutes;
     private static ArrayList<String>  errors;
     private static IntVariable foundUser;
@@ -37,6 +40,9 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        lunchTime_tv = findViewById(R.id.lunchTime_tv);
+        dinnerTime_tv = findViewById(R.id.dinnerTime_tv);
+        sleepingTime_tv = findViewById(R.id.sleepingTime_tv);
         firstName_et = findViewById(R.id.firstName_et);
         lastName_et = findViewById(R.id.lastName_et);
         username_et = findViewById(R.id.username_et);
@@ -110,10 +116,8 @@ public class RegisterActivity extends AppCompatActivity {
                         howManyErr = howManyErr + 1;
                     }
                 }
-                if (howManyErr>0) {
-                    showErrors();
-                }
-                else {
+                showErrors();
+                if (howManyErr==0) {
                     if (uc.addUserToDB(userData)) {
                         Toast.makeText(getApplicationContext(), "Vartotojas sėkmingai užregistruotas", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -139,34 +143,52 @@ public class RegisterActivity extends AppCompatActivity {
         if (!errors.get(3).equals("")) {
             address_et.setError(errors.get(3));
         }
-        /*
+
         if (!errors.get(4).equals("")) {
-            lunch_dp.setError(errors.get(4));
+            lunchTime_tv.setTextColor(Color.RED);
+            lunchTime_tv.setText("Pietų laikas: \n" + errors.get(4));
+        }
+        else {
+            lunchTime_tv.setTextColor(Color.GRAY);
+            lunchTime_tv.setText("Pietų laikas");
         }
         if (!errors.get(5).equals("")) {
-            dinnerTime.setText(errors.get(5));
+            dinnerTime_tv.setTextColor(Color.RED);
+            dinnerTime_tv.setText("Vakarienės laikas: \n" + errors.get(5));
         }
-        */
+        else {
+            dinnerTime_tv.setTextColor(Color.GRAY);
+            dinnerTime_tv.setText("Vakarienės laikas");
+        }
         if (!errors.get(6).equals("")) {
-            workingDayTrips_etn.setError(errors.get(6));
+            sleepingTime_tv.setTextColor(Color.RED);
+            sleepingTime_tv.setText("Miego laikas: \n" + errors.get(6));
         }
+        else {
+            sleepingTime_tv.setTextColor(Color.GRAY);
+            sleepingTime_tv.setText("Miego laikas");
+        }
+
         if (!errors.get(7).equals("")) {
-            weekendTrips_etn.setError(errors.get(7));
+            workingDayTrips_etn.setError(errors.get(7));
         }
         if (!errors.get(8).equals("")) {
-            takingShowerPerWeek_etn.setError(errors.get(8));
+            weekendTrips_etn.setError(errors.get(8));
         }
         if (!errors.get(9).equals("")) {
-            showerTime_etn.setError(errors.get(9));
+            takingShowerPerWeek_etn.setError(errors.get(9));
         }
         if (!errors.get(10).equals("")) {
-            takingBathPerWeek_etn.setError(errors.get(10));
+            showerTime_etn.setError(errors.get(10));
         }
         if (!errors.get(11).equals("")) {
-            password1_et.setError(errors.get(11));
+            takingBathPerWeek_etn.setError(errors.get(11));
         }
         if (!errors.get(12).equals("")) {
-            username_et.setError(errors.get(12));
+            password1_et.setError(errors.get(12));
+        }
+        if (!errors.get(13).equals("")) {
+            username_et.setError(errors.get(13));
         }
     }
     public void registerUser(View view) {

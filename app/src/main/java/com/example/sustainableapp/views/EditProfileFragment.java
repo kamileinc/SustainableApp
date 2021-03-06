@@ -1,5 +1,6 @@
 package com.example.sustainableapp.views;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -42,6 +43,7 @@ public class EditProfileFragment extends Fragment {
     Spinner dietS, dietChangeS, workingDayTransportS, weekendDayTransportS;
     String breakfastTime, lunchTime, dinnerTime, wakingUpTime, sleepingTime;
     TimePicker breakfast_dp, lunch_dp, dinner_dp, wakingUp_dp, sleeping_dp;
+    TextView lunchTime_tv, dinnerTime_tv, sleepingTime_tv;
     int hour, minutes;
     public EditProfileFragment() {
         // Required empty public constructor
@@ -112,7 +114,9 @@ public class EditProfileFragment extends Fragment {
                 if (car == true && bicycle == true) {
                     transport = "4";
                 }
-
+                Log.i("mano", "transport: " + transport);
+                Log.i("mano", "car: " + car);
+                Log.i("mano", "bicycle: " + bicycle);
                 String workingDayTrips = workingDayTrips_etn.getText().toString();
                 String weekendDayTrips = weekendTrips_etn.getText().toString();
                 String takingShowerPerWeek = takingShowerPerWeek_etn.getText().toString();
@@ -255,6 +259,9 @@ public class EditProfileFragment extends Fragment {
         return view;
     }
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        lunchTime_tv = getView().findViewById(R.id.lunchTime_tv);
+        dinnerTime_tv = getView().findViewById(R.id.dinnerTime_tv);
+        sleepingTime_tv = getView().findViewById(R.id.sleepingTime_tv);
         firstName_et = getView().findViewById(R.id.firstName_et);
         lastName_et = getView().findViewById(R.id.lastName_et);
         username_et = getView().findViewById(R.id.username_et);
@@ -341,6 +348,7 @@ public class EditProfileFragment extends Fragment {
         bundle.putString("userID", userID);
         fragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.container, fragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
     public void showErrors() {
@@ -356,28 +364,45 @@ public class EditProfileFragment extends Fragment {
         if (!errors.get(3).equals("")) {
             address_et.setError(errors.get(3));
         }
-        /*
+
         if (!errors.get(4).equals("")) {
-            lunch_dp.setError(errors.get(4));
+            lunchTime_tv.setTextColor(Color.RED);
+            lunchTime_tv.setText("Pietų laikas: \n" + errors.get(4));
+        }
+        else {
+            lunchTime_tv.setTextColor(Color.GRAY);
+            lunchTime_tv.setText("Pietų laikas");
         }
         if (!errors.get(5).equals("")) {
-            dinnerTime.setText(errors.get(5));
+            dinnerTime_tv.setTextColor(Color.RED);
+            dinnerTime_tv.setText("Vakarienės laikas: \n" + errors.get(5));
         }
-        */
+        else {
+            dinnerTime_tv.setTextColor(Color.GRAY);
+            dinnerTime_tv.setText("Vakarienės laikas");
+        }
         if (!errors.get(6).equals("")) {
-            workingDayTrips_etn.setError(errors.get(6));
+            sleepingTime_tv.setTextColor(Color.RED);
+            sleepingTime_tv.setText("Miego laikas: \n" + errors.get(6));
+        }
+        else {
+            sleepingTime_tv.setTextColor(Color.GRAY);
+            sleepingTime_tv.setText("Miego laikas");
         }
         if (!errors.get(7).equals("")) {
-            weekendTrips_etn.setError(errors.get(7));
+            workingDayTrips_etn.setError(errors.get(7));
         }
         if (!errors.get(8).equals("")) {
-            takingShowerPerWeek_etn.setError(errors.get(8));
+            weekendTrips_etn.setError(errors.get(8));
         }
         if (!errors.get(9).equals("")) {
-            showerTime_etn.setError(errors.get(9));
+            takingShowerPerWeek_etn.setError(errors.get(9));
         }
         if (!errors.get(10).equals("")) {
-            takingBathPerWeek_etn.setError(errors.get(10));
+            showerTime_etn.setError(errors.get(10));
+        }
+        if (!errors.get(11).equals("")) {
+            takingBathPerWeek_etn.setError(errors.get(11));
         }
 
     }

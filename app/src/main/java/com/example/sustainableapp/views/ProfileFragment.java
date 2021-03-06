@@ -160,6 +160,7 @@ public class ProfileFragment extends Fragment {
         bundle.putString("userID", userID);
         fragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.container, fragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
     public static void checkUserFound(List<User> list) {
