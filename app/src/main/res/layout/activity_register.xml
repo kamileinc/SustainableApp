@@ -97,21 +97,49 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/photo_tv"
+                android:id="@+id/textView25"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="30"
                 android:paddingStart="30dp"
                 android:text="Nuotrauka" />
 
-            <EditText
-                android:id="@+id/photo_et"
+            <ImageButton
+                android:id="@+id/image_b"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="photo.jpg" />
+                android:layout_weight="50"
+                android:src="@drawable/ic_baseline_add_photo_alternate_24"
+                android:tint="#FFFFFF"
+                android:background="@drawable/roundcorner"/>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="-30" />
+
         </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="100" />
+
+            <ImageView
+                android:id="@+id/photo_iv"
+                android:layout_width="300px"
+                android:layout_height="300px"
+                android:layout_weight="-8"
+                android:src="@android:drawable/gallery_thumb"
+                app:srcCompat="@drawable/ic_launcher_background" />
+        </TableRow>
+
 
         <TableRow
             android:layout_width="match_parent"
@@ -266,36 +294,48 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:timePickerMode="spinner"/>
+
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/transport_tv"
-                android:layout_width="wrap_content"
+                android:id="@+id/transport_tv2"
+                android:layout_width="141dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="30dp"
                 android:text="Transportas" />
 
-            <RadioGroup
+            <CheckBox
+                android:id="@+id/car_cb"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="Automobilis" />
 
-                <RadioButton
-                    android:id="@+id/car_rb"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Automobilis" />
+        </TableRow>
 
-                <RadioButton
-                    android:id="@+id/bicycle_rb"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Dviratis" />
-            </RadioGroup>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/transport_tv3"
+                android:layout_width="141dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="30dp"
+                android:text="" />
+
+            <CheckBox
+                android:id="@+id/bicycle_cb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="Dviratis" />
 
         </TableRow>
 
@@ -503,7 +543,7 @@
                 android:id="@+id/register_b"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#4CAF50"
+                android:background="@drawable/roundcorner"
                 android:onClick="registerUser"
                 android:text="Užsiregistruoti"
                 android:textSize="18sp" />
