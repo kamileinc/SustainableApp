@@ -40,6 +40,33 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingStart="30dp"
+                    android:text="Nuotrauka" />
+
+                <ImageView
+                    android:id="@+id/photo_iv"
+                    android:layout_width="300px"
+                    android:layout_height="300px"
+                    android:layout_weight="1"
+                    android:src="@android:drawable/gallery_thumb"
+                    app:srcCompat="@drawable/ic_launcher_background" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="225px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </TableRow>
+            <TableRow
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -99,25 +126,7 @@
                     android:inputType="textPersonName" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/photo_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingStart="30dp"
-                    android:text="Nuotrauka" />
-
-                <TextView
-                    android:id="@+id/photo_et"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
-            </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
@@ -447,8 +456,7 @@
                     android:id="@+id/change_b"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#4CAF50"
-
+                    android:background="@drawable/roundcorner"
                     android:text="Keisti"
                     android:textSize="18sp" />
 

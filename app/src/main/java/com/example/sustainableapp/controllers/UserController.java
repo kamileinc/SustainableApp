@@ -1,6 +1,7 @@
 package com.example.sustainableapp.controllers;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.example.sustainableapp.models.Database;
@@ -20,8 +21,26 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserController extends Application {
-    //REIK PALIKT TIK checkUserFound??? *****************************************************************
+    public void uploadPhoto(Bitmap bitmap, String userId) {
+        Database db = new Database();
+        if (bitmap != null) {
+            db.uploadFile(bitmap, userId);
+        }
 
+    }
+    public static void checkPhotoReturnedToView(Bitmap bmp, String purpose) {
+        if (purpose.equals("editProfile")) {
+            EditProfileFragment.checkPhotoReturned(bmp);
+        }
+        else if (purpose.equals("viewProfile")) {
+            ProfileFragment.checkPhotoReturned(bmp);
+        }
+    }
+    public void loadImageForView(String imageName, String purpose) {
+        Database db = new Database();
+        db.getPhotoForView(imageName, purpose);
+
+    }
     public static void checkUserFound(List<User> list, ArrayList<String> errors, String activity) {
         if (activity.equals("login")) {
             LoginActivity.checkUserFound(list, errors);
@@ -34,6 +53,9 @@ public class UserController extends Application {
         }
         else if (activity.equals("profileEdit")) {
             EditProfileFragment.checkUserFound(list);
+        }
+        else if (activity.equals("getUserID")) {
+            RegisterActivity.checkUserIDFound(list, errors);
         }
 
     }
@@ -54,6 +76,11 @@ public class UserController extends Application {
         else if (activity.equals("profileEdit")) {
             EditProfileFragment.checkUserNotFound(list);
         }
+        else if (activity.equals("getUserID")) {
+            RegisterActivity.checkUserIDFound(list, errors);
+        }
+
+
     }
 
 /*
@@ -100,12 +127,18 @@ public class UserController extends Application {
             if (validateUsername(u.getUsername()).equals("")) {
                 Database db = new Database();
                 errors.add(validateUsername(u.getUsername()));
-                db.findUserByLogin(u.getUsername(), errors);
+                db.findUserByLogin(u.getUsername(), errors, purpose);
             } else {
                 errors.add(validateUsername(u.getUsername()));
             }
         }
         //username
+        return errors;
+    }
+    public List<String> findUserByUsername(String userName, String purpose) {
+        ArrayList<String> errors = new ArrayList();
+        Database db = new Database();
+        db.findUserByLogin(userName, errors, purpose);
         return errors;
     }
     private String validateString(String s) {
@@ -387,7 +420,7 @@ public class UserController extends Application {
     }
     public void validateUserForAddingToDB(User u, String pass2) {
         //&& validatePassword(u.getPassword())
-        String purpose = "create";
+        String purpose = "register";
         List<String> errors = validateUser(u, pass2, purpose);
             Log.i("mano", "validated, username:" + u.getUsername());
     }

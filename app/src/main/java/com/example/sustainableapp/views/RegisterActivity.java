@@ -1,18 +1,25 @@
 package com.example.sustainableapp.views;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sustainableapp.R;
@@ -21,32 +28,38 @@ import com.example.sustainableapp.models.BooVariable;
 import com.example.sustainableapp.models.IntVariable;
 import com.example.sustainableapp.models.User;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText firstName_et,lastName_et, username_et, photo_et, address_et, workingDayTrips_etn, weekendTrips_etn, takingShowerPerWeek_etn, showerTime_etn, takingBathPerWeek_etn, password1_et, password2_et;
-    RadioButton car_rb, bicycle_rb;
+    CheckBox car_cb, bicycle_cb;
     Spinner dietS, dietChangeS, workingDayTransportS, weekendDayTransportS;
     String breakfastTime, lunchTime, dinnerTime, wakingUpTime, sleepingTime;
     TimePicker breakfast_dp, lunch_dp, dinner_dp, wakingUp_dp, sleeping_dp;
     TextView lunchTime_tv, dinnerTime_tv, sleepingTime_tv;
+    ImageView photo_iv;
+    private static Bitmap bitmapToUpload;
     int hour, minutes;
     private static ArrayList<String>  errors;
     private static IntVariable foundUser;
     private static BooVariable notFoundUser;
+    private static BooVariable goToLogin;
     ArrayList userData = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        photo_iv = findViewById(R.id.photo_iv);
         lunchTime_tv = findViewById(R.id.lunchTime_tv);
         dinnerTime_tv = findViewById(R.id.dinnerTime_tv);
         sleepingTime_tv = findViewById(R.id.sleepingTime_tv);
         firstName_et = findViewById(R.id.firstName_et);
         lastName_et = findViewById(R.id.lastName_et);
         username_et = findViewById(R.id.username_et);
-        photo_et = findViewById(R.id.photo_et);
+        //photo_et = findViewById(R.id.photo_et);
         address_et = findViewById(R.id.address_et);
 
         breakfast_dp = findViewById(R.id.breakfast_dp);
@@ -60,8 +73,8 @@ public class RegisterActivity extends AppCompatActivity {
         sleeping_dp = findViewById(R.id.sleepingTime_dp);
         sleeping_dp.setIs24HourView(true);
 
-        car_rb = findViewById(R.id.car_rb);
-        bicycle_rb = findViewById(R.id.bicycle_rb);
+        car_cb = findViewById(R.id.car_cb);
+        bicycle_cb = findViewById(R.id.bicycle_cb);
 
         workingDayTrips_etn = findViewById(R.id.workingDayTrips_etn);
         weekendTrips_etn = findViewById(R.id.weekendTrips_etn);
@@ -120,13 +133,37 @@ public class RegisterActivity extends AppCompatActivity {
                 if (howManyErr==0) {
                     if (uc.addUserToDB(userData)) {
                         Toast.makeText(getApplicationContext(), "Vartotojas sėkmingai užregistruotas", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(intent);
-                        finish();
+
+                        //gaut user id
+                        uc.findUserByUsername(username_et.getText().toString(), "getUserID" );
+                        //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        //startActivity(intent);
+                        //finish();
                     } else {
                         Toast.makeText(getApplicationContext(), "Visi langai turi būti užpildyti ir slaptažodis turi sutapti", Toast.LENGTH_LONG).show();
                     }
                 }
+            }
+        });
+        goToLogin = new BooVariable();
+        goToLogin.setListener(new BooVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        ImageButton image_b = (ImageButton) findViewById(R.id.image_b);
+        image_b.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "Pasirinkite nuotrauką"), 1);
+
             }
         });
     }
@@ -196,7 +233,7 @@ public class RegisterActivity extends AppCompatActivity {
         String firstName = firstName_et.getText().toString();
         String lastName = lastName_et.getText().toString();
         String username = username_et.getText().toString();
-        String photo = photo_et.getText().toString();
+        //String photo = photo_et.getText().toString();
         String address = address_et.getText().toString();
 
         hour = breakfast_dp.getHour();
@@ -219,8 +256,8 @@ public class RegisterActivity extends AppCompatActivity {
         minutes = sleeping_dp.getMinute();
         sleepingTime = hour + ":" + minutes;
         String transport = "0";
-        boolean car = car_rb.isChecked();
-        boolean bicycle = bicycle_rb.isChecked();
+        boolean car = car_cb.isChecked();
+        boolean bicycle = bicycle_cb.isChecked();
         if (car == true) {
             transport = "1";
         }
@@ -244,7 +281,7 @@ public class RegisterActivity extends AppCompatActivity {
         String dietChange = dietChangeS.getSelectedItem().toString();
         String workingDayTransport = workingDayTransportS.getSelectedItem().toString();
         String weekendDayTransport = weekendDayTransportS.getSelectedItem().toString();
-        User userToCheck = new User(firstName, lastName, username, photo, address,
+        User userToCheck = new User(firstName, lastName, username, "noPhoto.png", address,
                 diet, dietChange, breakfastTime, lunchTime, dinnerTime,
                 wakingUpTime, sleepingTime, transport, workingDayTrips, workingDayTransport,
                 weekendDayTrips, weekendDayTransport, takingShowerPerWeek, showerTime, takingBathPerWeek, password1);
@@ -252,7 +289,7 @@ public class RegisterActivity extends AppCompatActivity {
         userData.add(firstName);
         userData.add(lastName);
         userData.add(username);
-        userData.add(photo);
+        userData.add("noPhoto.png");
         userData.add(address);
         userData.add(diet);
         userData.add(dietChange);
@@ -288,6 +325,18 @@ public class RegisterActivity extends AppCompatActivity {
         checkUserNotFound(list, errors);
         }
     }
+    public static void checkUserIDFound(List<User> list, ArrayList<String> err) {
+        Log.i("mano", "radom " + list.size() + "...."  +  list.get(0).toString());
+        if (!list.isEmpty()) {
+            //nuotraukos ikelimas
+            if (bitmapToUpload != null) {
+                uploadPhotoToFirebase(bitmapToUpload, list.get(0).getId());
+            }
+        }
+        //perejimas i login
+        goToLogin.getListener().onChange();
+
+    }
 
     public static void checkUserNotFound(List<User> list, ArrayList<String>  err) {
         errors = err;
@@ -299,5 +348,24 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                photo_iv.setImageBitmap(bitmap);
+                bitmapToUpload = bitmap;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public static void uploadPhotoToFirebase(Bitmap bmp, String userID) {
+        UserController uc = new UserController();
+        uc.uploadPhoto(bmp, userID);
+
     }
 }

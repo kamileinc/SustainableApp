@@ -1,5 +1,8 @@
 package com.example.sustainableapp.views;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -7,13 +10,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,6 +32,8 @@ import com.example.sustainableapp.models.BooVariable;
 import com.example.sustainableapp.models.IntVariable;
 import com.example.sustainableapp.models.User;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,18 +41,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 public class EditProfileFragment extends Fragment {
     private static IntVariable foundProfile;
     private static BooVariable profileEdited;
     static ArrayList<User> profileData;
+    private static Bitmap bitmap;
+    private static Bitmap bitmapToUpload;
     ArrayList<String> errors;
     String userID;
     EditText firstName_et,lastName_et, username_et, photo_et, address_et, workingDayTrips_etn, weekendTrips_etn, takingShowerPerWeek_etn, showerTime_etn, takingBathPerWeek_etn, password1_et, password2_et;
-    RadioButton car_rb, bicycle_rb;
+    CheckBox car_cb, bicycle_cb;
     Spinner dietS, dietChangeS, workingDayTransportS, weekendDayTransportS;
     String breakfastTime, lunchTime, dinnerTime, wakingUpTime, sleepingTime;
     TimePicker breakfast_dp, lunch_dp, dinner_dp, wakingUp_dp, sleeping_dp;
+    ImageView photo_iv;
     TextView lunchTime_tv, dinnerTime_tv, sleepingTime_tv;
+    private static BooVariable photoReturned;
     int hour, minutes;
     public EditProfileFragment() {
         // Required empty public constructor
@@ -78,9 +93,10 @@ public class EditProfileFragment extends Fragment {
             public void onClick(View v)
             {
                 //validate and update data in db
+                uploadPhotoToFirebase(bitmapToUpload);
                 String firstName = firstName_et.getText().toString();
                 String lastName = lastName_et.getText().toString();
-                String photo = photo_et.getText().toString();
+                String photo = userID + ".jpg";
                 String address = address_et.getText().toString();
 
                 hour = breakfast_dp.getHour();
@@ -103,8 +119,8 @@ public class EditProfileFragment extends Fragment {
                 minutes = sleeping_dp.getMinute();
                 sleepingTime = hour + ":" + minutes;
                 String transport = "0";
-                boolean car = car_rb.isChecked();
-                boolean bicycle = bicycle_rb.isChecked();
+                boolean car = car_cb.isChecked();
+                boolean bicycle = bicycle_cb.isChecked();
                 if (car == true) {
                     transport = "1";
                 }
@@ -155,6 +171,18 @@ public class EditProfileFragment extends Fragment {
                 }
             }
         });
+        ImageButton image_b = (ImageButton) view.findViewById(R.id.image_b);
+        image_b.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "Pasirinkite nuotrauką"), 1);
+
+            }
+        });
         foundProfile = new IntVariable();
         foundProfile.setListener(new IntVariable.ChangeListener() {
             @Override
@@ -164,10 +192,14 @@ public class EditProfileFragment extends Fragment {
                     // Toast.makeText(getContext(), "Prekės rastos: " + productsForList.size(), Toast.LENGTH_LONG).show();
                     //ProductController pc = new ProductController();
                     //al = pc.formatProductListForFarmer(productsForList);
+                    UserController uc = new UserController();
+                    String purpose = "editProfile";
+                    uc.loadImageForView(profileData.get(0).getId() + ".jpg", purpose);
                     Log.i("mano", profileData.get(0).toString());
                     firstName_et.setText(profileData.get(0).getFirstName());
                     lastName_et.setText(profileData.get(0).getLastName());
-                    photo_et.setText(profileData.get(0).getPhoto());
+                    //photo_et.setText(profileData.get(0).getPhoto());
+                    //photo_et.setText(userID + ".jpg");
                     address_et.setText(profileData.get(0).getAddress());
                     if (profileData.get(0).getDiet().equals("Visavalgis")) {
                         dietS.setSelection(0);
@@ -187,7 +219,7 @@ public class EditProfileFragment extends Fragment {
                     else if (profileData.get(0).getDietChange().equals("Veganas")) {
                         dietChangeS.setSelection(2);
                     }
-                    UserController uc = new UserController();
+
                     breakfast_dp.setHour(uc.getHourAndMinutes(profileData.get(0).getBreakfastTime()).get(0));
                     breakfast_dp.setMinute(uc.getHourAndMinutes(profileData.get(0).getBreakfastTime()).get(1));
 
@@ -205,14 +237,14 @@ public class EditProfileFragment extends Fragment {
                    // wakingUpTime_et.setText(uc.formatTime(profileData.get(0).getWakingUpTime()));
                     //sleepingTime_et.setText(uc.formatTime(profileData.get(0).getSleepingTime()));
                     if (profileData.get(0).getTransport().equals("1")) {
-                        car_rb.setChecked(true);
+                        car_cb.setChecked(true);
                     }
                     else if (profileData.get(0).getTransport().equals("2")) {
-                        bicycle_rb.setChecked(true);
+                        bicycle_cb.setChecked(true);
                     }
                     else if (profileData.get(0).getTransport().equals("4")) {
-                        car_rb.setChecked(true);
-                        bicycle_rb.setChecked(true);
+                        car_cb.setChecked(true);
+                        bicycle_cb.setChecked(true);
                     }
                     workingDayTrips_etn.setText(profileData.get(0).getWorkingDayTrips());
                     if (profileData.get(0).getWorkingDayTransport().equals("Automobilis")) {
@@ -256,16 +288,29 @@ public class EditProfileFragment extends Fragment {
             }});
         UserController uc = new UserController();
         uc.getProfileForEdit(userID);
+        photoReturned = new BooVariable();
+        photoReturned.setListener(new BooVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+
+                if (photoReturned.isBoo()) {
+                    photo_iv.setImageBitmap(bitmap);
+                   // photo_iv.setImageBitmap(Bitmap.createScaledBitmap(bitmap, photo_iv.getWidth(), photo_iv.getHeight(), false));
+
+                }
+            }
+        });
         return view;
     }
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        photo_iv = getView().findViewById(R.id.photo_iv);
         lunchTime_tv = getView().findViewById(R.id.lunchTime_tv);
         dinnerTime_tv = getView().findViewById(R.id.dinnerTime_tv);
         sleepingTime_tv = getView().findViewById(R.id.sleepingTime_tv);
         firstName_et = getView().findViewById(R.id.firstName_et);
         lastName_et = getView().findViewById(R.id.lastName_et);
         username_et = getView().findViewById(R.id.username_et);
-        photo_et = getView().findViewById(R.id.photo_et);
+        //photo_et = getView().findViewById(R.id.photo_et);
         address_et = getView().findViewById(R.id.address_et);
 
         breakfast_dp = getView().findViewById(R.id.breakfast_dp);
@@ -279,8 +324,8 @@ public class EditProfileFragment extends Fragment {
         sleeping_dp = getView().findViewById(R.id.sleepingTime_dp);
         sleeping_dp.setIs24HourView(true);
 
-        car_rb = getView().findViewById(R.id.car_rb);
-        bicycle_rb = getView().findViewById(R.id.bicycle_rb);
+        car_cb = getView().findViewById(R.id.car_cb);
+        bicycle_cb = getView().findViewById(R.id.bicycle_cb);
 
         workingDayTrips_etn = getView().findViewById(R.id.workingDayTrips_etn);
         weekendTrips_etn = getView().findViewById(R.id.weekendTrips_etn);
@@ -405,5 +450,34 @@ public class EditProfileFragment extends Fragment {
             takingBathPerWeek_etn.setError(errors.get(11));
         }
 
+    }
+    public static void checkPhotoReturned(Bitmap bmp) {
+        Log.i("mano", "radom:" + photoReturned);
+        bitmap = bmp;
+        photoReturned.setBoo(true);
+        photoReturned.getListener().onChange();
+
+    }
+    public void uploadPhotoToFirebase(Bitmap bmp) {
+        UserController uc = new UserController();
+        uc.uploadPhoto(bmp, userID);
+
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            try {
+                InputStream inputStream = getContext().getContentResolver().openInputStream(data.getData());
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                photo_iv.setImageBitmap(bitmap);
+                //photo_iv.setImageBitmap(Bitmap.createScaledBitmap(bitmap, photo_iv.getWidth(), photo_iv.getHeight(), false));
+                bitmapToUpload = bitmap;
+            }
+            catch(FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

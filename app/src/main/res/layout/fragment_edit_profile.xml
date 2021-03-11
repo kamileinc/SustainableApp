@@ -14,9 +14,11 @@
             android:scrollbars="vertical"
             android:layout_height="match_parent"
             android:layout_width="match_parent">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -27,9 +29,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Profilio informacija"
                     android:textAlignment="center"
                     android:textSize="30sp" />
+
                 <TableLayout
                     android:id="@+id/tableLayout"
                     android:layout_width="wrap_content"
@@ -79,24 +83,54 @@
                             android:inputType="textPersonName" />
                     </TableRow>
 
+
                     <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/photo_tv"
+                            android:id="@+id/textView25"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="30"
                             android:paddingStart="30dp"
                             android:text="Nuotrauka" />
 
-                        <EditText
-                            android:id="@+id/photo_et"
+                        <ImageButton
+                            android:id="@+id/image_b"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:inputType="textPersonName" />
+                            android:layout_weight="50"
+                            android:backgroundTint="@color/purple_500"
+                            android:src="@drawable/ic_baseline_add_photo_alternate_24"
+                            android:tint="#FFFFFF"
+                            android:background="@drawable/roundcorner"/>
+
+                        <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="-30" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="100" />
+
+                        <ImageView
+                            android:id="@+id/photo_iv"
+                            android:layout_width="300px"
+                            android:layout_height="300px"
+                            android:layout_weight="-8"
+                            android:src="@android:drawable/gallery_thumb"
+                            app:srcCompat="@drawable/ic_launcher_background" />
                     </TableRow>
 
                     <TableRow
@@ -159,7 +193,7 @@
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/breakfastTime_tv"
@@ -173,12 +207,12 @@
                             android:id="@+id/breakfast_dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:timePickerMode="spinner"/>
+                            android:timePickerMode="spinner" />
                     </TableRow>
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/lunchTime_tv"
@@ -192,12 +226,12 @@
                             android:id="@+id/lunch_dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:timePickerMode="spinner"/>
+                            android:timePickerMode="spinner" />
                     </TableRow>
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/dinnerTime_tv"
@@ -211,12 +245,12 @@
                             android:id="@+id/dinner_dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:timePickerMode="spinner"/>
+                            android:timePickerMode="spinner" />
                     </TableRow>
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/wakingUpTime_tv"
@@ -230,12 +264,12 @@
                             android:id="@+id/wakingUpTime_dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:timePickerMode="spinner"/>
+                            android:timePickerMode="spinner" />
                     </TableRow>
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/sleepingTime_tv"
@@ -249,43 +283,54 @@
                             android:id="@+id/sleepingTime_dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:timePickerMode="spinner"/>
+                            android:timePickerMode="spinner" />
                     </TableRow>
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
-                            android:id="@+id/transport_tv"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/transport_tv2"
+                            android:layout_width="141dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:paddingLeft="30dp"
                             android:text="Transportas" />
 
-                        <RadioGroup
+                        <CheckBox
+                            android:id="@+id/car_cb"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" >
-
-                            <RadioButton
-                                android:id="@+id/car_rb"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Automobilis" />
-
-                            <RadioButton
-                                android:id="@+id/bicycle_rb"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Dviratis" />
-                        </RadioGroup>
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:text="Automobilis" />
 
                     </TableRow>
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/transport_tv3"
+                            android:layout_width="141dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="30dp"
+                            android:text="" />
+
+                        <CheckBox
+                            android:id="@+id/bicycle_cb"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:text="Dviratis" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/workingDayTrips_tv"
@@ -306,7 +351,7 @@
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/workingDayTransport_tv"
@@ -325,7 +370,7 @@
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/weekendTrips_tv"
@@ -346,7 +391,7 @@
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/weekendDayTransport_tv"
@@ -365,7 +410,7 @@
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/takingShowerPerWeek_tv"
@@ -386,7 +431,7 @@
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/showerTime_tv"
@@ -439,8 +484,7 @@
                             android:id="@+id/update_b"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="#4CAF50"
-
+                            android:background="@drawable/roundcorner"
                             android:text="Saugoti"
                             android:textSize="18sp" />
 

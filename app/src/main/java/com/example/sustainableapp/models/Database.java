@@ -2,18 +2,27 @@ package com.example.sustainableapp.models;
 
 
 import android.app.Application;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.sustainableapp.controllers.UserController;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +34,61 @@ public class Database extends Application {
     String p = "";
     String id = "";
     User us;
+    public void uploadFile(Bitmap bitmap, String userId) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://sustainableapp-e3fb1.appspot.com");
+        StorageReference mountainImagesRef = storageRef.child("images/" + userId +  ".jpg");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
+        byte[] data = baos.toByteArray();
+        UploadTask uploadTask = mountainImagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Log.i("downloadUrl-->", "Nay");
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                //Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                //sendMsg("" + downloadUrl, 2);
+                Log.i("downloadUrl-->", "yay");
+            }
+        });
+
+    }
+    public void getPhotoForView(String imageName, String purpose) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference gsReference = storage.getReferenceFromUrl("gs://sustainableapp-e3fb1.appspot.com/images/" + imageName);
+        final long ONE_MEGABYTE = 1024 * 1024;
+        gsReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                UserController.checkPhotoReturnedToView(bmp, purpose);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference gsReference = storage.getReferenceFromUrl("gs://sustainableapp-e3fb1.appspot.com/nophoto.png");
+                final long ONE_MEGABYTE = 1024 * 1024;
+                gsReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        UserController.checkPhotoReturnedToView(bmp, purpose);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                    }
+                });
+            }
+        });
+    }
     //REGISTER
     public boolean saveUser(User u) {
         try {
@@ -39,20 +103,30 @@ public class Database extends Application {
         }
     }
     //find user by username
-    public void findUserByLogin(final String username, ArrayList<String> errors) {
+    public void findUserByLogin(final String username, ArrayList<String> errors, String purpose) {
         try {
             rootNode = FirebaseDatabase.getInstance();
             reference = rootNode.getReference("users");
             u = username;
-            String activity = "register";
+            //String purpose = "register";
             readData(new FireBaseCallback() {
                 @Override
                 public void onCallback(List<User> list) {
                     if (list.isEmpty()){
-                        UserController.checkUserNotFound(list, errors, activity);
+                        if (purpose.equals("register")) {
+                            UserController.checkUserNotFound(list, errors, purpose);
+                        }
+                        else if (purpose.equals("getUserID")) {
+                            UserController.checkUserNotFound(list, errors, purpose);
+                        }
                     }
                     else {
-                        UserController.checkUserFound(list, errors, activity);
+                        if (purpose.equals("register")) {
+                            UserController.checkUserFound(list, errors, purpose);
+                        }
+                        else if (purpose.equals("getUserID")) {
+                            UserController.checkUserFound(list, errors, purpose);
+                        }
                     }
                 }
             });

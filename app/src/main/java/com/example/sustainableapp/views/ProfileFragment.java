@@ -1,5 +1,6 @@
 package com.example.sustainableapp.views;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +28,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.sustainableapp.R;
 import com.example.sustainableapp.controllers.UserController;
+import com.example.sustainableapp.models.BooVariable;
 import com.example.sustainableapp.models.IntVariable;
 import com.example.sustainableapp.models.User;
 
@@ -35,6 +39,9 @@ public class ProfileFragment extends Fragment {
     String userID;
     private static IntVariable foundProfile;
     static ArrayList<User> profileData;
+    ImageView photo_iv;
+    private static Bitmap bitmap;
+    private static BooVariable photoReturned;
     TextView firstName_et, lastName_et, username_et, photo_et, address_et, diet_et, dietChange_et,
             breakfast_et, lunch_et, dinner_et, wakingUpTime_et, sleepingTime_et,transport_et, workingDayTrips_et,
             workingDayTransport_et, weekendTrips_et, weekendDayTransport_et, takingShowerPerWeek_et, showerTime_et, takingBathPerWeek_et;
@@ -81,15 +88,16 @@ public class ProfileFragment extends Fragment {
                     // Toast.makeText(getContext(), "Prekės rastos: " + productsForList.size(), Toast.LENGTH_LONG).show();
                     //ProductController pc = new ProductController();
                     //al = pc.formatProductListForFarmer(productsForList);
+                    UserController uc = new UserController();
+                    String purpose = "viewProfile";
                     Log.i("mano", profileData.get(0).toString());
                     firstName_et.setText(profileData.get(0).getFirstName());
                     lastName_et.setText(profileData.get(0).getLastName());
                     username_et.setText(profileData.get(0).getUsername());
-                    photo_et.setText(profileData.get(0).getPhoto());
+                    //photo_et.setText(profileData.get(0).getPhoto());
                     address_et.setText(profileData.get(0).getAddress());
                     diet_et.setText(profileData.get(0).getDiet());
                     dietChange_et.setText(profileData.get(0).getDietChange());
-                    UserController uc = new UserController();
                     breakfast_et.setText(uc.formatTime(profileData.get(0).getBreakfastTime()));
 
 
@@ -116,6 +124,16 @@ public class ProfileFragment extends Fragment {
                     takingShowerPerWeek_et.setText(profileData.get(0).getTakingShowerPerWeek());
                     showerTime_et.setText(profileData.get(0).getShowerTime());
                     takingBathPerWeek_et.setText(profileData.get(0).getTakingBathPerWeek());
+                    uc.loadImageForView(profileData.get(0).getId() + ".jpg", purpose);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            uc.loadImageForView(profileData.get(0).getId() + ".jpg", purpose);
+                            //photo_iv.setMaxHeight(100);
+                            //photo_iv.setMaxWidth(100);
+                        }
+                    }, 1000);   //1 second
+
                     Log.i("mano", "turejo priskirt");
                 }
                 else {
@@ -124,14 +142,26 @@ public class ProfileFragment extends Fragment {
         UserController uc = new UserController();
         uc.getProfile(userID);
         Log.i("mano", "getprofiledata fragment");
+        photoReturned = new BooVariable();
+        photoReturned.setListener(new BooVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+
+                if (photoReturned.isBoo()) {
+                    photo_iv.setImageBitmap(bitmap);
+                    //photo_iv.setImageBitmap(Bitmap.createScaledBitmap(bitmap, photo_iv.getWidth(), photo_iv.getHeight(), false));
+
+                }
+            }
+        });
         return view;
     }
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
+        photo_iv = getView().findViewById(R.id.photo_iv);
         firstName_et = getView().findViewById(R.id.firstName_et);
         lastName_et = getView().findViewById(R.id.lastName_et);
         username_et = getView().findViewById(R.id.username_et);
-        photo_et = getView().findViewById(R.id.photo_et);
+        //photo_et = getView().findViewById(R.id.photo_et);
         address_et = getView().findViewById(R.id.address_et);
         diet_et = getView().findViewById(R.id.diet_et);
         dietChange_et = getView().findViewById(R.id.dietChange_et);
@@ -182,5 +212,12 @@ public class ProfileFragment extends Fragment {
         //errors = err;
         Log.i("mano", "neradom");
         //notFoundUser.getListener().onChange();
+    }
+    public static void checkPhotoReturned(Bitmap bmp) {
+        Log.i("mano", "radom:" + photoReturned);
+        bitmap = bmp;
+        photoReturned.setBoo(true);
+        photoReturned.getListener().onChange();
+
     }
 }
