@@ -9,6 +9,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.sustainableapp.controllers.FactController;
+import com.example.sustainableapp.controllers.SustainableActionController;
 import com.example.sustainableapp.controllers.UserController;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,9 +32,12 @@ public class Database extends Application {
     FirebaseDatabase rootNode;
     DatabaseReference reference;
     ArrayList userList = new ArrayList<>();
+    ArrayList saList = new ArrayList<>();
+    ArrayList factList = new ArrayList<>();
     String u ="";
     String p = "";
     String id = "";
+    String category = "";
     User us;
     public void uploadFile(Bitmap bitmap, String userId) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -89,6 +94,41 @@ public class Database extends Application {
             }
         });
     }
+
+    public boolean addNewCategoryToDB(SustainableAction sa) {
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("sustainableAction");
+            reference.child(sa.getId()).setValue(sa);
+            return true;
+        }
+        catch(Error e) {
+            return false;
+        }
+    }
+
+    public void getUsersSustainableActions(String userID) {
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("sustainableAction");
+            id = userID;
+            readData4(new FireBaseCallback3() {
+                @Override
+                public void onCallback(List<SustainableAction> list) {
+                    if (!list.isEmpty()) {
+                        Log.i("mano", "cia1");
+                        SustainableActionController.checkUsersSAFound((ArrayList<SustainableAction>) list);
+                    }
+                    else {
+                        Log.i("mano", "cia2");
+                        SustainableActionController.checkUsersSANotFound((ArrayList<SustainableAction>) list);
+                    }
+                }
+            });
+        }
+        catch(Error e) {
+        }
+    }
     //REGISTER
     public boolean saveUser(User u) {
         try {
@@ -102,6 +142,19 @@ public class Database extends Application {
             return false;
         }
     }
+    /*
+    public boolean saveFact(Fact f) {
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("facts");
+            reference.child(f.getId()).setValue(f);
+            return true;
+        }
+        catch(Error e) {
+            return false;
+        }
+    }
+    */
     //find user by username
     public void findUserByLogin(final String username, ArrayList<String> errors, String purpose) {
         try {
@@ -135,6 +188,29 @@ public class Database extends Application {
         }
     }
 
+    public void getFactsFromDB(String findCategory){
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("facts");
+            category = findCategory;
+            readData5(new FireBaseCallback5() {
+                @Override
+                public void onCallback(List<Fact> list) {
+                    if (list.isEmpty()){
+                        //UserController.checkUserNotFound(list, errors, purpose);///////////////////////////////////////////////////////////
+
+
+                    }
+                    else {
+                        //UserController.checkUserFound(list, errors, purpose);//////////////////////////////////////////////////////////////
+                        FactController.checkFactsFound((ArrayList<Fact>) list);
+                    }
+                }
+            });
+        }
+        catch(Error e) {
+        }
+    }
     public void readData(final FireBaseCallback fireBaseCallback){
         Query findUser = reference.orderByChild("username").equalTo(u);
         findUser.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -161,9 +237,41 @@ public class Database extends Application {
             }
         });
     }
+    public void readData5(final FireBaseCallback5 fireBaseCallback5){
+        Query findFacts = reference.orderByChild("category").equalTo(category);
+        findFacts.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Log.i("mano", "Facts found in db");
+                    for(DataSnapshot ds : snapshot.getChildren()) {
+                        String idFromDB = ds.getKey();
+                        Fact  f = ds.getValue(Fact.class);
+                        factList.add(f);
+                        fireBaseCallback5.onCallback(factList);
+                    }
+                }
+                else {
+                    Log.i("mano", "Facts NOT found in db");
+                    fireBaseCallback5.onCallback(factList);
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public interface FireBaseCallback5 {
+        void onCallback(List<Fact> list);
+    }
     public interface FireBaseCallback {
         void onCallback(List<User> list);
+    }
+    public interface FireBaseCallback3 {
+        void onCallback(List<SustainableAction> list);
     }
     //LOGIN
     public void findUserByLogin(final String username, final String password, ArrayList<String> errors) {
@@ -247,6 +355,36 @@ public class Database extends Application {
                 }
                 else {
                     fireBaseCallback.onCallback(userList);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void readData4(final FireBaseCallback3 fireBaseCallback3){
+        Query findSA = reference.orderByChild("userID").equalTo(id);
+        findSA.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Log.i("mano", "SNAPSHOT EXISTS");
+                    for(DataSnapshot ds : snapshot.getChildren()) {
+                        String idFromDB = ds.getKey();
+                        SustainableAction  sa = ds.getValue(SustainableAction.class);
+                        String categoryFromDB = sa.getCategory();
+                        String dateBeginFromDB = sa.getDateBegin();
+                        String dateEndFromDB = sa.getDateEnd();
+                        SustainableAction sustainableAction = new SustainableAction(idFromDB, categoryFromDB, id, dateBeginFromDB, dateEndFromDB);
+                        saList.add(sustainableAction);
+                    }
+                    fireBaseCallback3.onCallback(saList);
+                }
+                else {
+                    Log.i("mano", "SNAPSHOT does not EXIST");
+                    fireBaseCallback3.onCallback(saList);
                 }
             }
 
