@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.FoodActionFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        tools:context=".views.FoodActionFragment"
+        android:id="@+id/scrollView"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.FoodActionFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="50dp">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:text="Mitybos užduotys"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/textView32"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pusryčiams valgiau:"
+            android:textColor="@color/black" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:saveEnabled="false">
+
+                    <RadioButton
+                        android:id="@+id/breakfastVegan_rb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Veganiškai (jokios mėsos, žuvies, pieno produktų ir kiaušinių)" />
+
+                    <RadioButton
+                        android:id="@+id/breakfastVegetarian_rb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Vegetariškai (jokios mėsos ir žuvies)" />
+
+                    <RadioButton
+                        android:id="@+id/breakfastLowImpactMeat_rb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Mažiau taršos išskiriančios mėsos (...)" />
+
+                    <RadioButton
+                        android:id="@+id/breakfastHighImpactMeat_rb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Daugiau taršos išskiriančios mėsos (...)" />
+                </RadioGroup>
+            </TableRow>
+
+        </TableLayout>
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textView33"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pietums valgiau:"
+            android:textColor="@color/black" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <RadioButton
+                        android:id="@+id/lunchVegan_rb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Veganiškai (jokios mėsos, žuvies, pieno produktų ir kiaušinių)" />
+
+                    <RadioButton
+                        android:id="@+id/lunchVegetarian_rb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Vegetariškai (jokios mėsos ir žuvies)" />
+
+                    <RadioButton
+                        android:id="@+id/lunchLowImpactMeat_rb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Mažiau taršos išskiriančios mėsos (...)" />
+
+                    <RadioButton
+                        android:id="@+id/lunchHighImpactMeat_rb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Daugiau taršos išskiriančios mėsos (...)" />
+                </RadioGroup>
+            </TableRow>
+
+        </TableLayout>
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textView34"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vakarienei valgiau:"
+            android:textColor="@color/black" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <RadioButton
+                        android:id="@+id/dinnerVegan_rb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Veganiškai (jokios mėsos, žuvies, pieno produktų ir kiaušinių)" />
+
+                    <RadioButton
+                        android:id="@+id/dinnerVegetarian_rb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Vegetariškai (jokios mėsos ir žuvies)" />
+
+                    <RadioButton
+                        android:id="@+id/dinnerLowImpactMeat_rb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Mažiau taršos išskiriančios mėsos (...)" />
+
+                    <RadioButton
+                        android:id="@+id/dinnerHighImpactMeat_rb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Daugiau taršos išskiriančios mėsos (...)" />
+                </RadioGroup>
+            </TableRow>
+
+        </TableLayout>
+
+        <Button
+            android:id="@+id/saveFA_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/roundcorner"
+            android:text="Saugoti" />
+
+
+    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</FrameLayout>
