@@ -502,7 +502,6 @@ public class UserController extends Application {
         Log.i("laikas", "h1 = " + h1 + ", m1 = " + m1);
         Log.i("laikas", "h2 = " + h2 + ", m2 = " + m2);
         Log.i("laikas", "current time: h1 = " + currentTime);
-
         if (h2 >h1) {
             return true;
         }
