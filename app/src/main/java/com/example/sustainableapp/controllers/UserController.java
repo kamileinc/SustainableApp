@@ -11,6 +11,7 @@ import com.example.sustainableapp.views.FoodActionFragment;
 import com.example.sustainableapp.views.LoginActivity;
 import com.example.sustainableapp.views.ProfileFragment;
 import com.example.sustainableapp.views.RegisterActivity;
+import com.example.sustainableapp.views.UserActivity;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -64,6 +65,9 @@ public class UserController extends Application {
         else if (activity.equals("foodAction")) {
             FoodActionFragment.checkUserFound(list);
         }
+        else if (activity.equals("UserActivity")) {
+            UserActivity.checkUserFound(list);
+        }
 
     }
     public static void checkUserEdited() {
@@ -89,7 +93,9 @@ public class UserController extends Application {
         else if (activity.equals("foodAction")) {
             FoodActionFragment.checkUserNotFound(list);
         }
-
+        else if (activity.equals("UserActivity")) {
+            UserActivity.checkUserNotFound(list);
+        }
 
     }
 
@@ -223,6 +229,59 @@ public class UserController extends Application {
         else {
             return "";
         }
+    }
+    public String addTime(String s, int minutes) {
+        String[] sArr = s.split(":", 3);
+        int h1 = Integer.parseInt(sArr[0]);
+        int m1 = Integer.parseInt(sArr[1]);
+        SimpleDateFormat formatter= new SimpleDateFormat("HH:mm");
+        Date today = new Date(System.currentTimeMillis());
+        String todayStr = formatter.format(today);
+        String d2Str = "0:0";
+        try {
+            Date d = formatter.parse(s);
+            Calendar c = Calendar.getInstance();
+            String beginDateStr = formatter.format(d);
+            c.setTime(d);
+            c.add(Calendar.MINUTE, minutes);
+            Date d2 = c.getTime();
+            d2Str = formatter.format(d2);
+        }
+        catch (Exception e) {
+
+        }
+        Log.i("LYGINAMAS laikas", "h1 = " + h1 + ", m1 = " + m1);
+        Log.i("d2Str", d2Str);
+        return d2Str;
+    }
+    public boolean isUpcomingTime(String s) {
+
+        String[] sArr = s.split(":", 3);
+        int h1 = Integer.parseInt(sArr[0]);
+        int m1 = Integer.parseInt(sArr[1]);
+        SimpleDateFormat formatter= new SimpleDateFormat("HH:mm");
+        Date today = new Date(System.currentTimeMillis());
+        String todayStr = formatter.format(today);
+        String[] s2Arr = todayStr.split(":", 3);
+        int h2 = Integer.parseInt(s2Arr[0]);
+        int m2 = Integer.parseInt(s2Arr[1]);
+        Log.i("LYGINAMAS laikas", "h1 = " + h1 + ", m1 = " + m1);
+        Log.i("DABAR laikas", "h2 = " + h2 + ", m2 = " + m2);
+        if (h1>h2) {
+            return true;
+        }
+        else if (h1==h2) {
+            if (m1>m2) {
+                return true;
+            }
+            else if (m1==m2) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+        return false;
     }
     private String validateSleepingTime(String s, String s2) {
         String[] sArr = s.split(":", 3);

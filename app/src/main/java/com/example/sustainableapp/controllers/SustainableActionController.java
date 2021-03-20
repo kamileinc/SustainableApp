@@ -13,11 +13,13 @@ import com.example.sustainableapp.views.FoodActionFragment;
 import com.example.sustainableapp.views.ProfileFragment;
 import com.example.sustainableapp.views.TasksFragment;
 import com.example.sustainableapp.views.TransportActionFragment;
+import com.example.sustainableapp.views.UserActivity;
 import com.example.sustainableapp.views.WheelFragment;
 
 import java.io.StringBufferInputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,6 +58,9 @@ public class SustainableActionController extends Application {
         else if (purpose.equals("FoodActionFragment")) {
             FoodActionFragment.checkUsersSAFound(sa);
         }
+        else if (purpose.equals("UserActivity")) {
+            UserActivity.checkUsersSAFound(sa);
+        }
     }
     public static void checkUsersSANotFound(ArrayList<SustainableAction> sa, String purpose) {
         if (purpose.equals("TasksFragment")) {
@@ -72,6 +77,9 @@ public class SustainableActionController extends Application {
         }
         else if (purpose.equals("FoodActionFragment")) {
             FoodActionFragment.checkUsersSANotFound(sa);
+        }
+        else if (purpose.equals("UserActivity")) {
+            UserActivity.checkUsersSANotFound(sa);
         }
     }
     public boolean isTodayInDates(String beginDate, String endDate) {
@@ -90,6 +98,31 @@ public class SustainableActionController extends Application {
         Log.i("mano", "dateBegin: " + dateBegin.toString());
         Log.i("mano", "dateEng: " + dateEnd.toString());
         if((today.after(dateBegin) && today.before(dateEnd)) || today.equals(dateBegin) || today.equals(dateEnd)) {
+            // In between
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public boolean isDateInDates(Date date, String beginDate, String endDate) {
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        //Date today = new Date(System.currentTimeMillis());
+        Date dateBegin = new Date();
+        Date dateEnd = new Date();
+        String dateStr = formatter.format(date);
+        try {
+            date = formatter.parse(dateStr);
+            dateBegin = formatter.parse(beginDate);
+            dateEnd = formatter.parse(endDate);
+        }
+        catch(Exception e) {
+            e.getStackTrace();
+        }
+        Log.i("mano", "date: " + date.toString());
+        Log.i("mano", "dateBegin: " + dateBegin.toString());
+        Log.i("mano", "dateEng: " + dateEnd.toString());
+        if((date.after(dateBegin) && date.before(dateEnd)) || date.equals(dateBegin) || date.equals(dateEnd)) {
             // In between
             return true;
         }

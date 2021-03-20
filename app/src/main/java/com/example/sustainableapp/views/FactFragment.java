@@ -21,7 +21,9 @@ import com.example.sustainableapp.models.Database;
 import com.example.sustainableapp.models.Fact;
 import com.example.sustainableapp.models.SustainableAction;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 public class FactFragment extends Fragment {
@@ -70,8 +72,32 @@ public class FactFragment extends Fragment {
             @Override
             public void onChange() {
                 if (factsListReturned.isBoo()) {
-                    Random rand = new Random();
-                    int pickedFactInt = rand.nextInt(factsList.size());
+                    int pickedFactInt = 0;
+                    SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+                    Date d = new Date();
+                    String dayOfTheWeek = sdf.format(d);
+                    Log.i("mano", "siandien yra: " + dayOfTheWeek + factsList.size());
+                    if (dayOfTheWeek.equals("Monday")) {
+                        pickedFactInt = 0;
+                    }
+                    else if (dayOfTheWeek.equals("Tuesday")) {
+                        pickedFactInt = 1;
+                    }
+                    else if (dayOfTheWeek.equals("Wednesday")) {
+                        pickedFactInt = 2;
+                    }
+                    else if (dayOfTheWeek.equals("Thursday")) {
+                        pickedFactInt = 3;
+                    }
+                    else if (dayOfTheWeek.equals("Friday")) {
+                        pickedFactInt = 4;
+                    }
+                    else if (dayOfTheWeek.equals("Saturday")) {
+                        pickedFactInt = 5;
+                    }
+                    else if (dayOfTheWeek.equals("Sunday")) {
+                        pickedFactInt = 6;
+                    }
                     fact_tv.setText(factsList.get(pickedFactInt).getText());
                 }
                 else {

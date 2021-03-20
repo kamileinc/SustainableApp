@@ -295,9 +295,11 @@ public class Database extends Application {
                     for(DataSnapshot ds : snapshot.getChildren()) {
                         String idFromDB = ds.getKey();
                         Fact  f = ds.getValue(Fact.class);
+                        Log.i("mano", f.toString());
                         factList.add(f);
-                        fireBaseCallback5.onCallback(factList);
+
                     }
+                    fireBaseCallback5.onCallback(factList);
                 }
                 else {
                     Log.i("mano", "Facts NOT found in db");
