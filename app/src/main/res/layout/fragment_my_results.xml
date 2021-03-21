@@ -8,7 +8,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="10dp">
 
         <TextView
             android:id="@+id/textView"
@@ -17,10 +19,16 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="110dp"
             android:text="Mano rezultatai"
             android:textAlignment="center"
             android:textSize="30sp" />
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width = "match_parent"
+            android:layout_height = "200dip"
+            android:id = "@+id/graph" />
+
     </LinearLayout>
 
 </FrameLayout>

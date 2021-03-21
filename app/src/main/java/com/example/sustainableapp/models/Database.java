@@ -15,6 +15,7 @@ import com.example.sustainableapp.controllers.FoodActionController;
 import com.example.sustainableapp.controllers.SustainableActionController;
 import com.example.sustainableapp.controllers.TransportActionController;
 import com.example.sustainableapp.controllers.UserController;
+import com.example.sustainableapp.views.MyResultsFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -553,7 +554,7 @@ public class Database extends Application {
         catch(Error e) {
         }
     }
-    public void getFADataForFAFragment(final String faID) {
+    public void getFADataForFAFragment(final String faID, String purpose) {
         try {
             rootNode = FirebaseDatabase.getInstance();
             reference = rootNode.getReference("foodAction");
@@ -563,10 +564,33 @@ public class Database extends Application {
                 public void onCallback(List<FoodAction> list) {
 
                     if (list.isEmpty()){
-                        FoodActionController.checkFANotFound(list);
+                        FoodActionController.checkFANotFound(list, purpose);
                     }
                     else {
-                        FoodActionController.checkFAFound(list);
+                        FoodActionController.checkFAFound(list, purpose);
+                    }
+
+
+                }
+            });
+        }
+        catch(Error e) {
+        }
+    }
+    public void getFADataForMyResults(final String userID, String purpose) {
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("foodAction");
+            u = userID;
+            readData9(new FireBaseCallback8() {
+                @Override
+                public void onCallback(List<FoodAction> list) {
+
+                    if (list.isEmpty()){
+                        FoodActionController.checkFANotFound(list, purpose);
+                    }
+                    else {
+                        FoodActionController.checkFAFound(list, purpose);
                     }
 
 
@@ -744,6 +768,47 @@ public class Database extends Application {
                         FoodAction foodAction = new FoodAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date, breakfastFood, lunchFood, dinnerFood );
 
                         faList = new ArrayList<>();
+                        faList.add(foodAction);
+                    }
+                }
+                else {
+                }
+                fireBaseCallback8.onCallback(faList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void readData9(final FireBaseCallback8 fireBaseCallback8){
+        ////////////////////////////////////////////////////////////////////////////////////FOOD action
+        Query findFA = reference.orderByChild("userID").equalTo(u);
+        findFA.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                faList = new ArrayList<>();
+                if (snapshot.exists()) {
+                    Log.i("mano", "snapshot exists FOR FA.........................");
+                    for(DataSnapshot ds : snapshot.getChildren()) {
+                        Log.i("mano", "snapshot exists FOR FA.........................CHILD");
+                        String eaIDFromDB = ds.getKey();
+                        FoodAction fa = ds.getValue(FoodAction.class);
+                        String saID = fa.getId();
+                        String category = fa.getCategory();
+                        String userID = fa.getUserID();
+                        String dateBegin = fa.getDateBegin();
+                        String dateEnd = fa.getDateEnd();
+                        //id
+                        String date = fa.getDate();
+                        String breakfastFood = fa.getBreakfastFood();
+                        String lunchFood = fa.getLunchFood();
+                        String dinnerFood = fa.getDinnerFood();
+
+                        FoodAction foodAction = new FoodAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date, breakfastFood, lunchFood, dinnerFood );
+
+
                         faList.add(foodAction);
                     }
                 }

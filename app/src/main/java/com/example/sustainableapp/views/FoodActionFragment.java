@@ -74,7 +74,7 @@ public class FoodActionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_food_action, container, false);
         getUsersSustainableActions();
         FoodActionController fac = new FoodActionController();
-        fac.getFAForFAFragment(userID);
+        fac.getFAForFAFragment(userID, "FoodActionFragment");
         UserController uc = new UserController();
         uc.getProfile(userID, "foodAction");
         foundProfile = new IntVariable();

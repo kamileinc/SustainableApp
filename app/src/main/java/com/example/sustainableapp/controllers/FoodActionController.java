@@ -10,6 +10,7 @@ import com.example.sustainableapp.models.SustainableAction;
 import com.example.sustainableapp.models.TransportAction;
 import com.example.sustainableapp.views.EnergyActionFragment;
 import com.example.sustainableapp.views.FoodActionFragment;
+import com.example.sustainableapp.views.MyResultsFragment;
 import com.example.sustainableapp.views.TransportActionFragment;
 
 import java.text.SimpleDateFormat;
@@ -35,21 +36,38 @@ public class FoodActionController extends Application {
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
     }
-    public boolean getFAForFAFragment(String userId) {
+    public boolean getFAForFAFragment(String userId, String purpose) {
         Database db = new Database();
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(System.currentTimeMillis());
         String dateStr = formatter.format(date);
         final String id = userId + dateStr;
         Log.i("mano", "FA ID: "+ id);
-        db.getFADataForFAFragment(id);
+        db.getFADataForFAFragment(id, purpose);
         return true;
     }
-    public static void checkFANotFound(List<FoodAction> list) {
-        FoodActionFragment.checkFANotFound(list);
+    public boolean getFAForMyResults(String userID, String purpose) {
+        Database db = new Database();
+        db.getFADataForMyResults(userID, purpose);
+        return true;
     }
-    public static void checkFAFound(List<FoodAction> list) {
-        FoodActionFragment.checkFAFound(list);
+    public static void checkFANotFound(List<FoodAction> list, String purpose) {
+        if (purpose.equals("FoodActionFragment")) {
+            FoodActionFragment.checkFANotFound(list);
+        }
+        else if (purpose.equals("MyResultsFragment")) {
+            MyResultsFragment.checkFANotFound(list);
+        }
+
+
+    }
+    public static void checkFAFound(List<FoodAction> list, String purpose) {
+        if (purpose.equals("FoodActionFragment")) {
+            FoodActionFragment.checkFAFound(list);
+        }
+        else if (purpose.equals("MyResultsFragment")) {
+            MyResultsFragment.checkFAFound(list);
+        }
     }
     public void updateFoodActionInDB(FoodAction fa) {
         Database db = new Database();

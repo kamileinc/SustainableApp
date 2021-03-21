@@ -10,6 +10,7 @@ import com.example.sustainableapp.models.SustainableAction;
 import com.example.sustainableapp.views.EditProfileFragment;
 import com.example.sustainableapp.views.EnergyActionFragment;
 import com.example.sustainableapp.views.FoodActionFragment;
+import com.example.sustainableapp.views.MyResultsFragment;
 import com.example.sustainableapp.views.ProfileFragment;
 import com.example.sustainableapp.views.TasksFragment;
 import com.example.sustainableapp.views.TransportActionFragment;
@@ -61,6 +62,9 @@ public class SustainableActionController extends Application {
         else if (purpose.equals("UserActivity")) {
             UserActivity.checkUsersSAFound(sa);
         }
+        else if (purpose.equals("MyResultsFragment")) {
+            MyResultsFragment.checkUsersSAFound(sa);
+        }
     }
     public static void checkUsersSANotFound(ArrayList<SustainableAction> sa, String purpose) {
         if (purpose.equals("TasksFragment")) {
@@ -80,6 +84,9 @@ public class SustainableActionController extends Application {
         }
         else if (purpose.equals("UserActivity")) {
             UserActivity.checkUsersSANotFound(sa);
+        }
+        else if (purpose.equals("MyResultsFragment")) {
+            MyResultsFragment.checkUsersSANotFound(sa);
         }
     }
     public boolean isTodayInDates(String beginDate, String endDate) {
