@@ -9,6 +9,7 @@ import com.example.sustainableapp.models.User;
 import com.example.sustainableapp.views.EditProfileFragment;
 import com.example.sustainableapp.views.FoodActionFragment;
 import com.example.sustainableapp.views.LoginActivity;
+import com.example.sustainableapp.views.MyResultsFragment;
 import com.example.sustainableapp.views.ProfileFragment;
 import com.example.sustainableapp.views.RegisterActivity;
 import com.example.sustainableapp.views.UserActivity;
@@ -40,6 +41,9 @@ public class UserController extends Application {
         else if (purpose.equals("viewProfile")) {
             ProfileFragment.checkPhotoReturned(bmp);
         }
+        else if (purpose.equals("MyResultsFragment")) {
+            MyResultsFragment.checkPhotoReturned(bmp);
+        }
     }
     public void loadImageForView(String imageName, String purpose) {
         Database db = new Database();
@@ -68,6 +72,9 @@ public class UserController extends Application {
         else if (activity.equals("UserActivity")) {
             UserActivity.checkUserFound(list);
         }
+        else if (activity.equals("MyResultsFragment")) {
+            MyResultsFragment.checkUserFound(list);
+        }
 
     }
     public static void checkUserEdited() {
@@ -95,6 +102,9 @@ public class UserController extends Application {
         }
         else if (activity.equals("UserActivity")) {
             UserActivity.checkUserNotFound(list);
+        }
+        else if (activity.equals("MyResultsFragment")) {
+            MyResultsFragment.checkUserNotFound(list);
         }
 
     }

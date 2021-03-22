@@ -506,7 +506,7 @@ public class Database extends Application {
         catch(Error e) {
         }
     }
-    public void getEADataForEAFragment(final String eaID) {
+    public void getEADataForEAFragment(final String eaID, String purpose) {
         try {
             rootNode = FirebaseDatabase.getInstance();
             reference = rootNode.getReference("energyAction");
@@ -516,11 +516,11 @@ public class Database extends Application {
                 public void onCallback(List<EnergyAction> list) {
 
                     if (list.isEmpty()){
-                        EnergyActionController.checkEANotFound(list);
+                        EnergyActionController.checkEANotFound(list, purpose);
                         //UserController.checkUserNotFound(list);
                     }
                     else {
-                        EnergyActionController.checkEAFound(list);
+                        EnergyActionController.checkEAFound(list, purpose);
                         //UserController.checkUserFound(list);
                     }
 
@@ -531,7 +531,31 @@ public class Database extends Application {
         catch(Error e) {
         }
     }
-    public void getTADataForTAFragment(final String taID) {
+    public void getEADataForMyResults(final String userID, String purpose) {
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("energyAction");
+            u = userID;
+            readData11(new FireBaseCallback6() {
+                @Override
+                public void onCallback(List<EnergyAction> list) {
+
+                    if (list.isEmpty()){
+                        EnergyActionController.checkEANotFound(list, purpose);
+                    }
+                    else {
+                        EnergyActionController.checkEAFound(list, purpose);
+                        //UserController.checkUserFound(list);
+                    }
+
+
+                }
+            });
+        }
+        catch(Error e) {
+        }
+    }
+    public void getTADataForTAFragment(final String taID, String purpose) {
         try {
             rootNode = FirebaseDatabase.getInstance();
             reference = rootNode.getReference("transportAction");
@@ -541,10 +565,33 @@ public class Database extends Application {
                 public void onCallback(List<TransportAction> list) {
 
                     if (list.isEmpty()){
-                        TransportActionController.checkTANotFound(list);
+                        TransportActionController.checkTANotFound(list, purpose);
                     }
                     else {
-                        TransportActionController.checkTAFound(list);
+                        TransportActionController.checkTAFound(list, purpose);
+                    }
+
+
+                }
+            });
+        }
+        catch(Error e) {
+        }
+    }
+    public void getTADataForMyResults(String userID, String purpose) {
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("transportAction");
+            u = userID;
+            readData10(new FireBaseCallback7() {
+                @Override
+                public void onCallback(List<TransportAction> list) {
+
+                    if (list.isEmpty()){
+                        TransportActionController.checkTANotFound(list, purpose);
+                    }
+                    else {
+                        TransportActionController.checkTAFound(list, purpose);
                     }
 
 
@@ -661,6 +708,7 @@ public class Database extends Application {
         findProfile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                eaList = new ArrayList<>();
                 if (snapshot.exists()) {
                     //Log.i("mano", "snapshot exists");
                     for(DataSnapshot ds : snapshot.getChildren()) {
@@ -673,14 +721,57 @@ public class Database extends Application {
                         String dateEnd = ea.getDateEnd();
                         //id
                         String date = ea.getDate();
+                        boolean noWater = ea.isNoWater();
                         boolean shower = ea.isShower();
                         String showerTime = ea.getShowerTime();
                         boolean bath = ea.isBath();
                         String devicesOff = ea.getDevicesOff();
                         //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
-                        EnergyAction energyAction = new EnergyAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date, shower, showerTime, bath, devicesOff);
+                        EnergyAction energyAction = new EnergyAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date, noWater, shower, showerTime, bath, devicesOff);
 
-                        eaList = new ArrayList<>();
+
+                        eaList.add(energyAction);
+                    }
+                }
+                else {
+                }
+                fireBaseCallback6.onCallback(eaList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void readData11(final FireBaseCallback6 fireBaseCallback6){
+        ////////////////////////////////////////////////////////////////////////////////////energy action
+        Query findProfile = reference.orderByChild("userID").equalTo(u);
+        findProfile.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                eaList = new ArrayList<>();
+                if (snapshot.exists()) {
+                    //Log.i("mano", "snapshot exists");
+                    for(DataSnapshot ds : snapshot.getChildren()) {
+                        String eaIDFromDB = ds.getKey();
+                        EnergyAction ea = ds.getValue(EnergyAction.class);
+                        String saID = ea.getId();
+                        String category = ea.getCategory();
+                        String userID = ea.getUserID();
+                        String dateBegin = ea.getDateBegin();
+                        String dateEnd = ea.getDateEnd();
+                        //id
+                        String date = ea.getDate();
+                        boolean noWater = ea.isNoWater();
+                        boolean shower = ea.isShower();
+                        String showerTime = ea.getShowerTime();
+                        boolean bath = ea.isBath();
+                        String devicesOff = ea.getDevicesOff();
+                        //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
+                        EnergyAction energyAction = new EnergyAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date, noWater, shower, showerTime, bath, devicesOff);
+
+
                         eaList.add(energyAction);
                     }
                 }
@@ -701,6 +792,7 @@ public class Database extends Application {
         findProfile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                taList = new ArrayList<>();
                 if (snapshot.exists()) {
                     Log.i("mano", "snapshot exists FOR TA.........................");
                     for(DataSnapshot ds : snapshot.getChildren()) {
@@ -728,7 +820,56 @@ public class Database extends Application {
                         //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
                         TransportAction transportAction = new TransportAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date,
                                 noTravelling, walking, walkingKm,bicycle, bicycleKm, publicTransport, publicTransportKm,car,carKm,carPassengersKm,carPassengers);
-                        taList = new ArrayList<>();
+
+                        taList.add(transportAction);
+                    }
+                }
+                else {
+                }
+                fireBaseCallback7.onCallback(taList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void readData10(final FireBaseCallback7 fireBaseCallback7){
+        ////////////////////////////////////////////////////////////////////////////////////transport action
+        Query findProfile = reference.orderByChild("userID").equalTo(u);
+        findProfile.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                taList = new ArrayList<>();
+                if (snapshot.exists()) {
+                    Log.i("mano", "snapshot exists FOR TA.........................");
+                    for(DataSnapshot ds : snapshot.getChildren()) {
+                        String eaIDFromDB = ds.getKey();
+                        TransportAction ta = ds.getValue(TransportAction.class);
+                        String saID = ta.getId();
+                        String category = ta.getCategory();
+                        String userID = ta.getUserID();
+                        String dateBegin = ta.getDateBegin();
+                        String dateEnd = ta.getDateEnd();
+                        //id
+                        String date = ta.getDate();
+                        boolean noTravelling = ta.isNoTravelling();
+                        boolean walking = ta.isWalking();
+                        String walkingKm = ta.getWalkingKM();
+                        boolean bicycle = ta.isBicycle();
+                        String bicycleKm = ta.getBicycleKM();
+                        boolean publicTransport = ta.isPublicTransport();
+                        String publicTransportKm = ta.getPublicTransportKM();
+                        boolean car = ta.isCar();
+                        String carKm = ta.getCarKM();
+                        String carPassengersKm = ta.getCarPassengersKM();
+                        String carPassengers = ta.getCarPassengers();
+
+                        //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
+                        TransportAction transportAction = new TransportAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date,
+                                noTravelling, walking, walkingKm,bicycle, bicycleKm, publicTransport, publicTransportKm,car,carKm,carPassengersKm,carPassengers);
+
                         taList.add(transportAction);
                     }
                 }
@@ -927,6 +1068,7 @@ public class Database extends Application {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 for(DataSnapshot editableEA: snapshot.getChildren()){
+                    editableEA.getRef().child("noWater").setValue(eAction.isNoWater());
                     editableEA.getRef().child("shower").setValue(eAction.isShower());
                     editableEA.getRef().child("showerTime").setValue(eAction.getShowerTime());
                     editableEA.getRef().child("bath").setValue(eAction.isBath());

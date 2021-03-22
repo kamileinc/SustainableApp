@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,15 +20,147 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="110dp"
+            android:layout_height="62dp"
             android:text="Mano rezultatai"
             android:textAlignment="center"
             android:textSize="30sp" />
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="76dp">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/all_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bendra" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/food_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mityba" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/transport_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Transportas" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/energy_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Būstas" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="129dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/image_iv"
+                android:layout_width="300px"
+                android:layout_height="300px"
+                tools:src="@tools:sample/avatars" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/firstName2_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:paddingStart="20dp"
+                    android:text="Vardas"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/lastName2_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:paddingStart="20dp"
+                    android:text="Pavardė"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView26"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/noData_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Šioje kategorijoje dar neturite duomenų"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+
         <com.jjoe64.graphview.GraphView
-            android:layout_width = "match_parent"
-            android:layout_height = "200dip"
-            android:id = "@+id/graph" />
+            android:id="@+id/graph"
+            android:layout_width="match_parent"
+            android:layout_height="200dip"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/food_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mityba:"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/transport2_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Transportas:"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/energy_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Būstas:"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/total_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Iš viso:"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/badges_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ženkleliai:"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

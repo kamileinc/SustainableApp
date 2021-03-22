@@ -8,6 +8,7 @@ import com.example.sustainableapp.models.EnergyAction;
 import com.example.sustainableapp.models.SustainableAction;
 import com.example.sustainableapp.models.TransportAction;
 import com.example.sustainableapp.views.EnergyActionFragment;
+import com.example.sustainableapp.views.MyResultsFragment;
 import com.example.sustainableapp.views.TransportActionFragment;
 
 import java.text.SimpleDateFormat;
@@ -32,23 +33,33 @@ public class TransportActionController extends Application {
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
     }
-    public boolean getTAForTAFragment(String userId) {
+    public boolean getTAForTAFragment(String userId, String purpose) {
         Database db = new Database();
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(System.currentTimeMillis());
         String dateStr = formatter.format(date);
         final String id = userId + dateStr;
         Log.i("mano", "TA ID: "+ id);
-        db.getTADataForTAFragment(id);
+        db.getTADataForTAFragment(id, purpose);
         return true;
 
 
     }
-    public static void checkTANotFound(List<TransportAction> list) {
-        TransportActionFragment.checkTANotFound(list);
+    public static void checkTANotFound(List<TransportAction> list, String purpose) {
+        if (purpose.equals("TransportActionFragment")) {
+            TransportActionFragment.checkTANotFound(list);
+        }
+        else if (purpose.equals("MyResultsFragment")) {
+            MyResultsFragment.checkTANotFound(list);
+        }
     }
-    public static void checkTAFound(List<TransportAction> list) {
-        TransportActionFragment.checkTAFound(list);
+    public static void checkTAFound(List<TransportAction> list,  String purpose) {
+        if (purpose.equals("TransportActionFragment")) {
+            TransportActionFragment.checkTAFound(list);
+        }
+        else if (purpose.equals("MyResultsFragment")) {
+            MyResultsFragment.checkTAFound(list);
+        }
     }
     public List<String> validateTA(TransportAction ta) {
         ArrayList<String> errors = new ArrayList();
@@ -206,5 +217,10 @@ public class TransportActionController extends Application {
     }
     public static void checkTAEdited() {
         TransportActionFragment.checkTAEdited();
+    }
+    public boolean getTAForMyResults(String userID, String purpose) {
+        Database db = new Database();
+        db.getTADataForMyResults(userID, purpose);
+        return true;
     }
 }

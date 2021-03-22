@@ -11,6 +11,7 @@ import com.example.sustainableapp.models.User;
 import com.example.sustainableapp.views.EditProfileFragment;
 import com.example.sustainableapp.views.EnergyActionFragment;
 import com.example.sustainableapp.views.LoginActivity;
+import com.example.sustainableapp.views.MyResultsFragment;
 import com.example.sustainableapp.views.ProfileFragment;
 import com.example.sustainableapp.views.RegisterActivity;
 
@@ -35,7 +36,7 @@ public class EnergyActionController extends Application {
         for (int i= 0; i< 7;i++) {
 
             String date2 = formatter.format(c.getTime());
-            EnergyAction ea = new EnergyAction(sa.getId(), sa.getCategory(),sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), date2, false, "0:0", false, "0");
+            EnergyAction ea = new EnergyAction(sa.getId(), sa.getCategory(),sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), date2, false, false, "0:0", false, "0");
             db.saveEA(ea);
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
@@ -107,7 +108,12 @@ public class EnergyActionController extends Application {
         return "";
 
     }
-    public boolean getEAForEAFragment(String userId) {
+    public boolean getEAForMyResults(String userID, String purpose) {
+        Database db = new Database();
+        db.getEADataForMyResults(userID, purpose);
+        return true;
+    }
+    public boolean getEAForEAFragment(String userId, String purpose) {
         Database db = new Database();
 
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
@@ -115,15 +121,26 @@ public class EnergyActionController extends Application {
         String dateStr = formatter.format(date);
         final String id = userId + dateStr;
         Log.i("mano", "EA ID: "+ id);
-        db.getEADataForEAFragment(id);
+        db.getEADataForEAFragment(id, purpose);
         return true;
 
 
     }
-    public static void checkEANotFound(List<EnergyAction> list) {
-        EnergyActionFragment.checkEANotFound(list);
+    public static void checkEANotFound(List<EnergyAction> list, String purpose) {
+        if (purpose.equals("EnergyActionFragment")) {
+            EnergyActionFragment.checkEANotFound(list);
+        }
+        else if (purpose.equals("MyResultsFragment")) {
+            MyResultsFragment.checkEANotFound(list);
+        }
+
     }
-    public static void checkEAFound(List<EnergyAction> list) {
-        EnergyActionFragment.checkEAFound(list);
+    public static void checkEAFound(List<EnergyAction> list, String purpose) {
+        if (purpose.equals("EnergyActionFragment")) {
+            EnergyActionFragment.checkEAFound(list);
+        }
+        else if (purpose.equals("MyResultsFragment")) {
+            MyResultsFragment.checkEAFound(list);
+        }
     }
 }

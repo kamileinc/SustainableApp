@@ -36,7 +36,7 @@ import java.util.List;
 public class EnergyActionFragment extends Fragment {
     TextView min_tv, s_tv;
     EditText min_etn, s_etn, devices_etn;
-    CheckBox shower_cb, bath_cb;
+    CheckBox shower_cb, bath_cb, noWater_cb;
     Button save_energy_action_b;
     String userID;
     private static IntVariable foundEA;
@@ -93,6 +93,17 @@ public class EnergyActionFragment extends Fragment {
                 }
             }
                 });
+        noWater_cb =(CheckBox) view.findViewById(R.id.noWater_cb);
+        noWater_cb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (noWater_cb.isChecked()) {
+                    setInvisibleShowerAndBathFields(view);
+                } else {
+                    setVisibleShowerAndBathFields(view);
+                }
+            }
+        });
         save_energy_action_b = (Button) view.findViewById(R.id.save_energy_action_b);
         save_energy_action_b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,17 +112,25 @@ public class EnergyActionFragment extends Fragment {
                    // Log.i("mano", "DABARTINIS SA: min:  " + min_etn.getText());
                     String showerTime = "0:0";
                     String devices = "0";
-                    if (shower_cb.isChecked()) {
-                        if (!min_etn.getText().toString().equals("")) {
-                            showerTime = min_etn.getText().toString();
-                        } else {
-                            showerTime = "0";
-                        }
-                        showerTime = showerTime + ":";
-                        if (!s_etn.getText().toString().equals("")) {
-                            showerTime = showerTime + s_etn.getText().toString();
-                        } else {
-                            showerTime = showerTime + "0";
+                    boolean shower = shower_cb.isChecked();
+                    boolean bath = bath_cb.isChecked();
+                    if (noWater_cb.isChecked()) {
+                        bath = false;
+                        shower = false;
+                    }
+                    else {
+                        if (shower_cb.isChecked()) {
+                            if (!min_etn.getText().toString().equals("")) {
+                                showerTime = min_etn.getText().toString();
+                            } else {
+                                showerTime = "0";
+                            }
+                            showerTime = showerTime + ":";
+                            if (!s_etn.getText().toString().equals("")) {
+                                showerTime = showerTime + s_etn.getText().toString();
+                            } else {
+                                showerTime = showerTime + "0";
+                            }
                         }
                     }
                     if (devices_etn.getText().toString().length() != 0) {
@@ -120,7 +139,7 @@ public class EnergyActionFragment extends Fragment {
                     SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
                     Date date = new Date(System.currentTimeMillis());
                     String dateStr = formatter.format(date);
-                    EnergyAction ea = new EnergyAction(sa.getId(), sa.getCategory(), sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), dateStr, shower_cb.isChecked(), showerTime, bath_cb.isChecked(), devices);
+                    EnergyAction ea = new EnergyAction(sa.getId(), sa.getCategory(), sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), dateStr, noWater_cb.isChecked(), shower, showerTime, bath, devices);
                     EnergyActionController eac = new EnergyActionController();
                     errors = (ArrayList<String>) eac.validateEA(ea);
                     int howManyErr = 0;
@@ -158,7 +177,7 @@ public class EnergyActionFragment extends Fragment {
             }
         });
         EnergyActionController eac = new EnergyActionController();
-        eac.getEAForEAFragment(userID);
+        eac.getEAForEAFragment(userID, "EnergyActionFragment");
         foundEA = new IntVariable();
         foundEA.setListener(new IntVariable.ChangeListener() {
             @Override
@@ -170,6 +189,12 @@ public class EnergyActionFragment extends Fragment {
                     //int s1 = Integer.parseInt(sArr[1]);
                     min_etn.setText(sArr[0]);
                     s_etn.setText(sArr[1]);
+                    if (EAData.get(0).isNoWater()) {
+                        noWater_cb.setChecked(true);
+                    }
+                    if (noWater_cb.isChecked()) {
+                        setInvisibleShowerAndBathFields(view);
+                    }
                     if (EAData.get(0).isShower()) {
                         shower_cb.setChecked(true);
                         setVisibleShowerFields(view);
@@ -199,8 +224,19 @@ public class EnergyActionFragment extends Fragment {
         devices_etn = getView().findViewById(R.id.devices_etn);
         save_energy_action_b = getView().findViewById(R.id.save_energy_action_b);
         //shower_cb = getView().findViewById(R.id.shower_cb);
+        noWater_cb = getView().findViewById(R.id.noWater_cb);
         bath_cb = getView().findViewById(R.id.bath_cb);
         setInvisibleShowerFields(view);
+    }
+    public void setInvisibleShowerAndBathFields(View view) {
+        setInvisibleShowerFields(view);
+        shower_cb.setVisibility(View.INVISIBLE);
+        bath_cb.setVisibility(View.INVISIBLE);
+    }
+    public void setVisibleShowerAndBathFields(View view) {
+        setVisibleShowerFields(view);
+        shower_cb.setVisibility(View.VISIBLE);
+        bath_cb.setVisibility(View.VISIBLE);
     }
     public void setVisibleShowerFields(View view) {
         min_etn.setVisibility(View.VISIBLE);

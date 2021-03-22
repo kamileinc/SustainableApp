@@ -3,6 +3,7 @@ package com.example.sustainableapp.models;
 public class EnergyAction extends SustainableAction{
     private String eaID;
     private String date;
+    private boolean noWater;
     private boolean shower;
     private String showerTime;
     private boolean bath;
@@ -11,21 +12,23 @@ public class EnergyAction extends SustainableAction{
     public EnergyAction() {
     }
 
-    public EnergyAction(String id, String category, String userID, String dateBegin, String dateEnd, String eaID, String date, boolean shower, String showerTime, boolean bath, String devicesOff) {
+    public EnergyAction(String id, String category, String userID, String dateBegin, String dateEnd, String eaID, String date, boolean noWater, boolean shower, String showerTime, boolean bath, String devicesOff) {
         super(id, category, userID, dateBegin, dateEnd);
         this.eaID = eaID;
         this.date = date;
+        this.noWater = noWater;
         this.shower = shower;
         this.showerTime = showerTime;
         this.bath = bath;
         this.devicesOff = devicesOff;
     }
 
-    public EnergyAction(String id, String category, String userID, String dateBegin, String dateEnd, String date, boolean shower, String showerTime, boolean bath, String devicesOff) {
+    public EnergyAction(String id, String category, String userID, String dateBegin, String dateEnd, String date, boolean noWater, boolean shower, String showerTime, boolean bath, String devicesOff) {
         super(id, category, userID, dateBegin, dateEnd);
        //this.id = Long.toString(System.currentTimeMillis()/1000);
         this.eaID = userID + date;
         this.date = date;
+        this.noWater = noWater;
         this.shower = shower;
         this.showerTime = showerTime;
         this.bath = bath;
@@ -37,11 +40,20 @@ public class EnergyAction extends SustainableAction{
         return "EnergyAction{" +
                 "eaID='" + eaID + '\'' +
                 ", date='" + date + '\'' +
+                ", noWater='" + noWater + '\'' +
                 ", shower=" + shower +
                 ", showerTime='" + showerTime + '\'' +
                 ", bath=" + bath +
                 ", devicesOff='" + devicesOff + '\'' +
                 '}';
+    }
+
+    public boolean isNoWater() {
+        return noWater;
+    }
+
+    public void setNoWater(boolean noWater) {
+        this.noWater = noWater;
     }
 
     public String getEaID() {
