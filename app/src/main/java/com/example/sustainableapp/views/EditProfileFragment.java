@@ -194,7 +194,7 @@ public class EditProfileFragment extends Fragment {
                     //al = pc.formatProductListForFarmer(productsForList);
                     UserController uc = new UserController();
                     String purpose = "editProfile";
-                    uc.loadImageForView(profileData.get(0).getId() + ".jpg", purpose);
+                    uc.loadImageForView(profileData.get(0).getId(), profileData.get(0).getId() + ".jpg", purpose);
                     Log.i("mano", profileData.get(0).toString());
                     firstName_et.setText(profileData.get(0).getFirstName());
                     lastName_et.setText(profileData.get(0).getLastName());

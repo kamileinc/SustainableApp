@@ -3,11 +3,14 @@ package com.example.sustainableapp.controllers;
 import android.app.Application;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 
 import com.example.sustainableapp.models.Database;
 import com.example.sustainableapp.models.EnergyAction;
+import com.example.sustainableapp.models.FoodAction;
 import com.example.sustainableapp.models.SustainableAction;
 import com.example.sustainableapp.models.User;
+import com.example.sustainableapp.views.AllResultsFragment;
 import com.example.sustainableapp.views.EditProfileFragment;
 import com.example.sustainableapp.views.EnergyActionFragment;
 import com.example.sustainableapp.views.LoginActivity;
@@ -126,21 +129,92 @@ public class EnergyActionController extends Application {
 
 
     }
-    public static void checkEANotFound(List<EnergyAction> list, String purpose) {
+    public static void checkEANotFound(List<EnergyAction> list, String userID,  String purpose) {
         if (purpose.equals("EnergyActionFragment")) {
             EnergyActionFragment.checkEANotFound(list);
         }
         else if (purpose.equals("MyResultsFragment")) {
             MyResultsFragment.checkEANotFound(list);
         }
+        else if (purpose.equals("AllEA")) {
+            double points = 0;
+            MyResultsFragment.checkEAPoints(points);
+        }
+        else if (purpose.equals("AllResults")) {
+            double points = 0;
+            AllResultsFragment.checkEAPointsForUser(points, userID);
+        }
 
     }
-    public static void checkEAFound(List<EnergyAction> list, String purpose) {
+    public static void checkEAFound(List<EnergyAction> list, String userID, String purpose) {
         if (purpose.equals("EnergyActionFragment")) {
             EnergyActionFragment.checkEAFound(list);
         }
         else if (purpose.equals("MyResultsFragment")) {
             MyResultsFragment.checkEAFound(list);
         }
+        else if (purpose.equals("AllEA")) {
+            double points = 0;
+            points = sumAllEAPoints( list);
+            MyResultsFragment.checkEAPoints(points);
+        }
+        else if (purpose.equals("AllResults")) {
+            double points = 0;
+            points = sumAllEAPoints( list);
+            AllResultsFragment.checkEAPointsForUser(points, userID);
+        }
+    }
+    public void getAllEnergyPoints(String userID, String purpose) {
+        Database db = new Database();
+        db.getAllEA(userID, purpose);
+    }
+    public static double sumAllEAPoints(List<EnergyAction> eaList) {
+        double points = 0;
+        if (eaList != null) {
+
+
+            for (int i = 0; i<eaList.size();i++) {
+                double temp = 0;
+
+                    if (eaList.get(i).isNoWater()) {
+                        temp = temp + 10;
+                    }
+                    else if (eaList.get(i).isShower() && !eaList.get(i).isBath()) {
+                        String[] sArr = eaList.get(i).getShowerTime().split(":", 5);
+                        int m1 = Integer.parseInt(sArr[0]);
+                        if (m1<5) {
+                            temp = temp + 7.5;
+                        }
+                        else if (m1>=5 && m1<10) {
+                            temp = temp + 5;
+                        }
+                        else if (m1>10) {
+                            temp = temp + 2.5;
+                        }
+                    }
+                    else if (!eaList.get(i).isShower() && eaList.get(i).isBath()) {
+                        temp = temp + 2.5;
+                    }
+                    else if (eaList.get(i).isShower() && eaList.get(i).isBath()) {
+                        temp = temp + 1;
+                    }
+                    int devicesOff = Integer.parseInt(eaList.get(i).getDevicesOff());
+                    if (devicesOff > 0 && devicesOff <= 5) {
+                        temp = temp + 5;
+                    }
+                    else if (devicesOff > 5 && devicesOff <= 8) {
+                        temp = temp + 7.5;
+                    }
+                    else if (devicesOff >10) {
+                        temp = temp + 10;
+                    }
+                    //////////////////////////////////
+                    if (temp != 0) {
+                        temp = temp / 2;
+                    }
+                    points = points + temp;
+            }
+        }
+        return points;
     }
 }

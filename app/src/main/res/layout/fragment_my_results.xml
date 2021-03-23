@@ -100,7 +100,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView26"
+            android:id="@+id/empty_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

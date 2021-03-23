@@ -4,7 +4,6 @@ package com.example.sustainableapp.models;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,7 +14,6 @@ import com.example.sustainableapp.controllers.FoodActionController;
 import com.example.sustainableapp.controllers.SustainableActionController;
 import com.example.sustainableapp.controllers.TransportActionController;
 import com.example.sustainableapp.controllers.UserController;
-import com.example.sustainableapp.views.MyResultsFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -30,17 +28,15 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Database extends Application {
     FirebaseDatabase rootNode;
     DatabaseReference reference;
     ArrayList userList = new ArrayList<>();
-    ArrayList eaList = new ArrayList<>();
-    ArrayList taList = new ArrayList<>();
-    ArrayList faList = new ArrayList<>();
+    ArrayList<EnergyAction> eaList = new ArrayList<>();
+    ArrayList<TransportAction> taList = new ArrayList<>();
+    ArrayList<FoodAction> faList = new ArrayList<>();
     ArrayList saList = new ArrayList<>();
     ArrayList factList = new ArrayList<>();
     String u ="";
@@ -79,7 +75,7 @@ public class Database extends Application {
         });
 
     }
-    public void getPhotoForView(String imageName, String purpose) {
+    public void getPhotoForView(String userID, String imageName, String purpose) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference gsReference = storage.getReferenceFromUrl("gs://sustainableapp-e3fb1.appspot.com/images/" + imageName);
         final long ONE_MEGABYTE = 1024 * 1024;
@@ -87,7 +83,7 @@ public class Database extends Application {
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                UserController.checkPhotoReturnedToView(bmp, purpose);
+                UserController.checkPhotoReturnedToView(userID, bmp, purpose);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -99,7 +95,7 @@ public class Database extends Application {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        UserController.checkPhotoReturnedToView(bmp, purpose);
+                        UserController.checkPhotoReturnedToView(userID, bmp, purpose);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -237,6 +233,23 @@ public class Database extends Application {
         }
     }
 
+    public void findAllUsers() {
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("users");
+            //String purpose = "register";
+            readDataUsers(new FireBaseCallback() {
+                @Override
+                public void onCallback(List<User> list) {
+                //kazka daryti
+                    UserController.checkAllUsersFound(list);
+                }
+            });
+        }
+        catch(Error e) {
+        }
+    }
+
     public void getFactsFromDB(String findCategory){
         try {
             rootNode = FirebaseDatabase.getInstance();
@@ -273,6 +286,33 @@ public class Database extends Application {
                         userList.add(user);
                         fireBaseCallback.onCallback(userList);
                     }
+                }
+                else {
+                    Log.i("mano", "Username NOT found in db");
+                    fireBaseCallback.onCallback(userList);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void readDataUsers(final FireBaseCallback fireBaseCallback){
+        Query findUser = reference.orderByChild("username");
+        findUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Log.i("mano", "Username found in db");
+                    for(DataSnapshot ds : snapshot.getChildren()) {
+                        String idFromDB = ds.getKey();
+                        User  user = ds.getValue(User.class);
+                        userList.add(user);
+
+                    }
+                    fireBaseCallback.onCallback(userList);
                 }
                 else {
                     Log.i("mano", "Username NOT found in db");
@@ -516,11 +556,36 @@ public class Database extends Application {
                 public void onCallback(List<EnergyAction> list) {
 
                     if (list.isEmpty()){
-                        EnergyActionController.checkEANotFound(list, purpose);
+                        EnergyActionController.checkEANotFound(list, eaID, purpose);
                         //UserController.checkUserNotFound(list);
                     }
                     else {
-                        EnergyActionController.checkEAFound(list, purpose);
+                        EnergyActionController.checkEAFound(list, eaID, purpose);
+                        //UserController.checkUserFound(list);
+                    }
+
+
+                }
+            });
+        }
+        catch(Error e) {
+        }
+    }
+    public void getAllEA(final String userID, String purpose) {
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("energyAction");
+            u = userID;
+            readData13(new FireBaseCallback6() {
+                @Override
+                public void onCallback(List<EnergyAction> list) {
+
+                    if (list.isEmpty()){
+                        EnergyActionController.checkEANotFound(list, userID, purpose);
+                        //UserController.checkUserNotFound(list);
+                    }
+                    else {
+                        EnergyActionController.checkEAFound(list, userID, purpose);
                         //UserController.checkUserFound(list);
                     }
 
@@ -541,10 +606,10 @@ public class Database extends Application {
                 public void onCallback(List<EnergyAction> list) {
 
                     if (list.isEmpty()){
-                        EnergyActionController.checkEANotFound(list, purpose);
+                        EnergyActionController.checkEANotFound(list, userID,  purpose);
                     }
                     else {
-                        EnergyActionController.checkEAFound(list, purpose);
+                        EnergyActionController.checkEAFound(list, userID, purpose);
                         //UserController.checkUserFound(list);
                     }
 
@@ -565,10 +630,33 @@ public class Database extends Application {
                 public void onCallback(List<TransportAction> list) {
 
                     if (list.isEmpty()){
-                        TransportActionController.checkTANotFound(list, purpose);
+                        TransportActionController.checkTANotFound(list, taID, purpose);
                     }
                     else {
-                        TransportActionController.checkTAFound(list, purpose);
+                        TransportActionController.checkTAFound(list, taID, purpose);
+                    }
+
+
+                }
+            });
+        }
+        catch(Error e) {
+        }
+    }
+    public void getAllTA(final String userID, String purpose) {
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("transportAction");
+            u = userID;
+            readData14(new FireBaseCallback7() {
+                @Override
+                public void onCallback(List<TransportAction> list) {
+
+                    if (list.isEmpty()){
+                        TransportActionController.checkTANotFound(list, userID, purpose);
+                    }
+                    else {
+                        TransportActionController.checkTAFound(list, userID,  purpose);
                     }
 
 
@@ -588,10 +676,10 @@ public class Database extends Application {
                 public void onCallback(List<TransportAction> list) {
 
                     if (list.isEmpty()){
-                        TransportActionController.checkTANotFound(list, purpose);
+                        TransportActionController.checkTANotFound(list, userID, purpose);
                     }
                     else {
-                        TransportActionController.checkTAFound(list, purpose);
+                        TransportActionController.checkTAFound(list, userID, purpose);
                     }
 
 
@@ -611,10 +699,33 @@ public class Database extends Application {
                 public void onCallback(List<FoodAction> list) {
 
                     if (list.isEmpty()){
-                        FoodActionController.checkFANotFound(list, purpose);
+                        FoodActionController.checkFANotFound(list, faID, purpose);
                     }
                     else {
-                        FoodActionController.checkFAFound(list, purpose);
+                        FoodActionController.checkFAFound(list, faID, purpose);
+                    }
+
+
+                }
+            });
+        }
+        catch(Error e) {
+        }
+    }
+    public void getAllFA(final String userID, String purpose) {
+        try {
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("foodAction");
+            u = userID;
+            readData12(new FireBaseCallback8() {
+                @Override
+                public void onCallback(List<FoodAction> list) {
+
+                    if (list.isEmpty()){
+                        FoodActionController.checkFANotFound(list, userID, purpose);
+                    }
+                    else {
+                        FoodActionController.checkFAFound(list, userID, purpose);
                     }
 
 
@@ -634,10 +745,10 @@ public class Database extends Application {
                 public void onCallback(List<FoodAction> list) {
 
                     if (list.isEmpty()){
-                        FoodActionController.checkFANotFound(list, purpose);
+                        FoodActionController.checkFANotFound(list, userID, purpose);
                     }
                     else {
-                        FoodActionController.checkFAFound(list, purpose);
+                        FoodActionController.checkFAFound(list, userID, purpose);
                     }
 
 
@@ -744,7 +855,7 @@ public class Database extends Application {
             }
         });
     }
-    public void readData11(final FireBaseCallback6 fireBaseCallback6){
+    public void readData13(final FireBaseCallback6 fireBaseCallback6){
         ////////////////////////////////////////////////////////////////////////////////////energy action
         Query findProfile = reference.orderByChild("userID").equalTo(u);
         findProfile.addValueEventListener(new ValueEventListener() {
@@ -778,6 +889,54 @@ public class Database extends Application {
                 else {
                 }
                 fireBaseCallback6.onCallback(eaList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void readData11(final FireBaseCallback6 fireBaseCallback6){
+        ////////////////////////////////////////////////////////////////////////////////////energy action
+        Query findProfile = reference.orderByChild("userID").equalTo(u);
+        findProfile.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                eaList = new ArrayList<>();
+                List<EnergyAction> tempArr = new ArrayList<>();
+                if (snapshot.exists()) {
+                    //Log.i("mano", "snapshot exists");
+                    for(DataSnapshot ds : snapshot.getChildren()) {
+                        String eaIDFromDB = ds.getKey();
+                        EnergyAction ea = ds.getValue(EnergyAction.class);
+                        String saID = ea.getId();
+                        String category = ea.getCategory();
+                        String userID = ea.getUserID();
+                        String dateBegin = ea.getDateBegin();
+                        String dateEnd = ea.getDateEnd();
+                        //id
+                        String date = ea.getDate();
+                        boolean noWater = ea.isNoWater();
+                        boolean shower = ea.isShower();
+                        String showerTime = ea.getShowerTime();
+                        boolean bath = ea.isBath();
+                        String devicesOff = ea.getDevicesOff();
+                        //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
+                        EnergyAction energyAction = new EnergyAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date, noWater, shower, showerTime, bath, devicesOff);
+
+
+                        eaList.add(energyAction);
+                    }
+                    tempArr = new ArrayList<>();
+                    for (int i = eaList.size()-7; i<eaList.size(); i++) {
+                        Log.i("mano", "temparr: " + i);
+                        tempArr.add(eaList.get(i));
+                    }
+                }
+                else {
+                }
+                fireBaseCallback6.onCallback(tempArr);
             }
 
             @Override
@@ -835,7 +994,7 @@ public class Database extends Application {
             }
         });
     }
-    public void readData10(final FireBaseCallback7 fireBaseCallback7){
+    public void readData14(final FireBaseCallback7 fireBaseCallback7){
         ////////////////////////////////////////////////////////////////////////////////////transport action
         Query findProfile = reference.orderByChild("userID").equalTo(u);
         findProfile.addValueEventListener(new ValueEventListener() {
@@ -884,6 +1043,61 @@ public class Database extends Application {
             }
         });
     }
+    public void readData10(final FireBaseCallback7 fireBaseCallback7){
+        ////////////////////////////////////////////////////////////////////////////////////transport action
+        Query findProfile = reference.orderByChild("userID").equalTo(u);
+        findProfile.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                taList = new ArrayList<>();
+                List<TransportAction> tempArr = new ArrayList<>();
+                if (snapshot.exists()) {
+                    Log.i("mano", "snapshot exists FOR TA.........................");
+                    for(DataSnapshot ds : snapshot.getChildren()) {
+                        String eaIDFromDB = ds.getKey();
+                        TransportAction ta = ds.getValue(TransportAction.class);
+                        String saID = ta.getId();
+                        String category = ta.getCategory();
+                        String userID = ta.getUserID();
+                        String dateBegin = ta.getDateBegin();
+                        String dateEnd = ta.getDateEnd();
+                        //id
+                        String date = ta.getDate();
+                        boolean noTravelling = ta.isNoTravelling();
+                        boolean walking = ta.isWalking();
+                        String walkingKm = ta.getWalkingKM();
+                        boolean bicycle = ta.isBicycle();
+                        String bicycleKm = ta.getBicycleKM();
+                        boolean publicTransport = ta.isPublicTransport();
+                        String publicTransportKm = ta.getPublicTransportKM();
+                        boolean car = ta.isCar();
+                        String carKm = ta.getCarKM();
+                        String carPassengersKm = ta.getCarPassengersKM();
+                        String carPassengers = ta.getCarPassengers();
+
+                        //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
+                        TransportAction transportAction = new TransportAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date,
+                                noTravelling, walking, walkingKm,bicycle, bicycleKm, publicTransport, publicTransportKm,car,carKm,carPassengersKm,carPassengers);
+
+                        taList.add(transportAction);
+                    }
+                    tempArr = new ArrayList<>();
+                    for (int i = taList.size()-7; i<taList.size(); i++) {
+                        Log.i("mano", "temparr: " + i);
+                        tempArr.add(taList.get(i));
+                    }
+                }
+                else {
+                }
+                fireBaseCallback7.onCallback(tempArr);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
     public void readData8(final FireBaseCallback8 fireBaseCallback8){
         ////////////////////////////////////////////////////////////////////////////////////FOOD action
         Query findProfile = reference.orderByChild("faID").equalTo(id);
@@ -923,17 +1137,16 @@ public class Database extends Application {
             }
         });
     }
-    public void readData9(final FireBaseCallback8 fireBaseCallback8){
+    public void readData12(final FireBaseCallback8 fireBaseCallback8){
         ////////////////////////////////////////////////////////////////////////////////////FOOD action
-        Query findFA = reference.orderByChild("userID").equalTo(u);
-        findFA.addValueEventListener(new ValueEventListener() {
+        Query findProfile = reference.orderByChild("userID").equalTo(u);
+        findProfile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 faList = new ArrayList<>();
                 if (snapshot.exists()) {
                     Log.i("mano", "snapshot exists FOR FA.........................");
                     for(DataSnapshot ds : snapshot.getChildren()) {
-                        Log.i("mano", "snapshot exists FOR FA.........................CHILD");
                         String eaIDFromDB = ds.getKey();
                         FoodAction fa = ds.getValue(FoodAction.class);
                         String saID = fa.getId();
@@ -956,6 +1169,53 @@ public class Database extends Application {
                 else {
                 }
                 fireBaseCallback8.onCallback(faList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void readData9(final FireBaseCallback8 fireBaseCallback8){
+        ////////////////////////////////////////////////////////////////////////////////////FOOD action
+        Query findFA = reference.orderByChild("userID").equalTo(u);
+        findFA.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                faList = new ArrayList<>();
+                List<FoodAction> tempArr = new ArrayList<>();
+                if (snapshot.exists()) {
+                    Log.i("mano", "snapshot exists FOR FA.........................");
+                    for(DataSnapshot ds : snapshot.getChildren()) {
+                        Log.i("mano", "snapshot exists FOR FA.........................CHILD");
+                        String eaIDFromDB = ds.getKey();
+                        FoodAction fa = ds.getValue(FoodAction.class);
+                        String saID = fa.getId();
+                        String category = fa.getCategory();
+                        String userID = fa.getUserID();
+                        String dateBegin = fa.getDateBegin();
+                        String dateEnd = fa.getDateEnd();
+                        //id
+                        String date = fa.getDate();
+                        String breakfastFood = fa.getBreakfastFood();
+                        String lunchFood = fa.getLunchFood();
+                        String dinnerFood = fa.getDinnerFood();
+
+                        FoodAction foodAction = new FoodAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date, breakfastFood, lunchFood, dinnerFood );
+
+
+                        faList.add(foodAction);
+                    }
+                    tempArr = new ArrayList<>();
+                    for (int i = faList.size()-7; i<faList.size(); i++) {
+                        Log.i("mano", "temparr: " + i);
+                        tempArr.add(faList.get(i));
+                    }
+                }
+                else {
+                }
+                fireBaseCallback8.onCallback(tempArr);
             }
 
             @Override

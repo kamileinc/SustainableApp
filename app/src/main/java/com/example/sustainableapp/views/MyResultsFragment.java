@@ -48,6 +48,7 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.Series;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,17 +62,25 @@ public class MyResultsFragment extends Fragment {
     static ArrayList<SustainableAction> saList = new ArrayList<>();
     private static BooVariable saListReturned;
     private static IntVariable foundFA;
-    static ArrayList<FoodAction> FAData;
+    static ArrayList<FoodAction> FAData  = null;
     private static IntVariable foundEA;
-    static ArrayList<EnergyAction> EAData;
+    static ArrayList<EnergyAction> EAData  = null;
     private static IntVariable foundTA;
-    static ArrayList<TransportAction> TAData;
+    static ArrayList<TransportAction> TAData = null;
     private static IntVariable foundProfile;
     static ArrayList<User> profileData;
     private static Bitmap bitmap;
     private static BooVariable photoReturned;
+    private static BooVariable FAPointsReturned;
+    private static double FAPoints = 0;
+    private static BooVariable EAPointsReturned;
+    private static double EAPoints = 0;
+    private static BooVariable TAPointsReturned;
+    private static double TAPoints = 0;
+    private static IntVariable allPointsReturned;
+    private static double allPoints = 0;
     GraphView graph;
-    TextView noData, food_tv, transport2_tv, energy_tv, badges_tv, total_tv, firstName2_tv, lastName2_tv;
+    TextView noData, food_tv, transport2_tv, energy_tv, badges_tv, total_tv, firstName2_tv, lastName2_tv, empty_tv;
     ImageView image_iv;
     public MyResultsFragment() {
         // Required empty public constructor
@@ -98,9 +107,18 @@ public class MyResultsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_my_results, container, false);
+        FAData  = null;
+        EAData  = null;
+        TAData = null;
         getUsersSustainableActions();
         UserController uc = new UserController();
         uc.getProfile(userID, "MyResultsFragment");
+        FoodActionController fac = new FoodActionController();
+        fac.getAllFoodPoints(userID, "AllFA");
+        EnergyActionController eac = new EnergyActionController();
+        eac.getAllEnergyPoints(userID, "AllEA");
+        TransportActionController tac = new TransportActionController();
+        tac.getAllTransportPoints(userID, "AllTA");
         TabLayout tabs = (TabLayout) view.findViewById(R.id.tabs);
         TabItem food_tab = view.findViewById(R.id.food_tab);
         TabItem all_tab = view.findViewById(R.id.all_tab);
@@ -119,6 +137,36 @@ public class MyResultsFragment extends Fragment {
                 }
             }
         });
+        FAPointsReturned = new BooVariable();
+        FAPointsReturned.setListener(new BooVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+
+                food_tv.setText("Maistas: "  + new DecimalFormat("##.##").format(FAPoints) + " taškai");
+                //allPoints = allPoints + FAPoints;
+                allPointsReturned.setNumber(allPointsReturned.getNumber()+1);
+            }
+        });
+        EAPointsReturned = new BooVariable();
+        EAPointsReturned.setListener(new BooVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+
+                energy_tv.setText("Būstas: "  + new DecimalFormat("##.##").format(EAPoints) + " taškai");
+
+                allPointsReturned.setNumber(allPointsReturned.getNumber()+1);
+            }
+        });
+        TAPointsReturned = new BooVariable();
+        TAPointsReturned.setListener(new BooVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+
+                transport2_tv.setText("Transportas: "  + new DecimalFormat("##.##").format(TAPoints) + " taškai");
+                //allPoints = allPoints + TAPoints;
+                allPointsReturned.setNumber(allPointsReturned.getNumber()+1);
+            }
+        });
         foundProfile = new IntVariable();
         foundProfile.setListener(new IntVariable.ChangeListener() {
             @Override
@@ -133,11 +181,11 @@ public class MyResultsFragment extends Fragment {
                     Log.i("mano", profileData.get(0).toString());
                     firstName2_tv.setText(profileData.get(0).getFirstName());
                     lastName2_tv.setText(profileData.get(0).getLastName());
-                    uc.loadImageForView(profileData.get(0).getId() + ".jpg", purpose);
+                    uc.loadImageForView(profileData.get(0).getId(), profileData.get(0).getId() + ".jpg", purpose);
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
-                            uc.loadImageForView(profileData.get(0).getId() + ".jpg", purpose);
+                            uc.loadImageForView(profileData.get(0).getId(), profileData.get(0).getId() + ".jpg", purpose);
                             //photo_iv.setMaxHeight(100);
                             //photo_iv.setMaxWidth(100);
                         }
@@ -159,7 +207,8 @@ public class MyResultsFragment extends Fragment {
                 else if (selectedTabPosition==1) {
                     setVisibilityForGraphTab(view);
                     if (FAData != null) {
-                        noData.setVisibility(View.INVISIBLE);
+                        noData.setVisibility(View.GONE);
+
                         ArrayList<Double> arr = new ArrayList<Double>();
                         int numberOfActivity = 0;
                         Date today = new Date(System.currentTimeMillis());
@@ -215,11 +264,14 @@ public class MyResultsFragment extends Fragment {
                         String[] dates = new String[]{ FAData.get(0).getDate(), FAData.get(1).getDate(), FAData.get(2).getDate(), FAData.get(3).getDate(), FAData.get(4).getDate(), FAData.get(5).getDate(), FAData.get(6).getDate(), ""};
                         drawFAgraph(view, arr, numberOfActivity, dates);
                     }
+                    else {
+                        empty_tv.setVisibility(View.VISIBLE);
+                    }
                 }
                 else if (selectedTabPosition==2) {
                     setVisibilityForGraphTab(view);
                     if (TAData != null) {
-                        noData.setVisibility(View.INVISIBLE);
+                        noData.setVisibility(View.GONE);
                         ArrayList<Double> arr = new ArrayList<Double>();
                         int numberOfActivity = 0;
                         Date today = new Date(System.currentTimeMillis());
@@ -288,12 +340,15 @@ public class MyResultsFragment extends Fragment {
 
                         drawFAgraph(view, arr, numberOfActivity, dates);
                     }
+                    else {
+                        empty_tv.setVisibility(View.VISIBLE);
+                    }
 
                 }
                 else if (selectedTabPosition==3) {
                     setVisibilityForGraphTab(view);
                     if (EAData != null) {
-                        noData.setVisibility(View.INVISIBLE);
+                        noData.setVisibility(View.GONE);
                         ArrayList<Double> arr = new ArrayList<Double>();
                         int numberOfActivity = 0;
                         Date today = new Date(System.currentTimeMillis());
@@ -356,6 +411,9 @@ public class MyResultsFragment extends Fragment {
 
                         drawFAgraph(view, arr, numberOfActivity, dates);
                     }
+                    else {
+                        empty_tv.setVisibility(View.VISIBLE);
+                    }
 
                 }
             }
@@ -376,18 +434,25 @@ public class MyResultsFragment extends Fragment {
             public void onChange() {
                 if (saListReturned.isBoo()) {
                     Log.i("mano", "sa kiekis: " + saList.size() + "OBJ: " + saList.get(0).getCategory());
-                    if (saList.get(0).getCategory().equals("Food")) {
-                        FoodActionController fac = new FoodActionController();
-                        fac.getFAForMyResults(userID, "MyResultsFragment");
+                    for (int i = (saList.size()-1); i> (saList.size()-3); i--) {
+                        try {
+                            Log.i("mano", "for loop: " + i);
+                            if (saList.get(i).getCategory().equals("Food")) {
+                                FoodActionController fac = new FoodActionController();
+                                fac.getFAForMyResults(userID, "MyResultsFragment");
+                            } else if (saList.get(i).getCategory().equals("Transport")) {
+                                TransportActionController tac = new TransportActionController();
+                                tac.getTAForMyResults(userID, "MyResultsFragment");
+                            } else if (saList.get(i).getCategory().equals("Energy")) {
+                                EnergyActionController eac = new EnergyActionController();
+                                eac.getEAForMyResults(userID, "MyResultsFragment");
+                            }
+                        }
+                        catch (Exception e) {
+
+                        }
                     }
-                    else if (saList.get(0).getCategory().equals("Transport")) {
-                        TransportActionController tac = new TransportActionController();
-                        tac.getTAForMyResults(userID, "MyResultsFragment");
-                    }
-                    else if (saList.get(0).getCategory().equals("Energy")) {
-                        EnergyActionController eac = new EnergyActionController();
-                        eac.getEAForMyResults(userID, "MyResultsFragment");
-                    }
+
                 }
             }
         });
@@ -414,6 +479,18 @@ public class MyResultsFragment extends Fragment {
 
             }});
 
+        allPointsReturned = new IntVariable();
+        allPointsReturned.setListener(new IntVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+                if (allPointsReturned.getNumber()==3) {
+                    allPoints = EAPoints + TAPoints + FAPoints;
+                    total_tv.setText("Iš viso: "  + new DecimalFormat("##.##").format(allPoints) + " taškai");
+                    allPoints = 0;
+                    allPointsReturned.setNumber(0);
+                }
+            }});
+
         return view;
     }
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -432,6 +509,7 @@ public class MyResultsFragment extends Fragment {
         firstName2_tv = view.findViewById(R.id.firstName2_tv);
         lastName2_tv = view.findViewById(R.id.lastName2_tv);
         image_iv = view.findViewById(R.id.image_iv);
+        empty_tv = view.findViewById(R.id.empty_tv);
         //firstName2_tv.setVisibility(View.GONE);
         //lastName2_tv.setVisibility(View.GONE);
         //image_iv.setVisibility(View.GONE);
@@ -440,6 +518,7 @@ public class MyResultsFragment extends Fragment {
     }
     public void setVisibilityForAllTab(View view) {
         noData.setVisibility(View.GONE);
+        empty_tv.setVisibility(View.GONE);
         graph.setVisibility(View.GONE);
         food_tv.setVisibility(View.VISIBLE);
         transport2_tv.setVisibility(View.VISIBLE);
@@ -450,6 +529,7 @@ public class MyResultsFragment extends Fragment {
     }
     public void setVisibilityForGraphTab(View view) {
         noData.setVisibility(View.VISIBLE);
+        empty_tv.setVisibility(View.GONE);
         graph.setVisibility(View.GONE);
         food_tv.setVisibility(View.INVISIBLE);
         transport2_tv.setVisibility(View.INVISIBLE);
@@ -493,6 +573,29 @@ public class MyResultsFragment extends Fragment {
             checkFANotFound(list);
         }
     }
+    public static void checkFAPoints(double points) {
+        FAPoints = points;
+        FAPointsReturned.setBoo(true);
+        if (FAPointsReturned.getListener() != null) {
+            FAPointsReturned.getListener().onChange();
+        }
+    }
+    public static void checkEAPoints(double points) {
+        EAPoints = points;
+        EAPointsReturned.setBoo(true);
+        if (EAPointsReturned.getListener() != null) {
+            EAPointsReturned.getListener().onChange();
+        }
+    }
+
+    public static void checkTAPoints(double points) {
+        TAPoints = points;
+        TAPointsReturned.setBoo(true);
+        if (TAPointsReturned.getListener() != null) {
+            TAPointsReturned.getListener().onChange();
+        }
+    }
+
     public static void checkEANotFound(List<EnergyAction> list) {
         Log.i("mano", "neradom EA..........................");
     }
@@ -554,7 +657,7 @@ public class MyResultsFragment extends Fragment {
             series.setDrawDataPoints(true);
             series.setDataPointsRadius(10);
             series.setThickness(8);
-
+            graph.removeAllSeries();
             graph.addSeries(series);
             graph.getViewport().setMinX(1);
             graph.getViewport().setMaxX(8);
@@ -564,10 +667,10 @@ public class MyResultsFragment extends Fragment {
             graph.getViewport().setXAxisBoundsManual(true);
 
             //graph.setTitle("pavadinimas");
-            graph.getGridLabelRenderer().setVerticalAxisTitle("vertical axis title");
+            graph.getGridLabelRenderer().setVerticalAxisTitle("Taškai");
             graph.getGridLabelRenderer().setHorizontalLabelsVisible(true);
             graph.getGridLabelRenderer().setNumHorizontalLabels(8);
-            graph.getGridLabelRenderer().setHorizontalAxisTitle("Axis");
+            graph.getGridLabelRenderer().setHorizontalAxisTitle("Data");
             graph.getGridLabelRenderer().setTextSize(34);
             graph.getGridLabelRenderer().setGridColor(Color.BLUE);
             StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);

@@ -2,11 +2,14 @@ package com.example.sustainableapp.controllers;
 
 import android.app.Application;
 import android.util.Log;
+import android.view.View;
 
 import com.example.sustainableapp.models.Database;
 import com.example.sustainableapp.models.EnergyAction;
+import com.example.sustainableapp.models.FoodAction;
 import com.example.sustainableapp.models.SustainableAction;
 import com.example.sustainableapp.models.TransportAction;
+import com.example.sustainableapp.views.AllResultsFragment;
 import com.example.sustainableapp.views.EnergyActionFragment;
 import com.example.sustainableapp.views.MyResultsFragment;
 import com.example.sustainableapp.views.TransportActionFragment;
@@ -45,20 +48,38 @@ public class TransportActionController extends Application {
 
 
     }
-    public static void checkTANotFound(List<TransportAction> list, String purpose) {
+    public static void checkTANotFound(List<TransportAction> list, String userID, String purpose) {
         if (purpose.equals("TransportActionFragment")) {
             TransportActionFragment.checkTANotFound(list);
         }
         else if (purpose.equals("MyResultsFragment")) {
             MyResultsFragment.checkTANotFound(list);
         }
+        else if (purpose.equals("AllTA")) {
+            double points = 0;
+            MyResultsFragment.checkTAPoints(points);
+        }
+        else if (purpose.equals("AllResults")) {
+            double points = 0;
+            AllResultsFragment.checkTAPointsForUser(points, userID);
+        }
     }
-    public static void checkTAFound(List<TransportAction> list,  String purpose) {
+    public static void checkTAFound(List<TransportAction> list,  String userID, String purpose) {
         if (purpose.equals("TransportActionFragment")) {
             TransportActionFragment.checkTAFound(list);
         }
         else if (purpose.equals("MyResultsFragment")) {
             MyResultsFragment.checkTAFound(list);
+        }
+        else if (purpose.equals("AllTA")) {
+            double points = 0;
+            points = sumAllTAPoints( list);
+            MyResultsFragment.checkTAPoints(points);
+        }
+        else if (purpose.equals("AllResults")) {
+            double points = 0;
+            points = sumAllTAPoints( list);
+            AllResultsFragment.checkTAPointsForUser(points, userID);
         }
     }
     public List<String> validateTA(TransportAction ta) {
@@ -222,5 +243,65 @@ public class TransportActionController extends Application {
         Database db = new Database();
         db.getTADataForMyResults(userID, purpose);
         return true;
+    }
+    public void getAllTransportPoints(String userID, String purpose) {
+        Database db = new Database();
+        db.getAllTA(userID, purpose);
+    }
+    public static double sumAllTAPoints(List<TransportAction> taList) {
+        double points = 0;
+        if (taList != null) {
+            for (int i = 0; i<taList.size();i++) {
+                double temp = 0;
+                    if (taList.get(i).isNoTravelling()) {
+                        temp = temp + 10;
+                    }
+                    else if (taList.get(i).isWalking() && !taList.get(i).isBicycle() && !taList.get(i).isPublicTransport() && !taList.get(i).isCar()) {
+                        temp = temp + 10;
+                    }
+                    else if (taList.get(i).isBicycle() && !taList.get(i).isWalking() && !taList.get(i).isPublicTransport() && !taList.get(i).isCar()) {
+                        temp = temp + 10;
+                    }
+                    else if (taList.get(i).isPublicTransport() && !taList.get(i).isBicycle() && !taList.get(i).isWalking() && !taList.get(i).isCar()) {
+                        temp = temp + 7.5;
+                    }
+                    else if ((taList.get(i).isWalking() || taList.get(i).isBicycle()) && taList.get(i).isPublicTransport() && !taList.get(i).isCar()) {
+                        temp = temp + 8.5;
+                    }
+                    else if (!taList.get(i).isWalking() && !taList.get(i).isBicycle() && !taList.get(i).isPublicTransport() && taList.get(i).isCar()) {
+                        int passengers = Integer.parseInt(taList.get(i).getCarPassengers());
+                        if (passengers>0) {
+                            temp = temp + 5;
+                        }
+                        else {
+                            temp = temp + 2.5;
+                        }
+                    }
+                    else if (!taList.get(i).isWalking() && !taList.get(i).isBicycle() && taList.get(i).isPublicTransport() && taList.get(i).isCar()) {
+                        int passengers = Integer.parseInt(taList.get(i).getCarPassengers());
+                        if (passengers>0) {
+                            temp = temp + 6;
+                        }
+                        else {
+                            temp = temp + 3.5;
+                        }
+                    }
+                    else if ((taList.get(i).isWalking() || taList.get(i).isBicycle()) && taList.get(i).isPublicTransport() && taList.get(i).isCar()) {
+                        int passengers = Integer.parseInt(taList.get(i).getCarPassengers());
+                        if (passengers>0) {
+                            temp = temp + 7;
+                        }
+                        else {
+                            temp = temp + 4.5;
+                        }
+                    }
+                    //////////////////////////////////
+                    Log.i("mano", "temp: " + temp);
+                    points = points + temp;
+
+            }
+
+        }
+        return points;
     }
 }

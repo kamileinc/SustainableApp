@@ -124,11 +124,11 @@ public class ProfileFragment extends Fragment {
                     takingShowerPerWeek_et.setText(profileData.get(0).getTakingShowerPerWeek());
                     showerTime_et.setText(profileData.get(0).getShowerTime());
                     takingBathPerWeek_et.setText(profileData.get(0).getTakingBathPerWeek());
-                    uc.loadImageForView(profileData.get(0).getId() + ".jpg", purpose);
+                    uc.loadImageForView(profileData.get(0).getId(),profileData.get(0).getId() + ".jpg", purpose);
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
-                            uc.loadImageForView(profileData.get(0).getId() + ".jpg", purpose);
+                            uc.loadImageForView(profileData.get(0).getId(),profileData.get(0).getId() + ".jpg", purpose);
                             //photo_iv.setMaxHeight(100);
                             //photo_iv.setMaxWidth(100);
                         }

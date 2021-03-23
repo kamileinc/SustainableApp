@@ -2,12 +2,14 @@ package com.example.sustainableapp.controllers;
 
 import android.app.Application;
 import android.util.Log;
+import android.view.View;
 
 import com.example.sustainableapp.models.Database;
 import com.example.sustainableapp.models.EnergyAction;
 import com.example.sustainableapp.models.FoodAction;
 import com.example.sustainableapp.models.SustainableAction;
 import com.example.sustainableapp.models.TransportAction;
+import com.example.sustainableapp.views.AllResultsFragment;
 import com.example.sustainableapp.views.EnergyActionFragment;
 import com.example.sustainableapp.views.FoodActionFragment;
 import com.example.sustainableapp.views.MyResultsFragment;
@@ -51,22 +53,42 @@ public class FoodActionController extends Application {
         db.getFADataForMyResults(userID, purpose);
         return true;
     }
-    public static void checkFANotFound(List<FoodAction> list, String purpose) {
+    public static void checkFANotFound(List<FoodAction> list, String userID, String purpose) {
         if (purpose.equals("FoodActionFragment")) {
             FoodActionFragment.checkFANotFound(list);
         }
         else if (purpose.equals("MyResultsFragment")) {
             MyResultsFragment.checkFANotFound(list);
         }
+        else if (purpose.equals("AllFA")) {
+            //MyResultsFragment.checkFANotFound(list);
+            double points = 0;
+            MyResultsFragment.checkFAPoints(points);
+        }
+        else if (purpose.equals("AllResults")) {
+            //MyResultsFragment.checkFANotFound(list);
+            double points = 0;
+            AllResultsFragment.checkFAPointsForUser(points, userID);
+        }
 
 
     }
-    public static void checkFAFound(List<FoodAction> list, String purpose) {
+    public static void checkFAFound(List<FoodAction> list, String userID, String purpose) {
         if (purpose.equals("FoodActionFragment")) {
             FoodActionFragment.checkFAFound(list);
         }
         else if (purpose.equals("MyResultsFragment")) {
             MyResultsFragment.checkFAFound(list);
+        }
+        else if (purpose.equals("AllFA")) {
+            double points = 0;
+            points = sumAllFAPoints( list);
+            MyResultsFragment.checkFAPoints(points);
+        }
+        else if (purpose.equals("AllResults")) {
+            double points = 0;
+            points = sumAllFAPoints( list);
+            AllResultsFragment.checkFAPointsForUser(points, userID);
         }
     }
     public void updateFoodActionInDB(FoodAction fa) {
@@ -75,5 +97,53 @@ public class FoodActionController extends Application {
     }
     public static void checkFAEdited() {
         FoodActionFragment.checkFAEdited();
+    }
+    public void getAllFoodPoints(String userID, String purpose) {
+        Database db = new Database();
+        db.getAllFA(userID, purpose);
+    }
+    public static double sumAllFAPoints(List<FoodAction> faList) {
+        double points = 0;
+        if (faList != null) {
+            ArrayList<Double> arr = new ArrayList<Double>();
+            for (int i = 0; i<faList.size();i++) {
+                double temp = 0;
+                    if (faList.get(i).getBreakfastFood().equals("0")) {
+                        temp = temp + 10;
+                    } else if (faList.get(i).getBreakfastFood().equals("1")) {
+                        temp = temp + 7.5;
+                    } else if (faList.get(i).getBreakfastFood().equals("2")) {
+                        temp = temp + 5;
+                    } else if (faList.get(i).getBreakfastFood().equals("3")) {
+                        temp = temp + 2.5;
+                    }
+
+                    if (faList.get(i).getLunchFood().equals("0")) {
+                        temp = temp + 10;
+                    } else if (faList.get(i).getLunchFood().equals("1")) {
+                        temp = temp + 7.5;
+                    } else if (faList.get(i).getLunchFood().equals("2")) {
+                        temp = temp + 5;
+                    } else if (faList.get(i).getLunchFood().equals("3")) {
+                        temp = temp + 2.5;
+                    }
+
+                    if (faList.get(i).getDinnerFood().equals("0")) {
+                        temp = temp + 10;
+                    } else if (faList.get(i).getDinnerFood().equals("1")) {
+                        temp = temp + 7.5;
+                    } else if (faList.get(i).getDinnerFood().equals("2")) {
+                        temp = temp + 5;
+                    } else if (faList.get(i).getDinnerFood().equals("3")) {
+                        temp = temp + 2.5;
+                    }
+                    if (temp != 0) {
+                        temp = temp / 3;
+                    }
+                    arr.add(temp);
+                    points= points + temp;
+            }
+        }
+        return points;
     }
 }

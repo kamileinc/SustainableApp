@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.sustainableapp.models.Database;
 import com.example.sustainableapp.models.User;
+import com.example.sustainableapp.views.AllResultsFragment;
 import com.example.sustainableapp.views.EditProfileFragment;
 import com.example.sustainableapp.views.FoodActionFragment;
 import com.example.sustainableapp.views.LoginActivity;
@@ -34,7 +35,7 @@ public class UserController extends Application {
         }
 
     }
-    public static void checkPhotoReturnedToView(Bitmap bmp, String purpose) {
+    public static void checkPhotoReturnedToView(String userID, Bitmap bmp, String purpose) {
         if (purpose.equals("editProfile")) {
             EditProfileFragment.checkPhotoReturned(bmp);
         }
@@ -44,10 +45,16 @@ public class UserController extends Application {
         else if (purpose.equals("MyResultsFragment")) {
             MyResultsFragment.checkPhotoReturned(bmp);
         }
+        else if (purpose.equals("AllResults")) {
+            AllResultsFragment.checkPhotoReturned(userID, bmp);
+        }
     }
-    public void loadImageForView(String imageName, String purpose) {
+    public static void checkAllUsersFound(List<User> list) {
+        AllResultsFragment.checkAllUsersFound(list);
+    }
+    public void loadImageForView(String userID, String imageName, String purpose) {
         Database db = new Database();
-        db.getPhotoForView(imageName, purpose);
+        db.getPhotoForView(userID, imageName, purpose);
 
     }
     public static void checkUserFound(List<User> list, ArrayList<String> errors, String activity) {
@@ -166,6 +173,10 @@ public class UserController extends Application {
         Database db = new Database();
         db.findUserByLogin(userName, errors, purpose);
         return errors;
+    }
+    public void getAllUsers() {
+        Database db = new Database();
+        db.findAllUsers();
     }
     private String validateString(String s) {
         if (s.isEmpty()) {
