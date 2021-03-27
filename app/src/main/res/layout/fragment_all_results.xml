@@ -17,10 +17,58 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="75dp"
+            android:layout_height="62dp"
             android:text="Visų rezultatai"
             android:textAlignment="center"
+            android:textColor="@color/black"
             android:textSize="30sp" />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="76dp">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/all_res_all_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bendra" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/all_res_food_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mityba" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/all_res_transport_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trans- portas" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/all_res_energy_tab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Būstas" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/user_place_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent" >

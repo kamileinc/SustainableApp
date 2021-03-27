@@ -31,6 +31,7 @@ import com.example.sustainableapp.models.User;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -284,7 +285,7 @@ public class RegisterActivity extends AppCompatActivity {
         User userToCheck = new User(firstName, lastName, username, "noPhoto.png", address,
                 diet, dietChange, breakfastTime, lunchTime, dinnerTime,
                 wakingUpTime, sleepingTime, transport, workingDayTrips, workingDayTransport,
-                weekendDayTrips, weekendDayTransport, takingShowerPerWeek, showerTime, takingBathPerWeek, password1);
+                weekendDayTrips, weekendDayTransport, takingShowerPerWeek, showerTime, takingBathPerWeek, password1, new ArrayList<Boolean>());
         userData = new ArrayList<>();
         userData.add(firstName);
         userData.add(lastName);

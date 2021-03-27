@@ -24,6 +24,7 @@
             android:layout_height="87dp"
             android:text="Užduotys"
             android:textAlignment="center"
+            android:textColor="#000000"
             android:textSize="30sp" />
 
         <TextView

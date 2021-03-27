@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -500,7 +501,7 @@ public class UserController extends Application {
     public boolean addUserToDB(ArrayList al) {
         Log.i("mano", "add user to db1");
             Database db = new Database();
-            User u = new User(al.get(0).toString(), al.get(1).toString(),al.get(2).toString(), al.get(3).toString(), al.get(4).toString(), al.get(5).toString(),al.get(6).toString(), al.get(7).toString(),al.get(8).toString(),al.get(9).toString(),al.get(10).toString(),al.get(11).toString(),al.get(12).toString(),al.get(13).toString(),al.get(14).toString(),al.get(15).toString(),al.get(16).toString(),al.get(17).toString(),al.get(18).toString(),al.get(19).toString(), hashingPassword((String) al.get(20)));
+            User u = new User(al.get(0).toString(), al.get(1).toString(),al.get(2).toString(), al.get(3).toString(), al.get(4).toString(), al.get(5).toString(),al.get(6).toString(), al.get(7).toString(),al.get(8).toString(),al.get(9).toString(),al.get(10).toString(),al.get(11).toString(),al.get(12).toString(),al.get(13).toString(),al.get(14).toString(),al.get(15).toString(),al.get(16).toString(),al.get(17).toString(),al.get(18).toString(),al.get(19).toString(), hashingPassword((String) al.get(20)), new ArrayList<Boolean>());
             if (db.saveUser(u)) {
                 return true;
             }

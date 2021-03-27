@@ -28,6 +28,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Database extends Application {
@@ -433,13 +434,14 @@ public class Database extends Application {
                             String takingShowerPerWeekFromDB = user.getTakingShowerPerWeek();
                             String showerTimeFromDB = user.getShowerTime();
                             String takingBathPerWeekFromDB = user.getTakingBathPerWeek();
+                            ArrayList<Boolean> badges = user.getBadges();
 
                             //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
 
                             User us = new User(idFromDB, firstNameFromDB, lastNameFromDB, u, photoFromDB, addressFromDB,
                                     dietFromDB, dietChangeFromDB, breakfastTimeFromDB, lunchTimeFromDB, dinnerTimeFromDB,
                                     wakingUpTimeFromDB, sleepingTimeFromDB, transportFromDB, workingDayTripsFromDB, workingDayTransportFromDB,
-                                    weekendDayTripsFromDB, weekendDayTransportFromDB, takingShowerPerWeekFromDB, showerTimeFromDB, takingBathPerWeekFromDB, p);
+                                    weekendDayTripsFromDB, weekendDayTransportFromDB, takingShowerPerWeekFromDB, showerTimeFromDB, takingBathPerWeekFromDB, p, new ArrayList<Boolean>());
                             // Log.i("mano", "" + us.toString());
                             userList = new ArrayList<>();
                             userList.add(us);
@@ -789,13 +791,13 @@ public class Database extends Application {
                         String takingShowerPerWeekFromDB = user.getTakingShowerPerWeek();
                         String showerTimeFromDB = user.getShowerTime();
                         String takingBathPerWeekFromDB = user.getTakingBathPerWeek();
-
+                        ArrayList<Boolean> badges = user.getBadges();
                         //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
 
                         User us = new User(idFromDB, firstNameFromDB, lastNameFromDB, usernameFromDB, photoFromDB, addressFromDB,
                                 dietFromDB, dietChangeFromDB, breakfastTimeFromDB, lunchTimeFromDB, dinnerTimeFromDB,
                                 wakingUpTimeFromDB, sleepingTimeFromDB, transportFromDB, workingDayTripsFromDB, workingDayTransportFromDB,
-                                weekendDayTripsFromDB, weekendDayTransportFromDB, takingShowerPerWeekFromDB, showerTimeFromDB, takingBathPerWeekFromDB, "");
+                                weekendDayTripsFromDB, weekendDayTransportFromDB, takingShowerPerWeekFromDB, showerTimeFromDB, takingBathPerWeekFromDB, "", new ArrayList<Boolean>());
                         // Log.i("mano", "" + us.toString());
                         userList = new ArrayList<>();
                         userList.add(us);

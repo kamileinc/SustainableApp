@@ -1,5 +1,8 @@
 package com.example.sustainableapp.models;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class User
 {
 
@@ -25,11 +28,12 @@ public class User
     private String showerTime;
     private String takingBathPerWeek;
     private String password;
+    private ArrayList<Boolean> badges;
 
     public User(){
     }
 
-    public User(String id, String firstName, String lastName, String username, String photo, String address, String diet, String dietChange, String breakfastTime, String lunchTime, String dinnerTime, String wakingUpTime, String sleepingTime, String transport, String workingDayTrips, String workingDayTransport, String weekendDayTrips, String weekendDayTransport, String takingShowerPerWeek, String showerTime, String takingBathPerWeek, String password) {
+    public User(String id, String firstName, String lastName, String username, String photo, String address, String diet, String dietChange, String breakfastTime, String lunchTime, String dinnerTime, String wakingUpTime, String sleepingTime, String transport, String workingDayTrips, String workingDayTransport, String weekendDayTrips, String weekendDayTransport, String takingShowerPerWeek, String showerTime, String takingBathPerWeek, String password, ArrayList<Boolean> badges) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -52,9 +56,10 @@ public class User
         this.showerTime = showerTime;
         this.takingBathPerWeek = takingBathPerWeek;
         this.password = password;
+        this.badges = badges;
     }
 
-    public User(String firstName, String lastName, String username, String photo, String address, String diet, String dietChange, String breakfastTime, String lunchTime, String dinnerTime, String wakingUpTime, String sleepingTime, String transport, String workingDayTrips, String workingDayTransport, String weekendDayTrips, String weekendDayTransport, String takingShowerPerWeek, String showerTime, String takingBathPerWeek, String password) {
+    public User(String firstName, String lastName, String username, String photo, String address, String diet, String dietChange, String breakfastTime, String lunchTime, String dinnerTime, String wakingUpTime, String sleepingTime, String transport, String workingDayTrips, String workingDayTransport, String weekendDayTrips, String weekendDayTransport, String takingShowerPerWeek, String showerTime, String takingBathPerWeek, String password, ArrayList<Boolean> badges) {
         this.id = Long.toString(System.currentTimeMillis()/1000);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -77,6 +82,14 @@ public class User
         this.showerTime = showerTime;
         this.takingBathPerWeek = takingBathPerWeek;
         this.password = password;
+        ArrayList<Boolean> arr = new ArrayList<>();
+        arr.add(false);
+        arr.add(false);
+        arr.add(false);
+        arr.add(false);
+        arr.add(false);
+        arr.add(false);
+        this.badges = arr;
     }
 
     @Override
@@ -104,7 +117,16 @@ public class User
                 ", showerTime='" + showerTime + '\'' +
                 ", takingBathPerWeek='" + takingBathPerWeek + '\'' +
                 ", password='" + password + '\'' +
+                ", badges='" + badges + '\'' +
                 '}';
+    }
+
+    public ArrayList<Boolean> getBadges() {
+        return badges;
+    }
+
+    public void setBadges(ArrayList<Boolean> badges) {
+        this.badges = badges;
     }
 
     public String getId() {

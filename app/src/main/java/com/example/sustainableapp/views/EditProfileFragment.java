@@ -39,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -150,7 +151,7 @@ public class EditProfileFragment extends Fragment {
                         diet, dietChange, breakfastTime, lunchTime, dinnerTime,
                         wakingUpTime, sleepingTime, transport, workingDayTrips, workingDayTransport,
                         weekendDayTrips, weekendDayTransport, takingShowerPerWeek, showerTime, takingBathPerWeek,
-                        "");
+                        "", new ArrayList<Boolean>());
                 UserController uc = new UserController();
 
                 Log.i("mano", "user to check: " + userToCheck.toString());

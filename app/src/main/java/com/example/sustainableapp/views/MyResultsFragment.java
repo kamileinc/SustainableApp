@@ -181,6 +181,20 @@ public class MyResultsFragment extends Fragment {
                     Log.i("mano", profileData.get(0).toString());
                     firstName2_tv.setText(profileData.get(0).getFirstName());
                     lastName2_tv.setText(profileData.get(0).getLastName());
+                    Log.i("mano", profileData.get(0).toString());
+                    String badges = "";
+                    for (int i = 0; i<profileData.get(0).getBadges().size(); i++) {
+                        if (profileData.get(0).getBadges().get(i)!=false) {
+                            badges = badges + " " + i;
+                        }
+                    }
+                    badges_tv.setText("Ženkleliai: " + badges);
+                    /*
+                    if (profileData.get(0).getBadges() != null) {
+                        badges_tv.setText(profileData.get(0).getBadges().getOrDefault("id", ""));
+                    }
+                    */
+                    //badges_tv.setText(profileData.get(0).getBadges().get(0));
                     uc.loadImageForView(profileData.get(0).getId(), profileData.get(0).getId() + ".jpg", purpose);
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
