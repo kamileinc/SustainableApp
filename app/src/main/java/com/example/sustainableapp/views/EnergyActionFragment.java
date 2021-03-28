@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,10 +45,14 @@ public class EnergyActionFragment extends Fragment {
     private static IntVariable foundEA;
     static ArrayList<EnergyAction> EAData;
     private static BooVariable actionEdited;
+    private static BooVariable badge3Edited;
+    private static BooVariable badge0Edited;
     ArrayList<String> errors = new ArrayList<>();
     static ArrayList<SustainableAction> saList = new ArrayList<>();
     private static BooVariable saListReturned;
     SustainableAction sa = new SustainableAction();
+    private static IntVariable foundProfile;
+    static ArrayList<User> profileData;
     public EnergyActionFragment() {
         // Required empty public constructor
     }
@@ -72,14 +79,41 @@ public class EnergyActionFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_energy_action, container, false);
         getUsersSustainableActions();
+        UserController uc = new UserController();
+        uc.getProfile(userID, "EAFragment");
+        foundProfile = new IntVariable();
+        foundProfile.setListener(new IntVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+                Log.i("mano", "cia");
+                if (profileData != null) {
+                }
+                else {
+                }
+            }});
         actionEdited = new BooVariable();
         actionEdited.setListener(new BooVariable.ChangeListener() {
             @Override
             public void onChange() {
                 //toast
-                Toast.makeText(view.getContext(),"Sėkmingai išsaugoti pakeitimai",Toast. LENGTH_LONG).show();
+                Toast.makeText(view.getContext(),"Sėkmingai išsaugoti pakeitimai",Toast. LENGTH_SHORT).show();
                 //ijungt menu komponenta is naujo
                 getActivity().findViewById(R.id.ic_tasks).performClick();
+            }});
+        badge3Edited = new BooVariable();
+        badge3Edited.setListener(new BooVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+                //toast
+                Toast.makeText(view.getContext(), "Valio! Surinkote maksimalų taškų skaičių būsto srityje pirmą kartą, todėl gaunate ženklelį!", Toast.LENGTH_LONG).show();
+            }});
+
+        badge0Edited = new BooVariable();
+        badge0Edited.setListener(new BooVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+                //toast
+                Toast.makeText(view.getContext(), "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", Toast.LENGTH_SHORT).show();
             }});
 
         shower_cb =(CheckBox) view.findViewById(R.id.shower_cb);
@@ -154,6 +188,7 @@ public class EnergyActionFragment extends Fragment {
                         //UPDATE
                         Log.i("mano", "UPDATE, ERRORS: " + errors.get(0) +errors.get(1) +errors.get(2));
                         eac.updateEnergyActionInDB(ea);
+                        eac.checkForBadge3(ea, profileData.get(0));
 
                     }
                 }}
@@ -286,6 +321,18 @@ public class EnergyActionFragment extends Fragment {
             actionEdited.getListener().onChange();
         }
     }
+    public static void checkBadge3Edited() {
+        badge3Edited.setBoo(true);
+        if (badge3Edited.getListener() != null) {
+            badge3Edited.getListener().onChange();
+        }
+    }
+    public static void checkBadge0Edited() {
+        badge0Edited.setBoo(true);
+        if (badge0Edited.getListener() != null) {
+            badge0Edited.getListener().onChange();
+        }
+    }
     public static void checkEANotFound(List<EnergyAction> list) {
         Log.i("mano", "neradom");
     }
@@ -302,5 +349,25 @@ public class EnergyActionFragment extends Fragment {
         else {
             checkEANotFound(list);
         }
+    }
+    public static void checkUserFound(List<User> list) {
+        Log.i("mano", "radom " + list.size() + "...."  +  list.get(0).toString());
+        profileData = (ArrayList<User>) list;
+        if (!list.isEmpty()) {
+            foundProfile.setID(list.get(0).getId());
+            if (foundProfile.getListener() != null) {
+                foundProfile.getListener().onChange();
+                list = null;
+            }
+        }
+        else {
+            checkUserNotFound(list);
+        }
+    }
+
+    public static void checkUserNotFound(List<User> list) {
+        //errors = err;
+        Log.i("mano", "neradom");
+        //notFoundUser.getListener().onChange();
     }
 }

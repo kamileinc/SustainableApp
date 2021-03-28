@@ -8,11 +8,13 @@ import com.example.sustainableapp.models.Database;
 import com.example.sustainableapp.models.User;
 import com.example.sustainableapp.views.AllResultsFragment;
 import com.example.sustainableapp.views.EditProfileFragment;
+import com.example.sustainableapp.views.EnergyActionFragment;
 import com.example.sustainableapp.views.FoodActionFragment;
 import com.example.sustainableapp.views.LoginActivity;
 import com.example.sustainableapp.views.MyResultsFragment;
 import com.example.sustainableapp.views.ProfileFragment;
 import com.example.sustainableapp.views.RegisterActivity;
+import com.example.sustainableapp.views.TransportActionFragment;
 import com.example.sustainableapp.views.UserActivity;
 
 import java.nio.charset.StandardCharsets;
@@ -83,6 +85,12 @@ public class UserController extends Application {
         else if (activity.equals("MyResultsFragment")) {
             MyResultsFragment.checkUserFound(list);
         }
+        else if (activity.equals("EAFragment")) {
+            EnergyActionFragment.checkUserFound(list);
+        }
+        else if (activity.equals("TAFragment")) {
+            TransportActionFragment.checkUserFound(list);
+        }
 
     }
     public static void checkUserEdited() {
@@ -113,6 +121,12 @@ public class UserController extends Application {
         }
         else if (activity.equals("MyResultsFragment")) {
             MyResultsFragment.checkUserNotFound(list);
+        }
+        else if (activity.equals("EAFragment")) {
+            EnergyActionFragment.checkUserNotFound(list);
+        }
+        else if (activity.equals("TAFragment")) {
+            TransportActionFragment.checkUserNotFound(list);
         }
 
     }
@@ -253,27 +267,30 @@ public class UserController extends Application {
         }
     }
     public String addTime(String s, int minutes) {
-        String[] sArr = s.split(":", 3);
-        int h1 = Integer.parseInt(sArr[0]);
-        int m1 = Integer.parseInt(sArr[1]);
-        SimpleDateFormat formatter= new SimpleDateFormat("HH:mm");
-        Date today = new Date(System.currentTimeMillis());
-        String todayStr = formatter.format(today);
         String d2Str = "0:0";
-        try {
-            Date d = formatter.parse(s);
-            Calendar c = Calendar.getInstance();
-            String beginDateStr = formatter.format(d);
-            c.setTime(d);
-            c.add(Calendar.MINUTE, minutes);
-            Date d2 = c.getTime();
-            d2Str = formatter.format(d2);
-        }
-        catch (Exception e) {
+        if (!s.equals("")) {
+            String[] sArr = s.split(":", 3);
+            int h1 = Integer.parseInt(sArr[0]);
+            int m1 = Integer.parseInt(sArr[1]);
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+            Date today = new Date(System.currentTimeMillis());
+            String todayStr = formatter.format(today);
 
+            d2Str = "0:0";
+            try {
+                Date d = formatter.parse(s);
+                Calendar c = Calendar.getInstance();
+                String beginDateStr = formatter.format(d);
+                c.setTime(d);
+                c.add(Calendar.MINUTE, minutes);
+                Date d2 = c.getTime();
+                d2Str = formatter.format(d2);
+            } catch (Exception e) {
+
+            }
+            Log.i("LYGINAMAS laikas", "h1 = " + h1 + ", m1 = " + m1);
+            Log.i("d2Str", d2Str);
         }
-        Log.i("LYGINAMAS laikas", "h1 = " + h1 + ", m1 = " + m1);
-        Log.i("d2Str", d2Str);
         return d2Str;
     }
     public boolean isUpcomingTime(String s) {

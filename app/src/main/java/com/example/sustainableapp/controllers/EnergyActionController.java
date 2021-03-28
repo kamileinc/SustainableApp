@@ -2,6 +2,7 @@ package com.example.sustainableapp.controllers;
 
 import android.app.Application;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 
@@ -27,6 +28,12 @@ import java.util.List;
 public class EnergyActionController extends Application {
     public static void checkEAEdited() {
         EnergyActionFragment.checkEAEdited();
+    }
+    public static void checkBadge3Edited() {
+        EnergyActionFragment.checkBadge3Edited();
+    }
+    public static void checkBadge0Edited() {
+        EnergyActionFragment.checkBadge0Edited();
     }
     public void addEnergyActionsToDB(SustainableAction sa) {
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
@@ -217,4 +224,65 @@ public class EnergyActionController extends Application {
         }
         return points;
     }
+    public void checkForBadge3(EnergyAction ea, User u) {
+        double temp = 0;
+        double points = 0;
+        if (ea.isNoWater()) {
+            temp = temp + 10;
+        }
+        else if (ea.isShower() && !ea.isBath()) {
+            String[] sArr = ea.getShowerTime().split(":", 5);
+            int m1 = Integer.parseInt(sArr[0]);
+            if (m1<5) {
+                temp = temp + 7.5;
+            }
+            else if (m1>=5 && m1<10) {
+                temp = temp + 5;
+            }
+            else if (m1>10) {
+                temp = temp + 2.5;
+            }
+        }
+        else if (!ea.isShower() && ea.isBath()) {
+            temp = temp + 2.5;
+        }
+        else if (ea.isShower() && ea.isBath()) {
+            temp = temp + 1;
+        }
+        int devicesOff = Integer.parseInt(ea.getDevicesOff());
+        if (devicesOff > 0 && devicesOff <= 5) {
+            temp = temp + 5;
+        }
+        else if (devicesOff > 5 && devicesOff <= 8) {
+            temp = temp + 7.5;
+        }
+        else if (devicesOff >10) {
+            temp = temp + 10;
+        }
+        //////////////////////////////////
+        if (temp != 0) {
+            temp = temp / 2;
+        }
+        points = points + temp;
+        //check if user has badge0
+        if (u.getBadges().get(0)==false) {
+            //if user does not have badge0
+            //give badge0
+            Database db = new Database();
+            db.editBadge0(u, "EAController");
+        }
+        if (points == 10) {
+
+            //check if user has badge3
+            if (u.getBadges().get(3)==false) {
+                //if user does not have badge3
+                //give badge3
+                Database db = new Database();
+                db.editBadge3(u);
+            }
+
+
+        }
+    }
+
 }

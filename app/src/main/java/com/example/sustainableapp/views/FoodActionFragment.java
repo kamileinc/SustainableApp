@@ -45,6 +45,8 @@ public class FoodActionFragment extends Fragment {
     static ArrayList<FoodAction> FAData;
     static ArrayList<SustainableAction> saList = new ArrayList<>();
     private static BooVariable saListReturned;
+    private static BooVariable badge1Edited;
+    private static BooVariable badge0Edited;
     SustainableAction sa = new SustainableAction();
     public FoodActionFragment() {
         // Required empty public constructor
@@ -77,6 +79,21 @@ public class FoodActionFragment extends Fragment {
         fac.getFAForFAFragment(userID, "FoodActionFragment");
         UserController uc = new UserController();
         uc.getProfile(userID, "foodAction");
+        badge1Edited = new BooVariable();
+        badge1Edited.setListener(new BooVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+                //toast
+                Toast.makeText(view.getContext(), "Valio! Surinkote maksimalų taškų skaičių mitybos srityje pirmą kartą, todėl gaunate ženklelį!", Toast.LENGTH_LONG).show();
+            }});
+        badge0Edited = new BooVariable();
+        badge0Edited.setListener(new BooVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+                //toast
+                Toast.makeText(view.getContext(), "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", Toast.LENGTH_SHORT).show();
+            }});
+
         foundProfile = new IntVariable();
         foundProfile.setListener(new IntVariable.ChangeListener() {
             @Override
@@ -230,6 +247,7 @@ public class FoodActionFragment extends Fragment {
                 }
                 FoodAction fa = new FoodAction(sa.getId(), sa.getCategory(), sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), dateStr, breakfast, lunch, dinner);
                 fac.updateFoodActionInDB(fa);
+                fac.checkForBadge1(fa, profileData.get(0));
             }
         });
         saListReturned = new BooVariable();
@@ -255,7 +273,7 @@ public class FoodActionFragment extends Fragment {
             @Override
             public void onChange() {
                 //toast
-                Toast.makeText(view.getContext(),"Sėkmingai išsaugoti pakeitimai",Toast. LENGTH_LONG).show();
+                Toast.makeText(view.getContext(),"Sėkmingai išsaugoti pakeitimai",Toast. LENGTH_SHORT).show();
                 //ijungt menu komponenta is naujo
                 getActivity().findViewById(R.id.ic_tasks).performClick();
             }});
@@ -338,6 +356,18 @@ public class FoodActionFragment extends Fragment {
         actionEdited.setBoo(true);
         if (actionEdited.getListener() != null) {
             actionEdited.getListener().onChange();
+        }
+    }
+    public static void checkBadge1Edited() {
+        badge1Edited.setBoo(true);
+        if (badge1Edited.getListener() != null) {
+            badge1Edited.getListener().onChange();
+        }
+    }
+    public static void checkBadge0Edited() {
+        badge0Edited.setBoo(true);
+        if (badge0Edited.getListener() != null) {
+            badge0Edited.getListener().onChange();
         }
     }
 }

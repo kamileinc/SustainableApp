@@ -9,6 +9,7 @@ import com.example.sustainableapp.models.EnergyAction;
 import com.example.sustainableapp.models.FoodAction;
 import com.example.sustainableapp.models.SustainableAction;
 import com.example.sustainableapp.models.TransportAction;
+import com.example.sustainableapp.models.User;
 import com.example.sustainableapp.views.AllResultsFragment;
 import com.example.sustainableapp.views.EnergyActionFragment;
 import com.example.sustainableapp.views.FoodActionFragment;
@@ -22,6 +23,12 @@ import java.util.Date;
 import java.util.List;
 
 public class FoodActionController extends Application {
+    public static void checkBadge1Edited() {
+        FoodActionFragment.checkBadge1Edited();
+    }
+    public static void checkBadge0Edited() {
+        FoodActionFragment.checkBadge0Edited();
+    }
     public void addFoodActionsToDB(SustainableAction sa) {
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(System.currentTimeMillis());
@@ -146,4 +153,57 @@ public class FoodActionController extends Application {
         }
         return points;
     }
+    public void checkForBadge1(FoodAction fa, User u) {
+        double temp = 0;
+        double points = 0;
+        if (fa.getBreakfastFood().equals("0")) {
+            temp = temp + 10;
+        } else if (fa.getBreakfastFood().equals("1")) {
+            temp = temp + 7.5;
+        } else if (fa.getBreakfastFood().equals("2")) {
+            temp = temp + 5;
+        } else if (fa.getBreakfastFood().equals("3")) {
+            temp = temp + 2.5;
+        }
+
+        if (fa.getLunchFood().equals("0")) {
+            temp = temp + 10;
+        } else if (fa.getLunchFood().equals("1")) {
+            temp = temp + 7.5;
+        } else if (fa.getLunchFood().equals("2")) {
+            temp = temp + 5;
+        } else if (fa.getLunchFood().equals("3")) {
+            temp = temp + 2.5;
+        }
+
+        if (fa.getDinnerFood().equals("0")) {
+            temp = temp + 10;
+        } else if (fa.getDinnerFood().equals("1")) {
+            temp = temp + 7.5;
+        } else if (fa.getDinnerFood().equals("2")) {
+            temp = temp + 5;
+        } else if (fa.getDinnerFood().equals("3")) {
+            temp = temp + 2.5;
+        }
+        if (temp != 0) {
+            temp = temp / 3;
+        }
+        points= points + temp;
+        if (u.getBadges().get(0)==false) {
+            //if user does not have badge0
+            //give badge0
+            Database db = new Database();
+            db.editBadge0(u, "FAController");
+        }
+        if (points == 10) {
+
+            if (u.getBadges().get(1)==false) {
+                //if user does not have badge1
+                //give badge1
+                Database db = new Database();
+                db.editBadge1(u);
+            }
+        }
+    }
+
 }

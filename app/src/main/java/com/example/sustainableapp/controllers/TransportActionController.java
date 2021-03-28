@@ -9,8 +9,10 @@ import com.example.sustainableapp.models.EnergyAction;
 import com.example.sustainableapp.models.FoodAction;
 import com.example.sustainableapp.models.SustainableAction;
 import com.example.sustainableapp.models.TransportAction;
+import com.example.sustainableapp.models.User;
 import com.example.sustainableapp.views.AllResultsFragment;
 import com.example.sustainableapp.views.EnergyActionFragment;
+import com.example.sustainableapp.views.FoodActionFragment;
 import com.example.sustainableapp.views.MyResultsFragment;
 import com.example.sustainableapp.views.TransportActionFragment;
 
@@ -21,6 +23,12 @@ import java.util.Date;
 import java.util.List;
 
 public class TransportActionController extends Application {
+    public static void checkBadge2Edited() {
+        TransportActionFragment.checkBadge2Edited();
+    }
+    public static void checkBadge0Edited() {
+        TransportActionFragment.checkBadge0Edited();
+    }
     public void addTransportActionsToDB(SustainableAction sa) {
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(System.currentTimeMillis());
@@ -303,5 +311,67 @@ public class TransportActionController extends Application {
 
         }
         return points;
+    }
+    public void checkForBadge2(TransportAction ta, User u) {
+        double temp = 0;
+        double points = 0;
+        if (ta.isNoTravelling()) {
+            temp = temp + 10;
+        }
+        else if (ta.isWalking() && !ta.isBicycle() && !ta.isPublicTransport() && !ta.isCar()) {
+            temp = temp + 10;
+        }
+        else if (ta.isBicycle() && !ta.isWalking() && !ta.isPublicTransport() && !ta.isCar()) {
+            temp = temp + 10;
+        }
+        else if (ta.isPublicTransport() && !ta.isBicycle() && !ta.isWalking() && !ta.isCar()) {
+            temp = temp + 7.5;
+        }
+        else if ((ta.isWalking() || ta.isBicycle()) && ta.isPublicTransport() && !ta.isCar()) {
+            temp = temp + 8.5;
+        }
+        else if (!ta.isWalking() && !ta.isBicycle() && !ta.isPublicTransport() && ta.isCar()) {
+            int passengers = Integer.parseInt(ta.getCarPassengers());
+            if (passengers>0) {
+                temp = temp + 5;
+            }
+            else {
+                temp = temp + 2.5;
+            }
+        }
+        else if (!ta.isWalking() && !ta.isBicycle() && ta.isPublicTransport() && ta.isCar()) {
+            int passengers = Integer.parseInt(ta.getCarPassengers());
+            if (passengers>0) {
+                temp = temp + 6;
+            }
+            else {
+                temp = temp + 3.5;
+            }
+        }
+        else if ((ta.isWalking() || ta.isBicycle()) && ta.isPublicTransport() && ta.isCar()) {
+            int passengers = Integer.parseInt(ta.getCarPassengers());
+            if (passengers>0) {
+                temp = temp + 7;
+            }
+            else {
+                temp = temp + 4.5;
+            }
+        }
+        points = points + temp;
+        if (u.getBadges().get(0)==false) {
+            //if user does not have badge0
+            //give badge0
+            Database db = new Database();
+            db.editBadge0(u, "TAController");
+        }
+        if (points==10) {
+            //check if user has badge2
+            if (u.getBadges().get(2)==false) {
+                //if user does not have badge2
+                //give badge2
+                Database db = new Database();
+                db.editBadge2(u);
+            }
+        }
     }
 }

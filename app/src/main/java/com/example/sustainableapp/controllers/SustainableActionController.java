@@ -137,4 +137,7 @@ public class SustainableActionController extends Application {
             return false;
         }
     }
+    public void checkForBadges() {
+
+    }
 }

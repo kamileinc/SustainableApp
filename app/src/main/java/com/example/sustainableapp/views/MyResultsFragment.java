@@ -15,11 +15,14 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,6 +85,7 @@ public class MyResultsFragment extends Fragment {
     GraphView graph;
     TextView noData, food_tv, transport2_tv, energy_tv, badges_tv, total_tv, firstName2_tv, lastName2_tv, empty_tv;
     ImageView image_iv;
+    LinearLayout linearLayout;
     public MyResultsFragment() {
         // Required empty public constructor
     }
@@ -183,12 +187,86 @@ public class MyResultsFragment extends Fragment {
                     lastName2_tv.setText(profileData.get(0).getLastName());
                     Log.i("mano", profileData.get(0).toString());
                     String badges = "";
-                    for (int i = 0; i<profileData.get(0).getBadges().size(); i++) {
-                        if (profileData.get(0).getBadges().get(i)!=false) {
-                            badges = badges + " " + i;
+                    if (foundProfile.getNumber()!=1) {
+                        for (int i = 0; i < profileData.get(0).getBadges().size(); i++) {
+                            if (profileData.get(0).getBadges().get(i) != false) {
+                                Log.i("mano", "badge "+ i + ": " + profileData.get(0).getBadges().get(i));
+                                linearLayout = view.findViewById(R.id.linearLayout2);
+                                if (i == 0) {
+                                    LinearLayout ll = new LinearLayout(view.getContext());
+                                    ll.setOrientation(linearLayout.HORIZONTAL);
+                                    ImageView imageview = new ImageView(view.getContext());
+                                    LinearLayout.LayoutParams params = new LinearLayout
+                                            .LayoutParams(150, 150);
+                                    imageview.setImageResource(R.drawable.badge0);
+                                    imageview.setLayoutParams(params);
+                                    TextView textView = new TextView(view.getContext());
+                                    textView.setTextColor(Color.BLACK);
+                                    //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                    textView.setGravity(Gravity.CENTER_HORIZONTAL);
+                                    textView.setText("\n - Už pirmą užduoties išsaugojimą");
+                                    ll.addView(imageview);
+                                    ll.addView(textView);
+                                    linearLayout.addView(ll);
+                                }
+                                if (i == 1) {
+                                    LinearLayout ll = new LinearLayout(view.getContext());
+                                    ll.setOrientation(linearLayout.HORIZONTAL);
+                                    ImageView imageview = new ImageView(view.getContext());
+                                    LinearLayout.LayoutParams params = new LinearLayout
+                                            .LayoutParams(150, 150);
+                                    imageview.setImageResource(R.drawable.badge1);
+                                    imageview.setLayoutParams(params);
+                                    TextView textView = new TextView(view.getContext());
+                                    textView.setTextColor(Color.BLACK);
+                                    //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                    textView.setGravity(Gravity.CENTER_HORIZONTAL);
+                                    textView.setText("\n - Už pirmą maksimalų taškų mitybos kategorijoje surinkimą");
+                                    ll.addView(imageview);
+                                    ll.addView(textView);
+                                    linearLayout.addView(ll);
+                                }
+                                if (i == 2) {
+                                    LinearLayout ll = new LinearLayout(view.getContext());
+                                    ll.setOrientation(linearLayout.HORIZONTAL);
+                                    ImageView imageview = new ImageView(view.getContext());
+                                    LinearLayout.LayoutParams params = new LinearLayout
+                                            .LayoutParams(150, 150);
+                                    imageview.setImageResource(R.drawable.badge2);
+                                    imageview.setLayoutParams(params);
+                                    TextView textView = new TextView(view.getContext());
+                                    textView.setTextColor(Color.BLACK);
+                                    //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                    textView.setGravity(Gravity.CENTER_HORIZONTAL);
+                                    textView.setText("\n - Už pirmą maksimalų taškų transporto kategorijoje surinkimą");
+                                    ll.addView(imageview);
+                                    ll.addView(textView);
+                                    linearLayout.addView(ll);
+                                }
+                                if (i == 3) {
+                                    LinearLayout ll = new LinearLayout(view.getContext());
+                                    ll.setOrientation(linearLayout.HORIZONTAL);
+                                    ImageView imageview = new ImageView(view.getContext());
+                                    LinearLayout.LayoutParams params = new LinearLayout
+                                            .LayoutParams(150, 150);
+                                    imageview.setImageResource(R.drawable.badge3);
+                                    imageview.setLayoutParams(params);
+                                    TextView textView = new TextView(view.getContext());
+                                    textView.setTextColor(Color.BLACK);
+                                    //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                    textView.setGravity(Gravity.CENTER_HORIZONTAL);
+                                    textView.setText("\n - Už pirmą maksimalų taškų būsto kategorijoje surinkimą");
+                                    ll.addView(imageview);
+                                    ll.addView(textView);
+                                    linearLayout.addView(ll);
+                                }
+
+                                badges = badges + " " + i;
+                            }
                         }
+                        badges_tv.setText("Ženkleliai: ");
+                        foundProfile.setNumber(1);
                     }
-                    badges_tv.setText("Ženkleliai: " + badges);
                     /*
                     if (profileData.get(0).getBadges() != null) {
                         badges_tv.setText(profileData.get(0).getBadges().getOrDefault("id", ""));
@@ -524,6 +602,7 @@ public class MyResultsFragment extends Fragment {
         lastName2_tv = view.findViewById(R.id.lastName2_tv);
         image_iv = view.findViewById(R.id.image_iv);
         empty_tv = view.findViewById(R.id.empty_tv);
+        linearLayout = view.findViewById(R.id.linearLayout2);
         //firstName2_tv.setVisibility(View.GONE);
         //lastName2_tv.setVisibility(View.GONE);
         //image_iv.setVisibility(View.GONE);
@@ -539,6 +618,7 @@ public class MyResultsFragment extends Fragment {
         energy_tv.setVisibility(View.VISIBLE);
         badges_tv.setVisibility(View.VISIBLE);
         total_tv.setVisibility(View.VISIBLE);
+        linearLayout.setVisibility(View.VISIBLE);
         //firstName2_tv.setVisibility(View.GONE);
     }
     public void setVisibilityForGraphTab(View view) {
@@ -550,6 +630,7 @@ public class MyResultsFragment extends Fragment {
         energy_tv.setVisibility(View.INVISIBLE);
         badges_tv.setVisibility(View.INVISIBLE);
         total_tv.setVisibility(View.INVISIBLE);
+        linearLayout.setVisibility(View.INVISIBLE);
     }
     public void getUsersSustainableActions() {
         SustainableActionController sac = new SustainableActionController();

@@ -10,7 +10,9 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:textAlignment="center">
+        android:textAlignment="center"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp">
 
         <TextView
             android:id="@+id/textView"

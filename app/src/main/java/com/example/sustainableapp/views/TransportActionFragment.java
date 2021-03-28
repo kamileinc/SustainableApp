@@ -19,11 +19,13 @@ import com.example.sustainableapp.R;
 import com.example.sustainableapp.controllers.EnergyActionController;
 import com.example.sustainableapp.controllers.SustainableActionController;
 import com.example.sustainableapp.controllers.TransportActionController;
+import com.example.sustainableapp.controllers.UserController;
 import com.example.sustainableapp.models.BooVariable;
 import com.example.sustainableapp.models.EnergyAction;
 import com.example.sustainableapp.models.IntVariable;
 import com.example.sustainableapp.models.SustainableAction;
 import com.example.sustainableapp.models.TransportAction;
+import com.example.sustainableapp.models.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +44,10 @@ public class TransportActionFragment extends Fragment {
     static ArrayList<TransportAction> TAData;
     private static BooVariable actionEdited;
     ArrayList<String> errors = new ArrayList<>();
+    private static IntVariable foundProfile;
+    static ArrayList<User> profileData;
+    private static BooVariable badge2Edited;
+    private static BooVariable badge0Edited;
     public TransportActionFragment() {
         // Required empty public constructor
     }
@@ -70,12 +76,39 @@ public class TransportActionFragment extends Fragment {
         getUsersSustainableActions();
         TransportActionController tac = new TransportActionController();
         tac.getTAForTAFragment(userID, "TransportActionFragment");
+        UserController uc = new UserController();
+        uc.getProfile(userID, "TAFragment");
+        badge0Edited = new BooVariable();
+        badge0Edited.setListener(new BooVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+                //toast
+                Toast.makeText(view.getContext(), "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", Toast.LENGTH_SHORT).show();
+            }});
+
+        badge2Edited = new BooVariable();
+        badge2Edited.setListener(new BooVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+                //toast
+                Toast.makeText(view.getContext(), "Valio! Surinkote maksimalų taškų skaičių transporto srityje pirmą kartą, todėl gaunate ženklelį!", Toast.LENGTH_LONG).show();
+            }});
+        foundProfile = new IntVariable();
+        foundProfile.setListener(new IntVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+                Log.i("mano", "cia");
+                if (profileData != null) {
+                }
+                else {
+                }
+            }});
         actionEdited = new BooVariable();
         actionEdited.setListener(new BooVariable.ChangeListener() {
             @Override
             public void onChange() {
                 //toast
-                Toast.makeText(view.getContext(),"Sėkmingai išsaugoti pakeitimai",Toast. LENGTH_LONG).show();
+                Toast.makeText(view.getContext(),"Sėkmingai išsaugoti pakeitimai",Toast. LENGTH_SHORT).show();
                 //ijungt menu komponenta is naujo
                 getActivity().findViewById(R.id.ic_tasks).performClick();
             }});
@@ -310,6 +343,7 @@ public class TransportActionFragment extends Fragment {
                         //UPDATE
                         //Log.i("mano", "UPDATE, ERRORS: " + errors.get(0) +errors.get(1) +errors.get(2));
                         tac.updateTransportActionInDB(ta);
+                        tac.checkForBadge2(ta, profileData.get(0));
 
                     }
                 }}
@@ -503,6 +537,38 @@ public class TransportActionFragment extends Fragment {
         actionEdited.setBoo(true);
         if (actionEdited.getListener() != null) {
             actionEdited.getListener().onChange();
+        }
+    }
+    public static void checkUserFound(List<User> list) {
+        Log.i("mano", "radom " + list.size() + "...."  +  list.get(0).toString());
+        profileData = (ArrayList<User>) list;
+        if (!list.isEmpty()) {
+            foundProfile.setID(list.get(0).getId());
+            if (foundProfile.getListener() != null) {
+                foundProfile.getListener().onChange();
+                list = null;
+            }
+        }
+        else {
+            checkUserNotFound(list);
+        }
+    }
+
+    public static void checkUserNotFound(List<User> list) {
+        //errors = err;
+        Log.i("mano", "neradom");
+        //notFoundUser.getListener().onChange();
+    }
+    public static void checkBadge2Edited() {
+        badge2Edited.setBoo(true);
+        if (badge2Edited.getListener() != null) {
+            badge2Edited.getListener().onChange();
+        }
+    }
+    public static void checkBadge0Edited() {
+        badge0Edited.setBoo(true);
+        if (badge0Edited.getListener() != null) {
+            badge0Edited.getListener().onChange();
         }
     }
 }
