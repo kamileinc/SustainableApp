@@ -40,7 +40,7 @@ public class FoodActionController extends Application {
         for (int i= 0; i< 7;i++) {
             String date2 = formatter.format(c.getTime());
             FoodAction fa = new FoodAction(sa.getId(), sa.getCategory(),sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), date2,
-                    "", "", "");
+                    -1, -1, -1);
             db.saveFA(fa);
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
@@ -115,33 +115,33 @@ public class FoodActionController extends Application {
             ArrayList<Double> arr = new ArrayList<Double>();
             for (int i = 0; i<faList.size();i++) {
                 double temp = 0;
-                    if (faList.get(i).getBreakfastFood().equals("0")) {
+                    if (faList.get(i).getBreakfastFood()==0) {
                         temp = temp + 10;
-                    } else if (faList.get(i).getBreakfastFood().equals("1")) {
+                    } else if (faList.get(i).getBreakfastFood()==1) {
                         temp = temp + 7.5;
-                    } else if (faList.get(i).getBreakfastFood().equals("2")) {
+                    } else if (faList.get(i).getBreakfastFood()==2) {
                         temp = temp + 5;
-                    } else if (faList.get(i).getBreakfastFood().equals("3")) {
+                    } else if (faList.get(i).getBreakfastFood()==3) {
                         temp = temp + 2.5;
                     }
 
-                    if (faList.get(i).getLunchFood().equals("0")) {
+                    if (faList.get(i).getLunchFood()==0) {
                         temp = temp + 10;
-                    } else if (faList.get(i).getLunchFood().equals("1")) {
+                    } else if (faList.get(i).getLunchFood()==1) {
                         temp = temp + 7.5;
-                    } else if (faList.get(i).getLunchFood().equals("2")) {
+                    } else if (faList.get(i).getLunchFood()==2) {
                         temp = temp + 5;
-                    } else if (faList.get(i).getLunchFood().equals("3")) {
+                    } else if (faList.get(i).getLunchFood()==3) {
                         temp = temp + 2.5;
                     }
 
-                    if (faList.get(i).getDinnerFood().equals("0")) {
+                    if (faList.get(i).getDinnerFood()==0) {
                         temp = temp + 10;
-                    } else if (faList.get(i).getDinnerFood().equals("1")) {
+                    } else if (faList.get(i).getDinnerFood()==1) {
                         temp = temp + 7.5;
-                    } else if (faList.get(i).getDinnerFood().equals("2")) {
+                    } else if (faList.get(i).getDinnerFood()==2) {
                         temp = temp + 5;
-                    } else if (faList.get(i).getDinnerFood().equals("3")) {
+                    } else if (faList.get(i).getDinnerFood()==3) {
                         temp = temp + 2.5;
                     }
                     if (temp != 0) {
@@ -156,33 +156,33 @@ public class FoodActionController extends Application {
     public void checkForBadge1(FoodAction fa, User u) {
         double temp = 0;
         double points = 0;
-        if (fa.getBreakfastFood().equals("0")) {
+        if (fa.getBreakfastFood()==0) {
             temp = temp + 10;
-        } else if (fa.getBreakfastFood().equals("1")) {
+        } else if (fa.getBreakfastFood()==1) {
             temp = temp + 7.5;
-        } else if (fa.getBreakfastFood().equals("2")) {
+        } else if (fa.getBreakfastFood()==2) {
             temp = temp + 5;
-        } else if (fa.getBreakfastFood().equals("3")) {
+        } else if (fa.getBreakfastFood()==3) {
             temp = temp + 2.5;
         }
 
-        if (fa.getLunchFood().equals("0")) {
+        if (fa.getLunchFood()==0) {
             temp = temp + 10;
-        } else if (fa.getLunchFood().equals("1")) {
+        } else if (fa.getLunchFood()==1) {
             temp = temp + 7.5;
-        } else if (fa.getLunchFood().equals("2")) {
+        } else if (fa.getLunchFood()==2) {
             temp = temp + 5;
-        } else if (fa.getLunchFood().equals("3")) {
+        } else if (fa.getLunchFood()==3) {
             temp = temp + 2.5;
         }
 
-        if (fa.getDinnerFood().equals("0")) {
+        if (fa.getDinnerFood()==0) {
             temp = temp + 10;
-        } else if (fa.getDinnerFood().equals("1")) {
+        } else if (fa.getDinnerFood()==1) {
             temp = temp + 7.5;
-        } else if (fa.getDinnerFood().equals("2")) {
+        } else if (fa.getDinnerFood()==2) {
             temp = temp + 5;
-        } else if (fa.getDinnerFood().equals("3")) {
+        } else if (fa.getDinnerFood()==3) {
             temp = temp + 2.5;
         }
         if (temp != 0) {

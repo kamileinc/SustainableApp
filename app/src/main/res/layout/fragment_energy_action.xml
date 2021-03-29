@@ -45,7 +45,7 @@
                     android:id="@+id/noWater_cb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nesimaudžiau" />
+                    android:text="🌿🌿🌿Nesimaudžiau" />
             </TableRow>
 
             <TableRow
@@ -54,14 +54,14 @@
 
                 <CheckBox
                     android:id="@+id/shower_cb"
-                    android:layout_width="140dp"
+                    android:layout_width="160dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="duše" />
+                    android:text="🌿🌿duše" />
 
                 <TextView
                     android:id="@+id/textView10"
-                    android:layout_width="30dp"
+                    android:layout_width="20dp"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black" />
 
@@ -99,7 +99,7 @@
 
                 <TextView
                     android:id="@+id/textView14"
-                    android:layout_width="90dp"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content" />
             </TableRow>
 
@@ -111,7 +111,7 @@
                     android:id="@+id/bath_cb"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="vonioje" />
+                    android:text="🌿vonioje" />
             </TableRow>
 
             <TableRow
@@ -143,7 +143,7 @@
                     android:id="@+id/textView12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="el. prietaisų iš elektros lizdo"
+                    android:text="el. prietaisų iš elektros lizdo \n 🌿1-5, 🌿🌿-6-9, 🌿🌿🌿10 ir daugiau"
                     android:textColor="@color/black" />
             </TableRow>
 
@@ -156,7 +156,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
             </TableRow>
-
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="____________ \n Kuo daugiau 🌿 turi veikla, tuo ji tvaresnė. \n"
+                android:textColor="@color/black" />
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

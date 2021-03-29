@@ -67,25 +67,25 @@
                         android:id="@+id/breakfastVegan_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Veganiškai (jokios mėsos, žuvies, pieno produktų ir kiaušinių)" />
+                        android:text="🌿🌿🌿🌿Veganiškai (jokios mėsos, žuvies, pieno produktų ir kiaušinių)" />
 
                     <RadioButton
                         android:id="@+id/breakfastVegetarian_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Vegetariškai (jokios mėsos ir žuvies)" />
+                        android:text="🌿🌿🌿Vegetariškai (jokios mėsos ir žuvies)" />
 
                     <RadioButton
                         android:id="@+id/breakfastLowImpactMeat_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Mažiau taršos išskiriančios mėsos (...)" />
+                        android:text="🌿🌿Mažiau taršos išskiriančios mėsos: vištiena, kiauliena, kalakutiena, žuvis" />
 
                     <RadioButton
                         android:id="@+id/breakfastHighImpactMeat_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Daugiau taršos išskiriančios mėsos (...)" />
+                        android:text="🌿Daugiau taršos išskiriančios mėsos: jautine, ėriena, aviena, krevetės" />
                 </RadioGroup>
             </TableRow>
 
@@ -119,25 +119,25 @@
                         android:id="@+id/lunchVegan_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Veganiškai (jokios mėsos, žuvies, pieno produktų ir kiaušinių)" />
+                        android:text="🌿🌿🌿🌿Veganiškai (jokios mėsos, žuvies, pieno produktų ir kiaušinių)" />
 
                     <RadioButton
                         android:id="@+id/lunchVegetarian_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Vegetariškai (jokios mėsos ir žuvies)" />
+                        android:text="🌿🌿🌿Vegetariškai (jokios mėsos ir žuvies)" />
 
                     <RadioButton
                         android:id="@+id/lunchLowImpactMeat_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Mažiau taršos išskiriančios mėsos (...)" />
+                        android:text="🌿🌿Mažiau taršos išskiriančios mėsos: vištiena, kiauliena, kalakutiena, žuvis" />
 
                     <RadioButton
                         android:id="@+id/lunchHighImpactMeat_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Daugiau taršos išskiriančios mėsos (...)" />
+                        android:text="🌿Daugiau taršos išskiriančios mėsos: jautine, ėriena, aviena, krevetės" />
                 </RadioGroup>
             </TableRow>
 
@@ -171,30 +171,35 @@
                         android:id="@+id/dinnerVegan_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Veganiškai (jokios mėsos, žuvies, pieno produktų ir kiaušinių)" />
+                        android:text="🌿🌿🌿🌿Veganiškai (jokios mėsos, žuvies, pieno produktų ir kiaušinių)" />
 
                     <RadioButton
                         android:id="@+id/dinnerVegetarian_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Vegetariškai (jokios mėsos ir žuvies)" />
+                        android:text="🌿🌿🌿Vegetariškai (jokios mėsos ir žuvies)" />
 
                     <RadioButton
                         android:id="@+id/dinnerLowImpactMeat_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Mažiau taršos išskiriančios mėsos (...)" />
+                        android:text="🌿🌿Mažiau taršos išskiriančios mėsos: vištiena, kiauliena, kalakutiena, žuvis" />
 
                     <RadioButton
                         android:id="@+id/dinnerHighImpactMeat_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Daugiau taršos išskiriančios mėsos (...)" />
+                        android:text="🌿Daugiau taršos išskiriančios mėsos: jautine, ėriena, aviena, krevetės" />
                 </RadioGroup>
             </TableRow>
 
         </TableLayout>
-
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="____________ \n Kuo daugiau 🌿 turi veikla, tuo ji tvaresnė. \n"
+            android:textColor="@color/black" />
         <Button
             android:id="@+id/saveFA_b"
             android:layout_width="wrap_content"

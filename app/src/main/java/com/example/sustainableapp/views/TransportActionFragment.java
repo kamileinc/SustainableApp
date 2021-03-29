@@ -127,7 +127,7 @@ public class TransportActionFragment extends Fragment {
                         if (TAData.get(0).isWalking()) {
                             walking_cb.setChecked(true);
                             setVisibleWalkingFields(view);
-                            walking_etn.setText(TAData.get(0).getWalkingKM());
+                            walking_etn.setText(Integer.toString(TAData.get(0).getWalkingKM()));
                         }
                         else {
                             walking_cb.setChecked(false);
@@ -136,7 +136,7 @@ public class TransportActionFragment extends Fragment {
                         if (TAData.get(0).isBicycle()) {
                             bicycling_cb.setChecked(true);
                             setVisibleBicyclingFields(view);
-                            bicycling_etn.setText(TAData.get(0).getBicycleKM());
+                            bicycling_etn.setText(Integer.toString(TAData.get(0).getBicycleKM()));
                         }
                         else {
                             bicycling_cb.setChecked(false);
@@ -145,7 +145,7 @@ public class TransportActionFragment extends Fragment {
                         if (TAData.get(0).isPublicTransport()) {
                             publicTransport_cb.setChecked(true);
                             setVisiblePublicTransportFields(view);
-                            publicTransport_etn.setText(TAData.get(0).getPublicTransportKM());
+                            publicTransport_etn.setText(Integer.toString(TAData.get(0).getPublicTransportKM()));
                         }
                         else {
                             publicTransport_cb.setChecked(false);
@@ -154,9 +154,9 @@ public class TransportActionFragment extends Fragment {
                         if (TAData.get(0).isCar()) {
                             drivingCar_cb.setChecked(true);
                             setVisibleDrivingCarFields(view);
-                            drivingCar_etn.setText(TAData.get(0).getCarKM());
-                            givingALift_etn.setText(TAData.get(0).getCarPassengersKM());
-                            people_etn.setText(TAData.get(0).getCarPassengers());
+                            drivingCar_etn.setText(Integer.toString(TAData.get(0).getCarKM()));
+                            givingALift_etn.setText(Integer.toString(TAData.get(0).getCarPassengersKM()));
+                            people_etn.setText(Integer.toString(TAData.get(0).getCarPassengers()));
                         }
                         else {
                             drivingCar_cb.setChecked(false);
@@ -273,45 +273,57 @@ public class TransportActionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (sa != null) {
-                    String walkingKm = "0";
-                    String bicyclingKm = "0";
-                    String publicTransportKm = "0";
-                    String drivingCarKm = "0";
-                    String givingALiftKm = "0";
-                    String passengersInCar = "0";
+                    int walkingKm = 0;
+                    int bicyclingKm = 0;
+                    int publicTransportKm = 0;
+                    int drivingCarKm = 0;
+                    int givingALiftKm = 0;
+                    int passengersInCar = 0;
                     if (!noTravelling_cb.isChecked()) {
                         if (walking_cb.isChecked()) {
-
-                            walkingKm = walking_etn.getText().toString();
-                            if (walkingKm.equals("")) {
-                                walkingKm = "0";
+                            try {
+                                walkingKm = Integer.parseInt(walking_etn.getText().toString());
                             }
+                            catch(Exception e) {
+                                walkingKm = 0;
+                            }
+
                         }
                         if (bicycling_cb.isChecked()) {
-                            bicyclingKm = bicycling_etn.getText().toString();
-                            if (bicyclingKm.equals("")) {
-                                bicyclingKm = "0";
+                            try {
+                            bicyclingKm = Integer.parseInt(bicycling_etn.getText().toString());
+                            }
+                            catch(Exception e) {
+                                bicyclingKm = 0;
                             }
                         }
                         if (publicTransport_cb.isChecked()) {
-                            publicTransportKm = publicTransport_etn.getText().toString();
-                            if (publicTransportKm.equals("")) {
-                                publicTransportKm = "0";
-                            }
+                            try {
+                            publicTransportKm = Integer.parseInt(publicTransport_etn.getText().toString());
+                        }
+                            catch(Exception e) {
+                            walkingKm = 0;
+                        }
                         }
                         if (drivingCar_cb.isChecked()) {
-                            drivingCarKm = drivingCar_etn.getText().toString();
-                            givingALiftKm = givingALift_etn.getText().toString();
-                            passengersInCar = people_etn.getText().toString();
-                            if (drivingCarKm.equals("")) {
-                                drivingCarKm = "0";
+                            try {
+                                drivingCarKm = Integer.parseInt(drivingCar_etn.getText().toString());
                             }
-                            if (givingALiftKm.equals("")) {
-                                givingALiftKm = "0";
+                            catch(Exception e) {
+                                drivingCarKm= 0;
                             }
-                            if (passengersInCar.equals("")) {
-                                passengersInCar = "0";
+                            try {
+                                givingALiftKm = Integer.parseInt(givingALift_etn.getText().toString());
                             }
+                            catch(Exception e) {
+                                givingALiftKm = 0;
+                            }
+                            try {
+                                passengersInCar = Integer.parseInt(people_etn.getText().toString());
+                            }
+                            catch(Exception e) {
+                                passengersInCar = 0;
+                    }
                         }
                     }
 

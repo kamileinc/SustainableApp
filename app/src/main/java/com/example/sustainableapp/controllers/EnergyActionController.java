@@ -46,7 +46,7 @@ public class EnergyActionController extends Application {
         for (int i= 0; i< 7;i++) {
 
             String date2 = formatter.format(c.getTime());
-            EnergyAction ea = new EnergyAction(sa.getId(), sa.getCategory(),sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), date2, false, false, "0:0", false, "0");
+            EnergyAction ea = new EnergyAction(sa.getId(), sa.getCategory(),sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), date2, false, false, "0:0", false, 0);
             db.saveEA(ea);
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
@@ -66,21 +66,9 @@ public class EnergyActionController extends Application {
 
         return errors;
     }
-    private String validateDevices(String s) {
-        boolean numeric = true;
-        try {
-            int number = Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            numeric = false;
-        }
+    private String validateDevices(int s) {
 
-        if (s.isEmpty()) {
-            return "Laukas negali būti tuščias";
-        }
-        else if (!numeric) {
-            return "Laukas turi būti skaičius";
-        }
-        else if (numeric && (Integer.parseInt(s) > 100 || Integer.parseInt(s) < 0)) {
+        if (s > 100 || s < 0) {
             return "Skaičius negali būti mažesnis nei 0 ar didesnis nei 100";
         }
         else {
@@ -205,14 +193,14 @@ public class EnergyActionController extends Application {
                     else if (eaList.get(i).isShower() && eaList.get(i).isBath()) {
                         temp = temp + 1;
                     }
-                    int devicesOff = Integer.parseInt(eaList.get(i).getDevicesOff());
+                    int devicesOff = eaList.get(i).getDevicesOff();
                     if (devicesOff > 0 && devicesOff <= 5) {
                         temp = temp + 5;
                     }
-                    else if (devicesOff > 5 && devicesOff <= 8) {
+                    else if (devicesOff > 5 && devicesOff <= 9) {
                         temp = temp + 7.5;
                     }
-                    else if (devicesOff >10) {
+                    else if (devicesOff >=10) {
                         temp = temp + 10;
                     }
                     //////////////////////////////////
@@ -249,14 +237,14 @@ public class EnergyActionController extends Application {
         else if (ea.isShower() && ea.isBath()) {
             temp = temp + 1;
         }
-        int devicesOff = Integer.parseInt(ea.getDevicesOff());
+        int devicesOff = ea.getDevicesOff();
         if (devicesOff > 0 && devicesOff <= 5) {
             temp = temp + 5;
         }
-        else if (devicesOff > 5 && devicesOff <= 8) {
+        else if (devicesOff > 5 && devicesOff <= 9) {
             temp = temp + 7.5;
         }
-        else if (devicesOff >10) {
+        else if (devicesOff >=10) {
             temp = temp + 10;
         }
         //////////////////////////////////

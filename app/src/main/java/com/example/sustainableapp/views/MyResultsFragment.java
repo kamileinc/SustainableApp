@@ -83,7 +83,7 @@ public class MyResultsFragment extends Fragment {
     private static IntVariable allPointsReturned;
     private static double allPoints = 0;
     GraphView graph;
-    TextView noData, food_tv, transport2_tv, energy_tv, badges_tv, total_tv, firstName2_tv, lastName2_tv, empty_tv;
+    TextView noData, food_tv, transport2_tv, energy_tv, badges_tv, total_tv, firstName2_tv, lastName2_tv, username2_tv, empty_tv;
     ImageView image_iv;
     LinearLayout linearLayout;
     public MyResultsFragment() {
@@ -183,10 +183,10 @@ public class MyResultsFragment extends Fragment {
                     UserController uc = new UserController();
                     String purpose = "MyResultsFragment";
                     Log.i("mano", profileData.get(0).toString());
-                    firstName2_tv.setText(profileData.get(0).getFirstName());
-                    lastName2_tv.setText(profileData.get(0).getLastName());
+                    //firstName2_tv.setText(profileData.get(0).getFirstName());
+                    username2_tv.setText(profileData.get(0).getUsername());
                     Log.i("mano", profileData.get(0).toString());
-                    String badges = "";
+                    String badges = "dar neturite ženklelių";
                     if (foundProfile.getNumber()!=1) {
                         for (int i = 0; i < profileData.get(0).getBadges().size(); i++) {
                             if (profileData.get(0).getBadges().get(i) != false) {
@@ -203,11 +203,12 @@ public class MyResultsFragment extends Fragment {
                                     TextView textView = new TextView(view.getContext());
                                     textView.setTextColor(Color.BLACK);
                                     //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                    textView.setGravity(Gravity.CENTER_HORIZONTAL);
+                                    //textView.setGravity(Gravity.CENTER_HORIZONTAL);
                                     textView.setText("\n - Už pirmą užduoties išsaugojimą");
                                     ll.addView(imageview);
                                     ll.addView(textView);
                                     linearLayout.addView(ll);
+                                    badges = "";
                                 }
                                 if (i == 1) {
                                     LinearLayout ll = new LinearLayout(view.getContext());
@@ -220,11 +221,12 @@ public class MyResultsFragment extends Fragment {
                                     TextView textView = new TextView(view.getContext());
                                     textView.setTextColor(Color.BLACK);
                                     //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                    textView.setGravity(Gravity.CENTER_HORIZONTAL);
+                                    //textView.setGravity(Gravity.CENTER_HORIZONTAL);
                                     textView.setText("\n - Už pirmą maksimalų taškų mitybos kategorijoje surinkimą");
                                     ll.addView(imageview);
                                     ll.addView(textView);
                                     linearLayout.addView(ll);
+                                    badges = "";
                                 }
                                 if (i == 2) {
                                     LinearLayout ll = new LinearLayout(view.getContext());
@@ -237,11 +239,12 @@ public class MyResultsFragment extends Fragment {
                                     TextView textView = new TextView(view.getContext());
                                     textView.setTextColor(Color.BLACK);
                                     //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                    textView.setGravity(Gravity.CENTER_HORIZONTAL);
+                                    //textView.setGravity(Gravity.CENTER_HORIZONTAL);
                                     textView.setText("\n - Už pirmą maksimalų taškų transporto kategorijoje surinkimą");
                                     ll.addView(imageview);
                                     ll.addView(textView);
                                     linearLayout.addView(ll);
+                                    badges = "";
                                 }
                                 if (i == 3) {
                                     LinearLayout ll = new LinearLayout(view.getContext());
@@ -254,17 +257,18 @@ public class MyResultsFragment extends Fragment {
                                     TextView textView = new TextView(view.getContext());
                                     textView.setTextColor(Color.BLACK);
                                     //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                    textView.setGravity(Gravity.CENTER_HORIZONTAL);
+                                    //textView.setGravity(Gravity.CENTER_HORIZONTAL);
                                     textView.setText("\n - Už pirmą maksimalų taškų būsto kategorijoje surinkimą");
                                     ll.addView(imageview);
                                     ll.addView(textView);
                                     linearLayout.addView(ll);
+                                    badges = "";
                                 }
 
-                                badges = badges + " " + i;
+
                             }
                         }
-                        badges_tv.setText("Ženkleliai: ");
+                        badges_tv.setText("Ženkleliai: " + badges);
                         foundProfile.setNumber(1);
                     }
                     /*
@@ -318,33 +322,33 @@ public class MyResultsFragment extends Fragment {
                             }
                             if (sac.isDateInDates(dateToCheck, FAData.get(0).getDate(), todayStr)) {
                                 numberOfActivity++;
-                                if (FAData.get(i).getBreakfastFood().equals("0")) {
+                                if (FAData.get(i).getBreakfastFood()==0) {
                                     temp = temp + 10;
-                                } else if (FAData.get(i).getBreakfastFood().equals("1")) {
+                                } else if (FAData.get(i).getBreakfastFood()==1) {
                                     temp = temp + 7.5;
-                                } else if (FAData.get(i).getBreakfastFood().equals("2")) {
+                                } else if (FAData.get(i).getBreakfastFood()==2) {
                                     temp = temp + 5;
-                                } else if (FAData.get(i).getBreakfastFood().equals("3")) {
+                                } else if (FAData.get(i).getBreakfastFood()==3) {
                                     temp = temp + 2.5;
                                 }
 
-                                if (FAData.get(i).getLunchFood().equals("0")) {
+                                if (FAData.get(i).getLunchFood()==0) {
                                     temp = temp + 10;
-                                } else if (FAData.get(i).getLunchFood().equals("1")) {
+                                } else if (FAData.get(i).getLunchFood()==1) {
                                     temp = temp + 7.5;
-                                } else if (FAData.get(i).getLunchFood().equals("2")) {
+                                } else if (FAData.get(i).getLunchFood()==2) {
                                     temp = temp + 5;
-                                } else if (FAData.get(i).getLunchFood().equals("3")) {
+                                } else if (FAData.get(i).getLunchFood()==3) {
                                     temp = temp + 2.5;
                                 }
 
-                                if (FAData.get(i).getDinnerFood().equals("0")) {
+                                if (FAData.get(i).getDinnerFood()==0) {
                                     temp = temp + 10;
-                                } else if (FAData.get(i).getDinnerFood().equals("1")) {
+                                } else if (FAData.get(i).getDinnerFood()==1) {
                                     temp = temp + 7.5;
-                                } else if (FAData.get(i).getDinnerFood().equals("2")) {
+                                } else if (FAData.get(i).getDinnerFood()==2) {
                                     temp = temp + 5;
-                                } else if (FAData.get(i).getDinnerFood().equals("3")) {
+                                } else if (FAData.get(i).getDinnerFood()==3) {
                                     temp = temp + 2.5;
                                 }
                                 if (temp != 0) {
@@ -397,7 +401,7 @@ public class MyResultsFragment extends Fragment {
                                     temp = temp + 8.5;
                                 }
                                 else if (!TAData.get(i).isWalking() && !TAData.get(i).isBicycle() && !TAData.get(i).isPublicTransport() && TAData.get(i).isCar()) {
-                                    int passengers = Integer.parseInt(TAData.get(i).getCarPassengers());
+                                    int passengers = TAData.get(i).getCarPassengers();
                                     if (passengers>0) {
                                         temp = temp + 5;
                                     }
@@ -406,7 +410,7 @@ public class MyResultsFragment extends Fragment {
                                     }
                                 }
                                 else if (!TAData.get(i).isWalking() && !TAData.get(i).isBicycle() && TAData.get(i).isPublicTransport() && TAData.get(i).isCar()) {
-                                    int passengers = Integer.parseInt(TAData.get(i).getCarPassengers());
+                                    int passengers = TAData.get(i).getCarPassengers();
                                     if (passengers>0) {
                                         temp = temp + 6;
                                     }
@@ -415,7 +419,7 @@ public class MyResultsFragment extends Fragment {
                                     }
                                 }
                                 else if ((TAData.get(i).isWalking() || TAData.get(i).isBicycle()) && TAData.get(i).isPublicTransport() && TAData.get(i).isCar()) {
-                                    int passengers = Integer.parseInt(TAData.get(i).getCarPassengers());
+                                    int passengers = TAData.get(i).getCarPassengers();
                                     if (passengers>0) {
                                         temp = temp + 7;
                                     }
@@ -482,7 +486,7 @@ public class MyResultsFragment extends Fragment {
                                 else if (EAData.get(i).isShower() && EAData.get(i).isBath()) {
                                     temp = temp + 1;
                                 }
-                                int devicesOff = Integer.parseInt(EAData.get(i).getDevicesOff());
+                                int devicesOff = EAData.get(i).getDevicesOff();
                                 if (devicesOff > 0 && devicesOff <= 5) {
                                     temp = temp + 5;
                                 }
@@ -582,7 +586,23 @@ public class MyResultsFragment extends Fragment {
                     allPointsReturned.setNumber(0);
                 }
             }});
-
+        Button share_b = (Button) view.findViewById(R.id.share_b);
+        share_b.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                //change the type of data you need to share,
+                //for image use "image/*"
+                intent.setType("text/plain");
+                double total = EAPoints + TAPoints + FAPoints;
+                String data = "Renkuosi TVARIAU. Jau surinkau " + new DecimalFormat("##.##").format(total) + " taškų. Prisijunk ir tu prie programėlės TVARIAU.";
+                intent.putExtra(Intent.EXTRA_TEXT, data);
+                startActivity(Intent.createChooser(intent, "Share"));
+            }
+        });
         return view;
     }
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -598,8 +618,9 @@ public class MyResultsFragment extends Fragment {
         energy_tv = view.findViewById(R.id.energy_tv);
         badges_tv = view.findViewById(R.id.badges_tv);
         total_tv = view.findViewById(R.id.total_tv);
-        firstName2_tv = view.findViewById(R.id.firstName2_tv);
-        lastName2_tv = view.findViewById(R.id.lastName2_tv);
+        //firstName2_tv = view.findViewById(R.id.firstName2_tv);
+        //lastName2_tv = view.findViewById(R.id.lastName2_tv);
+        username2_tv = view.findViewById(R.id.username2_tv);
         image_iv = view.findViewById(R.id.image_iv);
         empty_tv = view.findViewById(R.id.empty_tv);
         linearLayout = view.findViewById(R.id.linearLayout2);
@@ -779,7 +800,7 @@ public class MyResultsFragment extends Fragment {
             graph.setVisibility(View.VISIBLE);
             Log.i("mano", "onviewcreated graph: TRY:" + graph.getSeries());
         } catch (IllegalArgumentException e) {
-            Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+           // Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             Log.i("mano", "onviewcreated graph: CATCH:" + graph);
         }
     }

@@ -87,12 +87,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="119dp"
+            android:gravity="center_horizontal"
             android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="                        " />
 
             <Button
                 android:id="@+id/login_b"
@@ -111,12 +107,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="119dp"
+            android:gravity="center_horizontal"
             android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="                        " />
 
             <Button
                 android:id="@+id/button"

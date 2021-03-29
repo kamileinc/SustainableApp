@@ -154,42 +154,42 @@ public class FoodActionFragment extends Fragment {
             public void onChange() {
                 Log.i("mano", "cia");
                 if (FAData != null) {
-                    if (FAData.get(0).getBreakfastFood().equals("0")) {
+                    if (FAData.get(0).getBreakfastFood()==0) {
                         breakfastVegan_rb.setChecked(true);
                     }
-                    else if (FAData.get(0).getBreakfastFood().equals("1")) {
+                    else if (FAData.get(0).getBreakfastFood()==1) {
                         breakfastVegetarian_rb.setChecked(true);
                     }
-                    else if (FAData.get(0).getBreakfastFood().equals("2")) {
+                    else if (FAData.get(0).getBreakfastFood()==2) {
                         breakfastLowImpactMeat_rb.setChecked(true);
                     }
-                    else if (FAData.get(0).getBreakfastFood().equals("3")) {
+                    else if (FAData.get(0).getBreakfastFood()==3) {
                         breakfastHighImpactMeat_rb.setChecked(true);
                     }
 
-                    if (FAData.get(0).getLunchFood().equals("0")) {
+                    if (FAData.get(0).getLunchFood()==0) {
                         lunchVegan_rb.setChecked(true);
                     }
-                    else if (FAData.get(0).getLunchFood().equals("1")) {
+                    else if (FAData.get(0).getLunchFood()==1) {
                         lunchVegetarian_rb.setChecked(true);
                     }
-                    else if (FAData.get(0).getLunchFood().equals("2")) {
+                    else if (FAData.get(0).getLunchFood()==2) {
                         lunchLowImpactMeat_rb.setChecked(true);
                     }
-                    else if (FAData.get(0).getLunchFood().equals("3")) {
+                    else if (FAData.get(0).getLunchFood()==3) {
                         lunchHighImpactMeat_rb.setChecked(true);
                     }
 
-                    if (FAData.get(0).getDinnerFood().equals("0")) {
+                    if (FAData.get(0).getDinnerFood()==0) {
                         dinnerVegan_rb.setChecked(true);
                     }
-                    else if (FAData.get(0).getDinnerFood().equals("1")) {
+                    else if (FAData.get(0).getDinnerFood()==1) {
                         dinnerVegetarian_rb.setChecked(true);
                     }
-                    else if (FAData.get(0).getDinnerFood().equals("2")) {
+                    else if (FAData.get(0).getDinnerFood()==2) {
                         dinnerLowImpactMeat_rb.setChecked(true);
                     }
-                    else if (FAData.get(0).getDinnerFood().equals("3")) {
+                    else if (FAData.get(0).getDinnerFood()==3) {
                         dinnerHighImpactMeat_rb.setChecked(true);
                     }
                 }
@@ -204,46 +204,46 @@ public class FoodActionFragment extends Fragment {
                 SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
                 Date date = new Date(System.currentTimeMillis());
                 String dateStr = formatter.format(date);
-                String breakfast = "";
-                String lunch = "";
-                String dinner = "";
+                int breakfast = -1;
+                int lunch = -1;
+                int dinner = -1;
                 if (breakfastVegan_rb.isChecked()) {
-                    breakfast = "0";
+                    breakfast = 0;
                 }
                 if (breakfastVegetarian_rb.isChecked()) {
-                    breakfast = "1";
+                    breakfast = 1;
                 }
                 if (breakfastLowImpactMeat_rb.isChecked()) {
-                    breakfast = "2";
+                    breakfast = 2;
                 }
                 if (breakfastHighImpactMeat_rb.isChecked()) {
-                    breakfast = "3";
+                    breakfast = 3;
                 }
 
                 if (lunchVegan_rb.isChecked()) {
-                    lunch = "0";
+                    lunch = 0;
                 }
                 if (lunchVegetarian_rb.isChecked()) {
-                    lunch = "1";
+                    lunch = 1;
                 }
                 if (lunchLowImpactMeat_rb.isChecked()) {
-                    lunch = "2";
+                    lunch = 2;
                 }
                 if (lunchHighImpactMeat_rb.isChecked()) {
-                    lunch = "3";
+                    lunch = 3;
                 }
 
                 if (dinnerVegan_rb.isChecked()) {
-                    dinner = "0";
+                    dinner = 0;
                 }
                 if (dinnerVegetarian_rb.isChecked()) {
-                    dinner = "1";
+                    dinner = 1;
                 }
                 if (dinnerLowImpactMeat_rb.isChecked()) {
-                    dinner = "2";
+                    dinner = 2;
                 }
                 if (dinnerHighImpactMeat_rb.isChecked()) {
-                    dinner = "3";
+                    dinner = 3;
                 }
                 FoodAction fa = new FoodAction(sa.getId(), sa.getCategory(), sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), dateStr, breakfast, lunch, dinner);
                 fac.updateFoodActionInDB(fa);

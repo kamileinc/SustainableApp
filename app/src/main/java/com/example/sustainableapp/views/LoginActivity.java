@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         foundUser.setListener(new IntVariable.ChangeListener() {
             @Override
             public void onChange() {
-                Toast.makeText(getApplicationContext(),"Vartotojo prisijungimas sėkmigas",Toast. LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Vartotojo prisijungimas sėkmingas",Toast. LENGTH_SHORT).show();
                 Log.i("mano", "salala1");
                 Intent intent = new Intent(getApplicationContext(), UserActivity.class);
                 intent.putExtra("userID", foundUser.getID());
@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onChange() {
                 username_et.setError("Vartotojo duomenys neteisingi");
                 password_et.setError("Vartotojo duomenys neteisingi");
-                Toast.makeText(getApplicationContext(),"Vartotojo duomenys neteisingi",Toast. LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"Vartotojo duomenys neteisingi",Toast. LENGTH_LONG).show();
             }
         });
     }

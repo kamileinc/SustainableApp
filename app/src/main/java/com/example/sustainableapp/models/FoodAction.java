@@ -3,14 +3,14 @@ package com.example.sustainableapp.models;
 public class FoodAction extends SustainableAction{
     private String faID;
     private String date;
-    private String breakfastFood;
-    private String lunchFood;
-    private String dinnerFood;
+    private int breakfastFood;
+    private int lunchFood;
+    private int dinnerFood;
 
     public FoodAction() {
     }
 
-    public FoodAction(String id, String category, String userID, String dateBegin, String dateEnd, String faID, String date, String breakfastFood, String lunchFood, String dinnerFood) {
+    public FoodAction(String id, String category, String userID, String dateBegin, String dateEnd, String faID, String date, int breakfastFood, int lunchFood, int dinnerFood) {
         super(id, category, userID, dateBegin, dateEnd);
         this.faID = faID;
         this.date = date;
@@ -19,7 +19,7 @@ public class FoodAction extends SustainableAction{
         this.dinnerFood = dinnerFood;
     }
 
-    public FoodAction(String id, String category, String userID, String dateBegin, String dateEnd,  String date, String breakfastFood, String lunchFood, String dinnerFood) {
+    public FoodAction(String id, String category, String userID, String dateBegin, String dateEnd,  String date, int breakfastFood, int lunchFood, int dinnerFood) {
         super(id, category, userID, dateBegin, dateEnd);
         this.faID = userID + date;
         this.date = date;
@@ -55,28 +55,27 @@ public class FoodAction extends SustainableAction{
         this.date = date;
     }
 
-
-    public String getBreakfastFood() {
+    public int getBreakfastFood() {
         return breakfastFood;
     }
 
-    public void setBreakfastFood(String breakfastFood) {
+    public void setBreakfastFood(int breakfastFood) {
         this.breakfastFood = breakfastFood;
     }
 
-    public String getLunchFood() {
+    public int getLunchFood() {
         return lunchFood;
     }
 
-    public void setLunchFood(String lunchFood) {
+    public void setLunchFood(int lunchFood) {
         this.lunchFood = lunchFood;
     }
 
-    public String getDinnerFood() {
+    public int getDinnerFood() {
         return dinnerFood;
     }
 
-    public void setDinnerFood(String dinnerFood) {
+    public void setDinnerFood(int dinnerFood) {
         this.dinnerFood = dinnerFood;
     }
 }

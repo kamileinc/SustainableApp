@@ -1,6 +1,7 @@
 package com.example.sustainableapp.views;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -16,9 +17,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sustainableapp.R;
 import com.example.sustainableapp.controllers.EnergyActionController;
@@ -27,6 +31,7 @@ import com.example.sustainableapp.controllers.SustainableActionController;
 import com.example.sustainableapp.controllers.TransportActionController;
 import com.example.sustainableapp.controllers.UserController;
 import com.example.sustainableapp.models.BooVariable;
+import com.example.sustainableapp.models.Database;
 import com.example.sustainableapp.models.FoodAction;
 import com.example.sustainableapp.models.IntVariable;
 import com.example.sustainableapp.models.Points;
@@ -53,6 +58,10 @@ public class AllResultsFragment extends Fragment {
     private static BooVariable TAPointsReturned;
     private static IntVariable allPointsReturned;
     private static BooVariable photoReturned;
+    private static BooVariable photosReturned;
+    private static ArrayList<Bitmap> bitmapList = new ArrayList<>();
+    private static ArrayList<String> userIDList = new ArrayList<>();
+    ProgressDialog dialog;
     TableLayout t1;
     public AllResultsFragment() {
         // Required empty public constructor
@@ -80,6 +89,9 @@ public class AllResultsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_all_results, container, false);
+        dialog = new ProgressDialog(view.getContext());
+        dialog.setMessage("Kraunama informacija...");
+        dialog.show();
         pointsList = new ArrayList<>();
         UserController uc = new UserController();
         uc.getAllUsers();
@@ -90,6 +102,8 @@ public class AllResultsFragment extends Fragment {
             public void onChange() {
                 Log.i("mano", "RASTI USERS: " + usersList.size());
                 if (pointsList.size()==0) {
+                    //UserController uc = new UserController();
+                   // uc.getAllPhotos(usersList, "AllResultsTable");
                     for (int i = 0; i < usersList.size(); i++) {
                         pointsList.add(new Points(usersList.get(i).getId(), usersList.get(i).getUsername(), usersList.get(i).getPhoto()));
                         FoodActionController fac = new FoodActionController();
@@ -193,6 +207,15 @@ public class AllResultsFragment extends Fragment {
                 }
             }
         });
+        photosReturned = new BooVariable();
+        photosReturned.setListener(new BooVariable.ChangeListener() {
+            @Override
+            public void onChange() {
+                if (photoReturned.isBoo()) {
+                    allPointsReturned.setNumber(allPointsReturned.getNumber()+1);
+                }
+            }
+        });
         //GAUTI VISUS VARTOTOJUS
         //GAUTI VISUS SA
         //GAUTI VISUS FA
@@ -256,6 +279,13 @@ public class AllResultsFragment extends Fragment {
         }
         photoReturned.setBoo(true);
         photoReturned.getListener().onChange();
+
+    }
+    public static void checkAllPhotosReturned(ArrayList<Bitmap> bmpList, ArrayList<String> uList) {
+        bitmapList = bmpList;
+        userIDList = uList;
+        photosReturned.setBoo(true);
+        photosReturned.getListener().onChange();
 
     }
     /*
@@ -379,135 +409,169 @@ public void drawTable(View view) {
 */
     @SuppressLint("ResourceType")
     public void drawTableForCategory(View view, String category) {
-        TableLayout tl = (TableLayout) view.findViewById(R.id.main_table);
-        tl.removeAllViews();
-        TextView[] textArray = new TextView[7];
-        TableRow[] tr_head = new TableRow[pointsList.size()+1];
+        dialog.hide();
+        if (pointsList!=null) {
+            Log.i("mano", "pointslistas dabar: " + pointsList.size());
+            TableLayout tl = (TableLayout) view.findViewById(R.id.main_table);
+            tl.removeAllViews();
+            TextView[] textArray = new TextView[pointsList.size()+7];
+            TableRow[] tr_head = new TableRow[pointsList.size()+1];
 
-        for(int i=0; i<=pointsList.size();i++){
-            if (i == 0) {
-                tr_head[i] = new TableRow(view.getContext());
-                tr_head[i].setId(10);
-
-                tr_head[i].setBackgroundColor(0xFF6200EE);        // part1
-                tr_head[i].setLayoutParams(new TableLayout.LayoutParams(
-                        TableLayout.LayoutParams.WRAP_CONTENT,
-                        TableLayout.LayoutParams.WRAP_CONTENT));
-
-                textArray[i] = new TextView(view.getContext());
-                textArray[i].setId(i + 333);
-                textArray[i].setText("Vieta");
-                textArray[i].setTextColor(Color.WHITE);
-                textArray[i].setPadding(30, 5, 30, 5);
-                tr_head[i].addView(textArray[i]);
-
-                textArray[i+1] = new TextView(view.getContext());
-                textArray[i+1].setId(i + 444);
-                textArray[i+1].setText("Vartotojo vardas");
-                textArray[i+1].setTextColor(Color.WHITE);
-                textArray[i+1].setPadding(30, 5, 30, 5);
-                tr_head[i].addView(textArray[i+1]);
-
-                textArray[i+2] = new TextView(view.getContext());
-                textArray[i+2].setId(i + 444);
-                textArray[i+2].setText(category);
-                textArray[i+2].setTextColor(Color.WHITE);
-                textArray[i+2].setPadding(30, 5, 30, 5);
-                tr_head[i].addView(textArray[i+2]);
-
-                tl.addView(tr_head[i], new TableLayout.LayoutParams(
-                        TableLayout.LayoutParams.WRAP_CONTENT,
-                        TableLayout.LayoutParams.WRAP_CONTENT));
-            }
-            else {
-                //Create the tablerows
-
-                if (i%2==0) {
+            for(int i=0; i<=pointsList.size();i++){
+                if (i == 0) {
                     tr_head[i] = new TableRow(view.getContext());
-                    tr_head[i].setId(i + 1);
-                    tr_head[i].setBackgroundColor(R.color.purple_500);
-                    tr_head[i].setLayoutParams(new ViewGroup.LayoutParams(
+                    tr_head[i].setId(10);
+
+                    tr_head[i].setBackgroundColor(0xFF6200EE);        // part1
+                    // tr_head[i].setLayoutParams(new TableLayout.LayoutParams(200,200));
+
+                    tr_head[i].setLayoutParams(new TableLayout.LayoutParams(
                             TableLayout.LayoutParams.WRAP_CONTENT,
-                            TableRow.LayoutParams.WRAP_CONTENT));
-                }
-                else {
-                    tr_head[i] = new TableRow(view.getContext());
-                    tr_head[i].setId(i + 1);
-                    tr_head[i].setBackgroundColor(Color.WHITE);
-                    tr_head[i].setLayoutParams(new ViewGroup.LayoutParams(
+                            TableLayout.LayoutParams.WRAP_CONTENT));
+
+
+                    textArray[i] = new TextView(view.getContext());
+                    textArray[i].setId(i + 333);
+                    textArray[i].setText("Vieta");
+                    textArray[i].setTextColor(Color.WHITE);
+                    textArray[i].setPadding(30, 5, 30, 5);
+                    tr_head[i].addView(textArray[i]);
+
+                    textArray[i+1] = new TextView(view.getContext());
+                    textArray[i+1].setId(i + 444);
+                    textArray[i+1].setText("Nuotrauka");
+                    textArray[i+1].setTextColor(Color.WHITE);
+                    textArray[i+1].setPadding(30, 5, 30, 5);
+                    tr_head[i].addView(textArray[i+1]);
+
+                    textArray[i+2] = new TextView(view.getContext());
+                    textArray[i+2].setId(i + 444);
+                    textArray[i+2].setText("Vartotojo vardas");
+                    textArray[i+2].setTextColor(Color.WHITE);
+                    textArray[i+2].setPadding(30, 5, 30, 5);
+                    tr_head[i].addView(textArray[i+2]);
+
+                    textArray[i+3] = new TextView(view.getContext());
+                    textArray[i+3].setId(i + 444);
+                    textArray[i+3].setText(category);
+                    textArray[i+3].setTextColor(Color.WHITE);
+                    textArray[i+3].setPadding(30, 5, 30, 5);
+                    tr_head[i].addView(textArray[i+3]);
+
+                    tl.addView(tr_head[i], new TableLayout.LayoutParams(
                             TableLayout.LayoutParams.WRAP_CONTENT,
-                            TableRow.LayoutParams.WRAP_CONTENT));
-                }
-                // Here create the TextView dynamically
-
-                textArray[i] = new TextView(view.getContext());
-                textArray[i].setId(i + 111);
-                textArray[i].setText(Integer.toString(i));
-                textArray[i].setTextColor(Color.BLACK);
-                textArray[i].setPadding(30, 5, 30, 5);
-                if (pointsList.get(i-1).getUserID().equals(userID)) {
-                    textArray[i].setTypeface(null, Typeface. BOLD);
-                    TextView user_place_tv = view.findViewById(R.id.user_place_tv);
-                    user_place_tv.setText("❁❁❁ Pagal kategoriją " + category.toUpperCase() + " jūs užimate " + i + " vietą! ❁❁❁");
+                            TableLayout.LayoutParams.WRAP_CONTENT));
                 }
                 else {
-                    textArray[i].setTypeface(null, Typeface. NORMAL);
-                }
-                tr_head[i].addView(textArray[i]);
+                    //Create the tablerows
 
-                textArray[i] = new TextView(view.getContext());
-                textArray[i].setId(i + 111);
-                textArray[i].setText(pointsList.get(i-1).getUserName());
-                textArray[i].setTextColor(Color.BLACK);
-                textArray[i].setPadding(30, 5, 30, 5);
-                if (pointsList.get(i-1).getUserID().equals(userID)) {
-                    textArray[i].setTypeface(null, Typeface. BOLD);
-                }
-                else {
-                    textArray[i].setTypeface(null, Typeface. NORMAL);
-                }
-                tr_head[i].addView(textArray[i]);
-                String points = "";
-                if (category.equals("Mityba")) {
-                    points = new DecimalFormat("##.##").format(pointsList.get(i-1).getFaPoints());
-                }
-                else if (category.equals("Būstas")) {
-                    points = new DecimalFormat("##.##").format(pointsList.get(i-1).getEaPoints());
-                }
-                else if (category.equals("Transportas")) {
-                    points = new DecimalFormat("##.##").format(pointsList.get(i-1).getTaPoints());
+                    if (i%2==0) {
+                        tr_head[i] = new TableRow(view.getContext());
+                        tr_head[i].setId(i + 1);
+                        tr_head[i].setBackgroundColor(R.color.purple_500);
+                        tr_head[i].setLayoutParams(new ViewGroup.LayoutParams(
+                                TableLayout.LayoutParams.WRAP_CONTENT,
+                                TableRow.LayoutParams.WRAP_CONTENT));
+                    }
+                    else {
+                        tr_head[i] = new TableRow(view.getContext());
+                        tr_head[i].setId(i + 1);
+                        tr_head[i].setBackgroundColor(Color.WHITE);
+                        tr_head[i].setLayoutParams(new ViewGroup.LayoutParams(
+                                TableLayout.LayoutParams.WRAP_CONTENT,
+                                TableRow.LayoutParams.WRAP_CONTENT));
+                    }
+                    // Here create the TextView dynamically
 
+                    textArray[i] = new TextView(view.getContext());
+                    textArray[i].setId(i + 111);
+                    textArray[i].setText(Integer.toString(i));
+                    textArray[i].setTextColor(Color.BLACK);
+                    textArray[i].setPadding(30, 5, 30, 5);
+                    if (pointsList.get(i-1).getUserID().equals(userID)) {
+                        textArray[i].setTypeface(null, Typeface. BOLD);
+                        TextView user_place_tv = view.findViewById(R.id.user_place_tv);
+                        user_place_tv.setText("❁❁❁ Šioje kategorijoje jūs užimate " + i + " vietą! ❁❁❁");
+                    }
+                    else {
+                        textArray[i].setTypeface(null, Typeface. NORMAL);
+                    }
+                    tr_head[i].addView(textArray[i]);
+
+                    ImageView iv = new ImageView(view.getContext());
+                /*
+                Log.i("mano", "userIDList: " + userIDList.size());
+                Log.i("mano", "usersList: " + usersList.size());
+                Log.i("mano", "bitmapList: " + bitmapList.size());
+                for (int j = 0; j<userIDList.size(); j++) {
+                    if (userIDList.get(j).equals(usersList.get((i-1)).getId())) {
+                        iv.setImageBitmap(bitmapList.get(j));
+                    }
                 }
-                else if (category.equals("Bendra")) {
-                    points = new DecimalFormat("##.##").format(pointsList.get(i-1).getFaPoints() + pointsList.get(i-1).getEaPoints() + pointsList.get(i-1).getTaPoints());
+                */
+                    //iv.setImageResource(R.drawable.badge0);
+                    iv.setImageBitmap(pointsList.get(i-1).getBitmap());
+                    tr_head[i].addView(iv, 100, 100);
 
+                    textArray[i] = new TextView(view.getContext());
+                    textArray[i].setId(i + 111);
+                    textArray[i].setText(pointsList.get(i-1).getUserName());
+                    textArray[i].setTextColor(Color.BLACK);
+                    textArray[i].setPadding(30, 5, 30, 5);
+                    if (pointsList.get(i-1).getUserID().equals(userID)) {
+                        textArray[i].setTypeface(null, Typeface. BOLD);
+                    }
+                    else {
+                        textArray[i].setTypeface(null, Typeface. NORMAL);
+                    }
+                    tr_head[i].addView(textArray[i]);
+                    String points = "";
+                    if (category.equals("Mityba")) {
+                        points = new DecimalFormat("##.##").format(pointsList.get(i-1).getFaPoints());
+                    }
+                    else if (category.equals("Būstas")) {
+                        points = new DecimalFormat("##.##").format(pointsList.get(i-1).getEaPoints());
+                    }
+                    else if (category.equals("Transportas")) {
+                        points = new DecimalFormat("##.##").format(pointsList.get(i-1).getTaPoints());
+
+                    }
+                    else if (category.equals("Bendra")) {
+                        points = new DecimalFormat("##.##").format(pointsList.get(i-1).getFaPoints() + pointsList.get(i-1).getEaPoints() + pointsList.get(i-1).getTaPoints());
+
+                    }
+
+                    textArray[i] = new TextView(view.getContext());
+                    textArray[i].setId(i + 222);
+                    textArray[i].setText(points);
+                    textArray[i].setTextColor(Color.BLACK);
+                    textArray[i].setPadding(30, 5, 30, 5);
+                    if (pointsList.get(i-1).getUserID().equals(userID)) {
+                        textArray[i].setTypeface(null, Typeface. BOLD);
+                    }
+                    else {
+                        textArray[i].setTypeface(null, Typeface. NORMAL);
+                    }
+                    tr_head[i].addView(textArray[i]);
+
+
+
+                    tl.addView(tr_head[i], new TableLayout.LayoutParams(
+                            TableLayout.LayoutParams.WRAP_CONTENT,
+                            TableLayout.LayoutParams.WRAP_CONTENT));
                 }
 
-                textArray[i] = new TextView(view.getContext());
-                textArray[i].setId(i + 222);
-                textArray[i].setText(points);
-                textArray[i].setTextColor(Color.BLACK);
-                textArray[i].setPadding(30, 5, 30, 5);
-                if (pointsList.get(i-1).getUserID().equals(userID)) {
-                    textArray[i].setTypeface(null, Typeface. BOLD);
-                }
-                else {
-                    textArray[i].setTypeface(null, Typeface. NORMAL);
-                }
-                tr_head[i].addView(textArray[i]);
+            } // end of for loop
+            for (int i = 0; i< usersList.size();i++){
+                Log.i("mano", "POINTS: " + pointsList.get(i).toString());
 
-
-
-                tl.addView(tr_head[i], new TableLayout.LayoutParams(
-                        TableLayout.LayoutParams.WRAP_CONTENT,
-                        TableLayout.LayoutParams.WRAP_CONTENT));
             }
-
-        } // end of for loop
-        for (int i = 0; i< usersList.size();i++){
-            Log.i("mano", "POINTS: " + pointsList.get(i).toString());
+        }
+        else {
+            Toast.makeText(view.getContext(), "Nera duomenu", Toast.LENGTH_LONG).show();
 
         }
+
     }
 
 }

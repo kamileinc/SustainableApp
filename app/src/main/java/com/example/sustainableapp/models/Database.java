@@ -107,7 +107,56 @@ public class Database extends Application {
             }
         });
     }
-
+    public void getPhotosForTable(ArrayList<User> userList, String purpose) {
+        ArrayList<Bitmap> bitmapList = new ArrayList<>();
+        ArrayList<String> usersIDList = new ArrayList<>();
+        for (int i=0;i<userList.size();i++) {
+            Log.i("mano", "for bitmapus: " + i);
+            String userID = userList.get(i).getId();
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference gsReference = storage.getReferenceFromUrl("gs://sustainableapp-e3fb1.appspot.com/images/" + userList.get(i).getId() + ".jpg");
+            final long ONE_MEGABYTE = 1024 * 1024;
+            gsReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    bitmapList.add(bmp);
+                    usersIDList.add(userID);
+                    if (bitmapList.size()==userList.size()) {
+                        //grazint arraylistus
+                        UserController.checkAllPhotosFound(bitmapList, usersIDList, purpose);
+                        Log.i("mano", "grazina visus bitmapus: " + bitmapList.size());
+                    }
+                    //UserController.checkPhotoReturnedToView(userID, bmp, purpose);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference gsReference = storage.getReferenceFromUrl("gs://sustainableapp-e3fb1.appspot.com/nophoto.png");
+                    final long ONE_MEGABYTE = 1024 * 1024;
+                    gsReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            //UserController.checkPhotoReturnedToView(userID, bmp, purpose);
+                            bitmapList.add(bmp);
+                            usersIDList.add(userID);
+                            if (bitmapList.size()==userList.size()) {
+                                //grazint arraylistus#
+                                UserController.checkAllPhotosFound(bitmapList, usersIDList, purpose);
+                                Log.i("mano", "grazina visus bitmapus: " + bitmapList.size());
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                        }
+                    });
+                }
+            });
+        }
+    }
     public boolean addNewCategoryToDB(SustainableAction sa) {
         try {
             rootNode = FirebaseDatabase.getInstance();
@@ -289,43 +338,30 @@ public class Database extends Application {
                         String lastNameFromDB = ds.child("lastName").getValue(String.class);
                         String usernameFromDB = ds.child("username").getValue(String.class);
                         String photoFromDB = ds.child("photo").getValue(String.class);
-                        String addressFromDB = ds.child("address").getValue(String.class);
-                        String dietFromDB = ds.child("diet").getValue(String.class);
-                        String dietChangeFromDB = ds.child("dietChange").getValue(String.class);
                         String breakfastTimeFromDB = ds.child("breakfastTime").getValue(String.class);
                         String lunchTimeFromDB = ds.child("lunchTime").getValue(String.class);
                         String dinnerTimeFromDB = ds.child("dinnerTime").getValue(String.class);
                         String wakingUpTimeFromDB = ds.child("wakingUpTime").getValue(String.class);
                         String sleepingTimeFromDB = ds.child("sleepingTime").getValue(String.class);
-                        String transportFromDB = ds.child("transport").getValue(String.class);
-                        String workingDayTripsFromDB = ds.child("workingDayTrips").getValue(String.class);
-                        String workingDayTransportFromDB = ds.child("firstName").getValue(String.class);
-                        String weekendDayTripsFromDB = ds.child("weekendDayTrips").getValue(String.class);
-                        String weekendDayTransportFromDB = ds.child("weekendDayTransport").getValue(String.class);
-                        String takingShowerPerWeekFromDB = ds.child("takingShowerPerWeek").getValue(String.class);
-                        String showerTimeFromDB = ds.child("showerTime").getValue(String.class);
-                        String takingBathPerWeekFromDB = ds.child("takingBathPerWeek").getValue(String.class);
-                        GenericTypeIndicator<HashMap<Integer, Integer>> t = new GenericTypeIndicator<HashMap<Integer, Integer>>() {};
 
+                        //GenericTypeIndicator<HashMap<Integer, Integer>> t = new GenericTypeIndicator<HashMap<Integer, Integer>>() {};
                         ArrayList<Boolean> badges = new ArrayList<>();
                         boolean boo = false;
-                        Log.i("mano", "badges getchildrencount: " + ds.child("badges").getClass());
+                        //Log.i("mano", "badges getchildrencount: " + ds.child("badges").getClass());
                         int j =0;
                         for (DataSnapshot ds2 : ds.getChildren()) {
-                            Log.i("mano", usernameFromDB + " badge2 " + j + ": " + ds.child("badges/0").toString());
+                           // Log.i("mano", usernameFromDB + " badge2 " + j + ": " + ds.child("badges/0").toString());
                             try {
                                 boo = ds.child("badges/" + j).getValue(Boolean.class);
-                                Log.i("mano", usernameFromDB + " badge3 " + j + ": " + boo);
+                                //Log.i("mano", usernameFromDB + " badge3 " + j + ": " + boo);
                                 badges.add(boo);
                             }
                             catch(Exception e) {
                             }
                             j++;
                         }
-                        User us = new User(idFromDB, firstNameFromDB, lastNameFromDB, u, photoFromDB, addressFromDB,
-                                dietFromDB, dietChangeFromDB, breakfastTimeFromDB, lunchTimeFromDB, dinnerTimeFromDB,
-                                wakingUpTimeFromDB, sleepingTimeFromDB, transportFromDB, workingDayTripsFromDB, workingDayTransportFromDB,
-                                weekendDayTripsFromDB, weekendDayTransportFromDB, takingShowerPerWeekFromDB, showerTimeFromDB, takingBathPerWeekFromDB, p, badges);
+                        User us = new User(idFromDB, firstNameFromDB, lastNameFromDB, u, photoFromDB, breakfastTimeFromDB, lunchTimeFromDB, dinnerTimeFromDB,
+                                wakingUpTimeFromDB, sleepingTimeFromDB, p, badges);
                         userList.add(us);
                         fireBaseCallback.onCallback(userList);
                     }
@@ -357,66 +393,30 @@ public class Database extends Application {
                         String lastNameFromDB = ds.child("lastName").getValue(String.class);
                         String usernameFromDB = ds.child("username").getValue(String.class);
                         String photoFromDB = ds.child("photo").getValue(String.class);
-                        String addressFromDB = ds.child("address").getValue(String.class);
-                        String dietFromDB = ds.child("diet").getValue(String.class);
-                        String dietChangeFromDB = ds.child("dietChange").getValue(String.class);
                         String breakfastTimeFromDB = ds.child("breakfastTime").getValue(String.class);
                         String lunchTimeFromDB = ds.child("lunchTime").getValue(String.class);
                         String dinnerTimeFromDB = ds.child("dinnerTime").getValue(String.class);
                         String wakingUpTimeFromDB = ds.child("wakingUpTime").getValue(String.class);
                         String sleepingTimeFromDB = ds.child("sleepingTime").getValue(String.class);
-                        String transportFromDB = ds.child("transport").getValue(String.class);
-                        String workingDayTripsFromDB = ds.child("workingDayTrips").getValue(String.class);
-                        String workingDayTransportFromDB = ds.child("firstName").getValue(String.class);
-                        String weekendDayTripsFromDB = ds.child("weekendDayTrips").getValue(String.class);
-                        String weekendDayTransportFromDB = ds.child("weekendDayTransport").getValue(String.class);
-                        String takingShowerPerWeekFromDB = ds.child("takingShowerPerWeek").getValue(String.class);
-                        String showerTimeFromDB = ds.child("showerTime").getValue(String.class);
-                        String takingBathPerWeekFromDB = ds.child("takingBathPerWeek").getValue(String.class);
-                        GenericTypeIndicator<HashMap<Integer, Integer>> t = new GenericTypeIndicator<HashMap<Integer, Integer>>() {};
 
                         ArrayList<Boolean> badges = new ArrayList<>();
                         boolean boo = false;
-                        Log.i("mano", "badges getchildrencount: " + ds.child("badges").getClass());
+                        //Log.i("mano", "badges getchildrencount: " + ds.child("badges").getClass());
                         int j =0;
                         for (DataSnapshot ds2 : ds.getChildren()) {
-                            Log.i("mano", usernameFromDB + " badge2 " + j + ": " + ds.child("badges/0").toString());
+                            //Log.i("mano", usernameFromDB + " badge2 " + j + ": " + ds.child("badges/0").toString());
                             try {
                                 boo = ds.child("badges/" + j).getValue(Boolean.class);
-                                Log.i("mano", usernameFromDB + " badge3 " + j + ": " + boo);
+                                //Log.i("mano", usernameFromDB + " badge3 " + j + ": " + boo);
                                 badges.add(boo);
                             }
                             catch(Exception e) {
                             }
                             j++;
                         }
-                            //Log.i("mano", usernameFromDB +" badge3 " + j + ": " + ds2.getValue(Boolean.class));
-                            //HashMap<Integer, Integer> hm = ds2.child(Integer.toString(j)).getValue(t);
-                        /*
-                            try {
-                                Log.i("mano", usernameFromDB + " badge " + j + ": " + hm.get(j));
-                            }catch(Exception e) {
 
-                            }
-                            j++;
-                        */
-                        /*
-                        for(int i = 0;i<ds.child("badges").getChildrenCount();i++){
-                            //Boolean hm = ds.child("badges").getClass();
-                            Log.i("mano", "badge " + i + " :" + boo);
-                            badges.add(boo);
-                        }
-                        */
-
-
-                        //ArrayList<Boolean> badges = ds.child("badges").getValue(ArrayList<Boolean>().class);
-
-                        //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
-
-                        User us = new User(idFromDB, firstNameFromDB, lastNameFromDB, usernameFromDB, photoFromDB, addressFromDB,
-                                dietFromDB, dietChangeFromDB, breakfastTimeFromDB, lunchTimeFromDB, dinnerTimeFromDB,
-                                wakingUpTimeFromDB, sleepingTimeFromDB, transportFromDB, workingDayTripsFromDB, workingDayTransportFromDB,
-                                weekendDayTripsFromDB, weekendDayTransportFromDB, takingShowerPerWeekFromDB, showerTimeFromDB, takingBathPerWeekFromDB, p, badges);
+                        User us = new User(idFromDB, firstNameFromDB, lastNameFromDB, usernameFromDB, photoFromDB, breakfastTimeFromDB, lunchTimeFromDB, dinnerTimeFromDB,
+                                wakingUpTimeFromDB, sleepingTimeFromDB, p, badges);
 
                         userList.add(us);
 
@@ -528,33 +528,21 @@ public class Database extends Application {
                             String lastNameFromDB = ds.child("lastName").getValue(String.class);
                             String usernameFromDB = ds.child("username").getValue(String.class);
                             String photoFromDB = ds.child("photo").getValue(String.class);
-                            String addressFromDB = ds.child("address").getValue(String.class);
-                            String dietFromDB = ds.child("diet").getValue(String.class);
-                            String dietChangeFromDB = ds.child("dietChange").getValue(String.class);
                             String breakfastTimeFromDB = ds.child("breakfastTime").getValue(String.class);
                             String lunchTimeFromDB = ds.child("lunchTime").getValue(String.class);
                             String dinnerTimeFromDB = ds.child("dinnerTime").getValue(String.class);
                             String wakingUpTimeFromDB = ds.child("wakingUpTime").getValue(String.class);
                             String sleepingTimeFromDB = ds.child("sleepingTime").getValue(String.class);
-                            String transportFromDB = ds.child("transport").getValue(String.class);
-                            String workingDayTripsFromDB = ds.child("workingDayTrips").getValue(String.class);
-                            String workingDayTransportFromDB = ds.child("firstName").getValue(String.class);
-                            String weekendDayTripsFromDB = ds.child("weekendDayTrips").getValue(String.class);
-                            String weekendDayTransportFromDB = ds.child("weekendDayTransport").getValue(String.class);
-                            String takingShowerPerWeekFromDB = ds.child("takingShowerPerWeek").getValue(String.class);
-                            String showerTimeFromDB = ds.child("showerTime").getValue(String.class);
-                            String takingBathPerWeekFromDB = ds.child("takingBathPerWeek").getValue(String.class);
-                            GenericTypeIndicator<HashMap<Integer, Integer>> t = new GenericTypeIndicator<HashMap<Integer, Integer>>() {};
 
                             ArrayList<Boolean> badges = new ArrayList<>();
                             boolean boo = false;
-                            Log.i("mano", "badges getchildrencount: " + ds.child("badges").getClass());
+                            //Log.i("mano", "badges getchildrencount: " + ds.child("badges").getClass());
                             int j =0;
                             for (DataSnapshot ds2 : ds.getChildren()) {
-                                Log.i("mano", usernameFromDB + " badge2 " + j + ": " + ds.child("badges/0").toString());
+                                //Log.i("mano", usernameFromDB + " badge2 " + j + ": " + ds.child("badges/0").toString());
                                 try {
                                     boo = ds.child("badges/" + j).getValue(Boolean.class);
-                                    Log.i("mano", usernameFromDB + " badge3 " + j + ": " + boo);
+                                    //Log.i("mano", usernameFromDB + " badge3 " + j + ": " + boo);
                                     badges.add(boo);
                                 }
                                 catch(Exception e) {
@@ -562,12 +550,8 @@ public class Database extends Application {
                                 j++;
                             }
 
-                            //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
-
-                            User us = new User(idFromDB, firstNameFromDB, lastNameFromDB, u, photoFromDB, addressFromDB,
-                                    dietFromDB, dietChangeFromDB, breakfastTimeFromDB, lunchTimeFromDB, dinnerTimeFromDB,
-                                    wakingUpTimeFromDB, sleepingTimeFromDB, transportFromDB, workingDayTripsFromDB, workingDayTransportFromDB,
-                                    weekendDayTripsFromDB, weekendDayTransportFromDB, takingShowerPerWeekFromDB, showerTimeFromDB, takingBathPerWeekFromDB, p, badges);
+                            User us = new User(idFromDB, firstNameFromDB, lastNameFromDB, u, photoFromDB, breakfastTimeFromDB, lunchTimeFromDB, dinnerTimeFromDB,
+                                    wakingUpTimeFromDB, sleepingTimeFromDB, p, badges);
                             // Log.i("mano", "" + us.toString());
                             userList = new ArrayList<>();
                             userList.add(us);
@@ -901,33 +885,21 @@ public class Database extends Application {
                         String lastNameFromDB = ds.child("lastName").getValue(String.class);
                         String usernameFromDB = ds.child("username").getValue(String.class);
                         String photoFromDB = ds.child("photo").getValue(String.class);
-                        String addressFromDB = ds.child("address").getValue(String.class);
-                        String dietFromDB = ds.child("diet").getValue(String.class);
-                        String dietChangeFromDB = ds.child("dietChange").getValue(String.class);
                         String breakfastTimeFromDB = ds.child("breakfastTime").getValue(String.class);
                         String lunchTimeFromDB = ds.child("lunchTime").getValue(String.class);
                         String dinnerTimeFromDB = ds.child("dinnerTime").getValue(String.class);
                         String wakingUpTimeFromDB = ds.child("wakingUpTime").getValue(String.class);
                         String sleepingTimeFromDB = ds.child("sleepingTime").getValue(String.class);
-                        String transportFromDB = ds.child("transport").getValue(String.class);
-                        String workingDayTripsFromDB = ds.child("workingDayTrips").getValue(String.class);
-                        String workingDayTransportFromDB = ds.child("firstName").getValue(String.class);
-                        String weekendDayTripsFromDB = ds.child("weekendDayTrips").getValue(String.class);
-                        String weekendDayTransportFromDB = ds.child("weekendDayTransport").getValue(String.class);
-                        String takingShowerPerWeekFromDB = ds.child("takingShowerPerWeek").getValue(String.class);
-                        String showerTimeFromDB = ds.child("showerTime").getValue(String.class);
-                        String takingBathPerWeekFromDB = ds.child("takingBathPerWeek").getValue(String.class);
-                        GenericTypeIndicator<HashMap<Integer, Integer>> t = new GenericTypeIndicator<HashMap<Integer, Integer>>() {};
 
                         ArrayList<Boolean> badges = new ArrayList<>();
                         boolean boo = false;
-                        Log.i("mano", "badges getchildrencount: " + ds.child("badges").getClass());
+                        //Log.i("mano", "badges getchildrencount: " + ds.child("badges").getClass());
                         int j =0;
                         for (DataSnapshot ds2 : ds.getChildren()) {
-                            Log.i("mano", usernameFromDB + " badge2 " + j + ": " + ds.child("badges/0").toString());
+                            //Log.i("mano", usernameFromDB + " badge2 " + j + ": " + ds.child("badges/0").toString());
                             try {
                                 boo = ds.child("badges/" + j).getValue(Boolean.class);
-                                Log.i("mano", usernameFromDB + " badge3 " + j + ": " + boo);
+                                //Log.i("mano", usernameFromDB + " badge3 " + j + ": " + boo);
                                 badges.add(boo);
                             }
                             catch(Exception e) {
@@ -936,10 +908,8 @@ public class Database extends Application {
                         }
                         //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
 
-                        User us = new User(idFromDB, firstNameFromDB, lastNameFromDB, usernameFromDB, photoFromDB, addressFromDB,
-                                dietFromDB, dietChangeFromDB, breakfastTimeFromDB, lunchTimeFromDB, dinnerTimeFromDB,
-                                wakingUpTimeFromDB, sleepingTimeFromDB, transportFromDB, workingDayTripsFromDB, workingDayTransportFromDB,
-                                weekendDayTripsFromDB, weekendDayTransportFromDB, takingShowerPerWeekFromDB, showerTimeFromDB, takingBathPerWeekFromDB, "", badges);
+                        User us = new User(idFromDB, firstNameFromDB, lastNameFromDB, usernameFromDB, photoFromDB, breakfastTimeFromDB, lunchTimeFromDB, dinnerTimeFromDB,
+                                wakingUpTimeFromDB, sleepingTimeFromDB, "", badges);
                         // Log.i("mano", "" + us.toString());
                         userList = new ArrayList<>();
                         userList.add(us);
@@ -980,7 +950,7 @@ public class Database extends Application {
                         boolean shower = ea.isShower();
                         String showerTime = ea.getShowerTime();
                         boolean bath = ea.isBath();
-                        String devicesOff = ea.getDevicesOff();
+                        int devicesOff = ea.getDevicesOff();
                         //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
                         EnergyAction energyAction = new EnergyAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date, noWater, shower, showerTime, bath, devicesOff);
 
@@ -1022,7 +992,7 @@ public class Database extends Application {
                         boolean shower = ea.isShower();
                         String showerTime = ea.getShowerTime();
                         boolean bath = ea.isBath();
-                        String devicesOff = ea.getDevicesOff();
+                        int devicesOff = ea.getDevicesOff();
                         //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
                         EnergyAction energyAction = new EnergyAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date, noWater, shower, showerTime, bath, devicesOff);
 
@@ -1065,7 +1035,7 @@ public class Database extends Application {
                         boolean shower = ea.isShower();
                         String showerTime = ea.getShowerTime();
                         boolean bath = ea.isBath();
-                        String devicesOff = ea.getDevicesOff();
+                        int devicesOff = ea.getDevicesOff();
                         //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
                         EnergyAction energyAction = new EnergyAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date, noWater, shower, showerTime, bath, devicesOff);
 
@@ -1110,15 +1080,15 @@ public class Database extends Application {
                         String date = ta.getDate();
                         boolean noTravelling = ta.isNoTravelling();
                         boolean walking = ta.isWalking();
-                        String walkingKm = ta.getWalkingKM();
+                        int walkingKm = ta.getWalkingKM();
                         boolean bicycle = ta.isBicycle();
-                        String bicycleKm = ta.getBicycleKM();
+                        int bicycleKm = ta.getBicycleKM();
                         boolean publicTransport = ta.isPublicTransport();
-                        String publicTransportKm = ta.getPublicTransportKM();
+                        int publicTransportKm = ta.getPublicTransportKM();
                         boolean car = ta.isCar();
-                        String carKm = ta.getCarKM();
-                        String carPassengersKm = ta.getCarPassengersKM();
-                        String carPassengers = ta.getCarPassengers();
+                        int carKm = ta.getCarKM();
+                        int carPassengersKm = ta.getCarPassengersKM();
+                        int carPassengers = ta.getCarPassengers();
 
                         //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
                         TransportAction transportAction = new TransportAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date,
@@ -1159,15 +1129,15 @@ public class Database extends Application {
                         String date = ta.getDate();
                         boolean noTravelling = ta.isNoTravelling();
                         boolean walking = ta.isWalking();
-                        String walkingKm = ta.getWalkingKM();
+                        int walkingKm = ta.getWalkingKM();
                         boolean bicycle = ta.isBicycle();
-                        String bicycleKm = ta.getBicycleKM();
+                        int bicycleKm = ta.getBicycleKM();
                         boolean publicTransport = ta.isPublicTransport();
-                        String publicTransportKm = ta.getPublicTransportKM();
+                        int publicTransportKm = ta.getPublicTransportKM();
                         boolean car = ta.isCar();
-                        String carKm = ta.getCarKM();
-                        String carPassengersKm = ta.getCarPassengersKM();
-                        String carPassengers = ta.getCarPassengers();
+                        int carKm = ta.getCarKM();
+                        int carPassengersKm = ta.getCarPassengersKM();
+                        int carPassengers = ta.getCarPassengers();
 
                         //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
                         TransportAction transportAction = new TransportAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date,
@@ -1209,15 +1179,15 @@ public class Database extends Application {
                         String date = ta.getDate();
                         boolean noTravelling = ta.isNoTravelling();
                         boolean walking = ta.isWalking();
-                        String walkingKm = ta.getWalkingKM();
+                        int walkingKm = ta.getWalkingKM();
                         boolean bicycle = ta.isBicycle();
-                        String bicycleKm = ta.getBicycleKM();
+                        int bicycleKm = ta.getBicycleKM();
                         boolean publicTransport = ta.isPublicTransport();
-                        String publicTransportKm = ta.getPublicTransportKM();
+                        int publicTransportKm = ta.getPublicTransportKM();
                         boolean car = ta.isCar();
-                        String carKm = ta.getCarKM();
-                        String carPassengersKm = ta.getCarPassengersKM();
-                        String carPassengers = ta.getCarPassengers();
+                        int carKm = ta.getCarKM();
+                        int carPassengersKm = ta.getCarPassengersKM();
+                        int carPassengers = ta.getCarPassengers();
 
                         //String usernameFromDB = snapshot.child(username).child("username").getValue(String.class);
                         TransportAction transportAction = new TransportAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date,
@@ -1260,9 +1230,9 @@ public class Database extends Application {
                         String dateEnd = fa.getDateEnd();
                         //id
                         String date = fa.getDate();
-                        String breakfastFood = fa.getBreakfastFood();
-                        String lunchFood = fa.getLunchFood();
-                        String dinnerFood = fa.getDinnerFood();
+                        int breakfastFood = fa.getBreakfastFood();
+                        int lunchFood = fa.getLunchFood();
+                        int dinnerFood = fa.getDinnerFood();
 
                         FoodAction foodAction = new FoodAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date, breakfastFood, lunchFood, dinnerFood );
 
@@ -1300,9 +1270,9 @@ public class Database extends Application {
                         String dateEnd = fa.getDateEnd();
                         //id
                         String date = fa.getDate();
-                        String breakfastFood = fa.getBreakfastFood();
-                        String lunchFood = fa.getLunchFood();
-                        String dinnerFood = fa.getDinnerFood();
+                        int breakfastFood = fa.getBreakfastFood();
+                        int lunchFood = fa.getLunchFood();
+                        int dinnerFood = fa.getDinnerFood();
 
                         FoodAction foodAction = new FoodAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date, breakfastFood, lunchFood, dinnerFood );
 
@@ -1342,9 +1312,9 @@ public class Database extends Application {
                         String dateEnd = fa.getDateEnd();
                         //id
                         String date = fa.getDate();
-                        String breakfastFood = fa.getBreakfastFood();
-                        String lunchFood = fa.getLunchFood();
-                        String dinnerFood = fa.getDinnerFood();
+                        int breakfastFood = fa.getBreakfastFood();
+                        int lunchFood = fa.getLunchFood();
+                        int dinnerFood = fa.getDinnerFood();
 
                         FoodAction foodAction = new FoodAction(saID, category, userID, dateBegin, dateEnd, eaIDFromDB, date, breakfastFood, lunchFood, dinnerFood );
 
@@ -1511,21 +1481,12 @@ public class Database extends Application {
                     editableUser.getRef().child("firstName").setValue(us.getFirstName());
                     editableUser.getRef().child("lastName").setValue(us.getLastName());
                     editableUser.getRef().child("photo").setValue(us.getPhoto());
-                    editableUser.getRef().child("diet").setValue(us.getDiet());
-                    editableUser.getRef().child("dietChange").setValue(us.getDietChange());
                     editableUser.getRef().child("breakfastTime").setValue(us.getBreakfastTime());
                     editableUser.getRef().child("lunchTime").setValue(us.getLunchTime());
                     editableUser.getRef().child("dinnerTime").setValue(us.getDinnerTime());
                     editableUser.getRef().child("wakingUpTime").setValue(us.getWakingUpTime());
                     editableUser.getRef().child("sleepingTime").setValue(us.getSleepingTime());
-                    editableUser.getRef().child("transport").setValue(us.getTransport());
-                    editableUser.getRef().child("workingDayTrips").setValue(us.getWorkingDayTrips());
-                    editableUser.getRef().child("workingDayTransport").setValue(us.getWorkingDayTransport());
-                    editableUser.getRef().child("weekendDayTrips").setValue(us.getWeekendDayTrips());
-                    editableUser.getRef().child("weekendDayTransport").setValue(us.getWeekendDayTransport());
-                    editableUser.getRef().child("takingShowerPerWeek").setValue(us.getTakingShowerPerWeek());
-                    editableUser.getRef().child("showerTime").setValue(us.getShowerTime());
-                    editableUser.getRef().child("takingBathPerWeek").setValue(us.getTakingBathPerWeek());
+
                 }
                 fireBaseCallback2.onCallback();
             }

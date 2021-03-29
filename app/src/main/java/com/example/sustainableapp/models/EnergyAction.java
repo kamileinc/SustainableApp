@@ -7,12 +7,12 @@ public class EnergyAction extends SustainableAction{
     private boolean shower;
     private String showerTime;
     private boolean bath;
-    private String devicesOff;
+    private int devicesOff;
 
     public EnergyAction() {
     }
 
-    public EnergyAction(String id, String category, String userID, String dateBegin, String dateEnd, String eaID, String date, boolean noWater, boolean shower, String showerTime, boolean bath, String devicesOff) {
+    public EnergyAction(String id, String category, String userID, String dateBegin, String dateEnd, String eaID, String date, boolean noWater, boolean shower, String showerTime, boolean bath, int devicesOff) {
         super(id, category, userID, dateBegin, dateEnd);
         this.eaID = eaID;
         this.date = date;
@@ -23,7 +23,7 @@ public class EnergyAction extends SustainableAction{
         this.devicesOff = devicesOff;
     }
 
-    public EnergyAction(String id, String category, String userID, String dateBegin, String dateEnd, String date, boolean noWater, boolean shower, String showerTime, boolean bath, String devicesOff) {
+    public EnergyAction(String id, String category, String userID, String dateBegin, String dateEnd, String date, boolean noWater, boolean shower, String showerTime, boolean bath, int devicesOff) {
         super(id, category, userID, dateBegin, dateEnd);
        //this.id = Long.toString(System.currentTimeMillis()/1000);
         this.eaID = userID + date;
@@ -96,11 +96,11 @@ public class EnergyAction extends SustainableAction{
         this.bath = bath;
     }
 
-    public String getDevicesOff() {
+    public int getDevicesOff() {
         return devicesOff;
     }
 
-    public void setDevicesOff(String devicesOff) {
+    public void setDevicesOff(int devicesOff) {
         this.devicesOff = devicesOff;
     }
 }

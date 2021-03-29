@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/ic_wheel"
-        android:icon="@drawable/ic_baseline_category_24"
+        android:icon="@drawable/ic_baseline_pie_chart_24"
         android:title="Ratas"/>
     <item
         android:id="@+id/ic_tasks"
@@ -14,7 +14,7 @@
 
     <item
         android:id="@+id/ic_all_results"
-        android:icon="@drawable/ic_baseline_stacked_line_chart_24"
+        android:icon="@drawable/ic_baseline_table_chart_24"
         android:title="Visų rezultatai"/>
     <item
         android:id="@+id/ic_my_results"

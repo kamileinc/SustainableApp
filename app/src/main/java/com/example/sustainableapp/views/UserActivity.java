@@ -64,6 +64,28 @@ public class UserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user);
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
+        try {
+            String fragment = intent.getStringExtra("fragment");
+            Log.i("mano", "fragmentas..." + fragment);
+            if (fragment.equals("TasksFragment")) {
+                Log.i("mano", "fragmentas2..." + fragment);
+                //openFragment(new TasksFragment());
+                //openFragment(TasksFragment.newInstance("", ""));
+                Fragment frag = new TasksFragment();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                Bundle bundle = new Bundle();
+                bundle.putString("userID", userID);
+                frag.setArguments(bundle);
+                transaction.replace(R.id.container, frag);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        }
+        catch (Exception e) {
+            Log.i("mano", "NEfragmentas...");
+            openFragment(WheelFragment.newInstance("", ""));
+            openFragment(new WheelFragment());
+        }
         UserController uc = new UserController();
         uc.getProfile(userID, "UserActivity");
         Log.i("mano", "USER ACTIVITY " );
@@ -72,11 +94,11 @@ public class UserActivity extends AppCompatActivity {
         createNotificationChannel(id2);
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        openFragment(WheelFragment.newInstance("", ""));
+       // openFragment(WheelFragment.newInstance("", ""));
 
         Log.i("mano", "activity: " + userID);
 
-        openFragment(new WheelFragment());
+       // openFragment(new WheelFragment());
         //openFragment(new EditProfileFragment());
         saListReturned = new BooVariable();
         saListReturned.setListener(new BooVariable.ChangeListener() {
@@ -297,14 +319,18 @@ public class UserActivity extends AppCompatActivity {
     }
     public static void sendNotification(Context context, String id, String title, String message, boolean sendNextDay) {
         Intent resultIntent = new Intent(context, UserActivity.class);
+        //Intent resultIntent = new Intent(context, TasksFragment.class);
         resultIntent.putExtra("userID", userID);
+        if (id.equals(id2)) {
+            resultIntent.putExtra("fragment", "TasksFragment");
+        }
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntentWithParentStack(resultIntent);
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, id)
-                .setSmallIcon(R.drawable.ic_baseline_category_24)
+                .setSmallIcon(R.drawable.ic_baseline_pie_chart_24)
                 .setContentTitle(title)
                 //.setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)

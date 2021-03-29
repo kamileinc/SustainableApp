@@ -45,7 +45,7 @@
                     android:id="@+id/noTravelling_cb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nekeliavau" />
+                    android:text="🌿🌿🌿🌿Nekeliavau" />
             </TableRow>
 
             <TableRow
@@ -56,7 +56,7 @@
                     android:id="@+id/walking_cb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pėsčiomis" />
+                    android:text="🌿🌿🌿🌿Pėsčiomis" />
 
                 <EditText
                     android:id="@+id/walking_etn"
@@ -84,7 +84,7 @@
                     android:id="@+id/bicycling_cb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dviračiu" />
+                    android:text="🌿🌿🌿🌿Dviračiu" />
 
                 <EditText
                     android:id="@+id/bicycling_etn"
@@ -112,7 +112,7 @@
                     android:id="@+id/publicTransport_cb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Viešuoju transportu" />
+                    android:text="🌿🌿🌿Viešuoju transportu" />
 
                 <EditText
                     android:id="@+id/publicTransport_etn"
@@ -140,7 +140,7 @@
                     android:id="@+id/drivingCar_cb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Automobiliu" />
+                    android:text="🌿Automobiliu" />
 
                 <EditText
                     android:id="@+id/drivingCar_etn"
@@ -168,7 +168,7 @@
                     android:id="@+id/drivingCar_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Iš kurių"
+                    android:text="🌿🌿Iš kurių"
                     android:textAlignment="textEnd"
                     android:textColor="@color/black" />
 
@@ -198,7 +198,7 @@
                     android:id="@+id/drivingCar_tv2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="pavežiau"
+                    android:text="🌿🌿pavežiau"
                     android:textAlignment="textEnd"
                     android:textColor="@color/black" />
 
@@ -222,13 +222,20 @@
             </TableRow>
 
         </TableLayout>
-
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="____________ \n Kuo daugiau 🌿 turi veikla, tuo ji tvaresnė. \n"
+            android:textColor="@color/black" />
         <Button
             android:id="@+id/saveTA_b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/roundcorner"
             android:text="Saugoti" />
+
+
 
     </LinearLayout>
 </FrameLayout>

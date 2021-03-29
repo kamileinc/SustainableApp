@@ -52,12 +52,21 @@ public class UserController extends Application {
             AllResultsFragment.checkPhotoReturned(userID, bmp);
         }
     }
+    public static void checkAllPhotosFound(ArrayList<Bitmap> bitmapList, ArrayList<String> usersIDList, String purpose) {
+            AllResultsFragment.checkAllPhotosReturned(bitmapList, usersIDList);
+
+    }
     public static void checkAllUsersFound(List<User> list) {
         AllResultsFragment.checkAllUsersFound(list);
     }
     public void loadImageForView(String userID, String imageName, String purpose) {
         Database db = new Database();
         db.getPhotoForView(userID, imageName, purpose);
+
+    }
+    public void getAllPhotos(ArrayList<User> userList, String purpose) {
+        Database db = new Database();
+        db.getPhotosForTable(userList, purpose);
 
     }
     public static void checkUserFound(List<User> list, ArrayList<String> errors, String activity) {
@@ -131,14 +140,6 @@ public class UserController extends Application {
 
     }
 
-/*
-    public boolean validateString(String s) {
-        if (!s.equals("") && s.length()<= 100) {
-            return true;
-        }
-        return false;
-    }
-    */
     public boolean validateHashedPass(String s) {
         if (!s.equals("") && s.length()<= 130) {
             return true;
@@ -150,28 +151,14 @@ public class UserController extends Application {
         errors.add(validateString(u.getFirstName()));
         errors.add(validateString(u.getLastName()));
         errors.add(validateString(u.getPhoto()));
-        errors.add(validateString(u.getAddress()));
         // laikai
         errors.add(validateTimes(u.getBreakfastTime(), u.getLunchTime()));
         errors.add(validateTimes(u.getLunchTime(), u.getDinnerTime()));
         errors.add(validateSleepingTime(u.getWakingUpTime(), u.getSleepingTime()));
-        //errors.add("");
-        //errors.add("");
-        //skaičiai
-        errors.add(validateInt(u.getWorkingDayTrips()));
-        errors.add(validateInt(u.getWeekendDayTrips()));
-        errors.add(validateInt(u.getTakingShowerPerWeek()));
-        errors.add(validateInt(u.getShowerTime()));
-        errors.add(validateInt(u.getTakingBathPerWeek()));
         //slaptazodis
         if (!purpose.equals("edit")) {
             errors.add(validatePassword(u.getPassword(), pass2));
-        /*
-        for (int i = 0; i <al.size(); i++) {
-            if (!validateString((String) al.get(i))) {
-                return false;
-            }
-        }*/
+
             if (validateUsername(u.getUsername()).equals("")) {
                 Database db = new Database();
                 errors.add(validateUsername(u.getUsername()));
@@ -518,7 +505,7 @@ public class UserController extends Application {
     public boolean addUserToDB(ArrayList al) {
         Log.i("mano", "add user to db1");
             Database db = new Database();
-            User u = new User(al.get(0).toString(), al.get(1).toString(),al.get(2).toString(), al.get(3).toString(), al.get(4).toString(), al.get(5).toString(),al.get(6).toString(), al.get(7).toString(),al.get(8).toString(),al.get(9).toString(),al.get(10).toString(),al.get(11).toString(),al.get(12).toString(),al.get(13).toString(),al.get(14).toString(),al.get(15).toString(),al.get(16).toString(),al.get(17).toString(),al.get(18).toString(),al.get(19).toString(), hashingPassword((String) al.get(20)), new ArrayList<Boolean>());
+            User u = new User(al.get(0).toString(), al.get(1).toString(),al.get(2).toString(), al.get(3).toString(), al.get(4).toString(), al.get(5).toString(),al.get(6).toString(), al.get(7).toString(),al.get(8).toString(),hashingPassword(al.get(9).toString()));
             if (db.saveUser(u)) {
                 return true;
             }

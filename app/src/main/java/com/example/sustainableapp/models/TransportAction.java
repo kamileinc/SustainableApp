@@ -5,20 +5,20 @@ public class TransportAction extends SustainableAction{
     private String date;
     private boolean noTravelling;
     private boolean walking;
-    private String walkingKM;
+    private int walkingKM;
     private boolean bicycle;
-    private String bicycleKM;
+    private int bicycleKM;
     private boolean publicTransport;
-    private String publicTransportKM;
+    private int publicTransportKM;
     private boolean car;
-    private String carKM;
-    private String carPassengersKM;
-    private String carPassengers;
+    private int carKM;
+    private int carPassengersKM;
+    private int carPassengers;
 
     public TransportAction() {
     }
 
-    public TransportAction(String id, String category, String userID, String dateBegin, String dateEnd, String taID, String date, boolean noTravelling, boolean walking, String walkingKM, boolean bicycle, String bicycleKM, boolean publicTransport, String publicTransportKM, boolean car, String carKM, String carPassengersKM, String carPassengers) {
+    public TransportAction(String id, String category, String userID, String dateBegin, String dateEnd, String taID, String date, boolean noTravelling, boolean walking, int walkingKM, boolean bicycle, int bicycleKM, boolean publicTransport, int publicTransportKM, boolean car, int carKM, int carPassengersKM, int carPassengers) {
         super(id, category, userID, dateBegin, dateEnd);
         this.taID = taID;
         this.date = date;
@@ -35,7 +35,7 @@ public class TransportAction extends SustainableAction{
         this.carPassengers = carPassengers;
     }
 
-    public TransportAction(String id, String category, String userID, String dateBegin, String dateEnd, String date, boolean noTravelling, boolean walking, String walkingKM, boolean bicycle, String bicycleKM, boolean publicTransport, String publicTransportKM, boolean car, String carKM, String carPassengersKM, String getCarPassengers) {
+    public TransportAction(String id, String category, String userID, String dateBegin, String dateEnd, String date, boolean noTravelling, boolean walking, int walkingKM, boolean bicycle, int bicycleKM, boolean publicTransport, int publicTransportKM, boolean car, int carKM, int carPassengersKM, int getCarPassengers) {
         super(id, category, userID, dateBegin, dateEnd);
         this.taID = userID + date;
         this.date = date;
@@ -103,13 +103,6 @@ public class TransportAction extends SustainableAction{
         this.walking = walking;
     }
 
-    public String getWalkingKM() {
-        return walkingKM;
-    }
-
-    public void setWalkingKM(String walkingKM) {
-        this.walkingKM = walkingKM;
-    }
 
     public boolean isBicycle() {
         return bicycle;
@@ -119,13 +112,6 @@ public class TransportAction extends SustainableAction{
         this.bicycle = bicycle;
     }
 
-    public String getBicycleKM() {
-        return bicycleKM;
-    }
-
-    public void setBicycleKM(String bicycleKM) {
-        this.bicycleKM = bicycleKM;
-    }
 
     public boolean isPublicTransport() {
         return publicTransport;
@@ -133,14 +119,6 @@ public class TransportAction extends SustainableAction{
 
     public void setPublicTransport(boolean publicTransport) {
         this.publicTransport = publicTransport;
-    }
-
-    public String getPublicTransportKM() {
-        return publicTransportKM;
-    }
-
-    public void setPublicTransportKM(String publicTransportKM) {
-        this.publicTransportKM = publicTransportKM;
     }
 
     public boolean isCar() {
@@ -151,27 +129,51 @@ public class TransportAction extends SustainableAction{
         this.car = car;
     }
 
-    public String getCarKM() {
+    public int getWalkingKM() {
+        return walkingKM;
+    }
+
+    public void setWalkingKM(int walkingKM) {
+        this.walkingKM = walkingKM;
+    }
+
+    public int getBicycleKM() {
+        return bicycleKM;
+    }
+
+    public void setBicycleKM(int bicycleKM) {
+        this.bicycleKM = bicycleKM;
+    }
+
+    public int getPublicTransportKM() {
+        return publicTransportKM;
+    }
+
+    public void setPublicTransportKM(int publicTransportKM) {
+        this.publicTransportKM = publicTransportKM;
+    }
+
+    public int getCarKM() {
         return carKM;
     }
 
-    public void setCarKM(String carKM) {
+    public void setCarKM(int carKM) {
         this.carKM = carKM;
     }
 
-    public String getCarPassengersKM() {
+    public int getCarPassengersKM() {
         return carPassengersKM;
     }
 
-    public void setCarPassengersKM(String carPassengersKM) {
+    public void setCarPassengersKM(int carPassengersKM) {
         this.carPassengersKM = carPassengersKM;
     }
 
-    public String getCarPassengers() {
+    public int getCarPassengers() {
         return carPassengers;
     }
 
-    public void setCarPassengers(String carPassengers) {
+    public void setCarPassengers(int carPassengers) {
         this.carPassengers = carPassengers;
     }
 }

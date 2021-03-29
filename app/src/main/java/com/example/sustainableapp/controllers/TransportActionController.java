@@ -39,7 +39,7 @@ public class TransportActionController extends Application {
         Database db = new Database();
         for (int i= 0; i< 7;i++) {
             String date2 = formatter.format(c.getTime());
-            TransportAction ta = new TransportAction(sa.getId(), sa.getCategory(),sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), date2, false, false, "", false, "", false, "", false, "", "", "");
+            TransportAction ta = new TransportAction(sa.getId(), sa.getCategory(),sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), date2, false, false, 0, false, 0, false, 0, false, 0, 0, 0);
             db.saveTA(ta);
             c.add(Calendar.DAY_OF_MONTH, 1);
         }
@@ -107,134 +107,61 @@ public class TransportActionController extends Application {
         errors.add(validateCarPassengers(ta.isCar(), ta.getCarPassengers(), ta.getCarPassengersKM()));
         return errors;
     }
-    private String validateWalkingKm(boolean boo, String s) {
-        boolean numeric = true;
-        try {
-            int number = Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            numeric = false;
-        }
+    private String validateWalkingKm(boolean boo, int s) {
+
         if (boo) {
-            if (s.isEmpty()) {
-                return "Laukas negali būti tuščias";
-            }
-            else if (!numeric) {
-                return "Laukas turi būti skaičius";
-            }
-            else if (numeric && (Integer.parseInt(s) > 350 || Integer.parseInt(s) <= 0)) {
+            if (s > 350 || s <= 0) {
                 return "Skaičius negali būti mažesnis nei 1 ar didesnis nei 350";
             }
         }
         return "";
 
     }
-    private String validateBicyclingKm(boolean boo, String s) {
-        boolean numeric = true;
-        try {
-            int number = Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            numeric = false;
-        }
+    private String validateBicyclingKm(boolean boo, int s) {
         if (boo) {
-            if (s.isEmpty()) {
-                return "Laukas negali būti tuščias";
-            }
-            else if (!numeric) {
-                return "Laukas turi būti skaičius";
-            }
-            else if (numeric && (Integer.parseInt(s) > 500 || Integer.parseInt(s) <= 0)) {
+            if (s > 500 || s <= 0) {
                 return "Skaičius negali būti mažesnis nei 1 ar didesnis nei 500";
             }
         }
         return "";
 
     }
-    private String validatePublicTransportKm(boolean boo, String s) {
-        boolean numeric = true;
-        try {
-            int number = Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            numeric = false;
-        }
+    private String validatePublicTransportKm(boolean boo, int s) {
         if (boo) {
-            if (s.isEmpty()) {
-                return "Laukas negali būti tuščias";
-            }
-            else if (!numeric) {
-                return "Laukas turi būti skaičius";
-            }
-            else if (numeric && (Integer.parseInt(s) > 2000 || Integer.parseInt(s) <= 0)) {
+            if (s > 2000 || s <= 0) {
                 return "Skaičius negali būti mažesnis nei 1 ar didesnis nei 2000";
             }
         }
         return "";
 
     }
-    private String validateCarKm(boolean boo, String s) {
-        boolean numeric = true;
-        try {
-            int number = Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            numeric = false;
-        }
+    private String validateCarKm(boolean boo, int s) {
         if (boo) {
-            if (s.isEmpty()) {
-                return "Laukas negali būti tuščias";
-            }
-            else if (!numeric) {
-                return "Laukas turi būti skaičius";
-            }
-            else if (numeric && (Integer.parseInt(s) > 2000 || Integer.parseInt(s) <= 0)) {
+            if (s > 2000 || s <= 0) {
                 return "Skaičius negali būti mažesnis nei 1 ar didesnis nei 2000";
             }
         }
         return "";
 
     }
-    private String validateCarWithPassengersKm(boolean boo, String s, String s2) {
-        boolean numeric = true;
-        try {
-            int number = Integer.parseInt(s);
-            int number2 = Integer.parseInt(s2);
-        } catch (NumberFormatException e) {
-            numeric = false;
-        }
+    private String validateCarWithPassengersKm(boolean boo, int s, int s2) {
         if (boo) {
-            if (s.isEmpty()) {
-                return "Laukas negali būti tuščias";
-            }
-            else if (!numeric) {
-                return "Laukas turi būti skaičius";
-            }
-            else if (numeric && (Integer.parseInt(s) > 2000 || Integer.parseInt(s) < 0)) {
+            if (s > 2000 || s < 0) {
                 return "Skaičius negali būti mažesnis nei 0 ar didesnis nei 2000";
             }
-            else if (numeric && (Integer.parseInt(s) > Integer.parseInt(s2) )) {
+            else if (s > s2) {
                 return "Skaičius negali būti didesnis nei važiavimo automobiliu skaičius";
             }
         }
         return "";
 
     }
-    private String validateCarPassengers(boolean boo, String s, String s2) {
-        boolean numeric = true;
-        try {
-            int number = Integer.parseInt(s);
-            int number2 = Integer.parseInt(s2);
-        } catch (NumberFormatException e) {
-            numeric = false;
-        }
+    private String validateCarPassengers(boolean boo, int s, int s2) {
         if (boo) {
-            if (s.isEmpty()) {
-                return "Laukas negali būti tuščias";
-            }
-            else if (!numeric) {
-                return "Laukas turi būti skaičius";
-            }
-            else if (numeric && (Integer.parseInt(s) > 10 || Integer.parseInt(s) < 0)) {
+            if (s > 10 || s< 0) {
                 return "Skaičius negali būti mažesnis nei 0 ar didesnis nei 10";
             }
-            else if (numeric && (Integer.parseInt(s) > 0 && Integer.parseInt(s2) <= 0)) {
+            else if (s > 0 && s2 <= 0) {
                 return "Skaičius negali būti didesnis už 0, kai pavežimo km yra lygūs 0";
             }
         }
@@ -277,7 +204,7 @@ public class TransportActionController extends Application {
                         temp = temp + 8.5;
                     }
                     else if (!taList.get(i).isWalking() && !taList.get(i).isBicycle() && !taList.get(i).isPublicTransport() && taList.get(i).isCar()) {
-                        int passengers = Integer.parseInt(taList.get(i).getCarPassengers());
+                        int passengers = taList.get(i).getCarPassengers();
                         if (passengers>0) {
                             temp = temp + 5;
                         }
@@ -286,7 +213,7 @@ public class TransportActionController extends Application {
                         }
                     }
                     else if (!taList.get(i).isWalking() && !taList.get(i).isBicycle() && taList.get(i).isPublicTransport() && taList.get(i).isCar()) {
-                        int passengers = Integer.parseInt(taList.get(i).getCarPassengers());
+                        int passengers = taList.get(i).getCarPassengers();
                         if (passengers>0) {
                             temp = temp + 6;
                         }
@@ -295,7 +222,7 @@ public class TransportActionController extends Application {
                         }
                     }
                     else if ((taList.get(i).isWalking() || taList.get(i).isBicycle()) && taList.get(i).isPublicTransport() && taList.get(i).isCar()) {
-                        int passengers = Integer.parseInt(taList.get(i).getCarPassengers());
+                        int passengers = taList.get(i).getCarPassengers();
                         if (passengers>0) {
                             temp = temp + 7;
                         }
@@ -331,7 +258,7 @@ public class TransportActionController extends Application {
             temp = temp + 8.5;
         }
         else if (!ta.isWalking() && !ta.isBicycle() && !ta.isPublicTransport() && ta.isCar()) {
-            int passengers = Integer.parseInt(ta.getCarPassengers());
+            int passengers = ta.getCarPassengers();
             if (passengers>0) {
                 temp = temp + 5;
             }
@@ -340,7 +267,7 @@ public class TransportActionController extends Application {
             }
         }
         else if (!ta.isWalking() && !ta.isBicycle() && ta.isPublicTransport() && ta.isCar()) {
-            int passengers = Integer.parseInt(ta.getCarPassengers());
+            int passengers = ta.getCarPassengers();
             if (passengers>0) {
                 temp = temp + 6;
             }
@@ -349,7 +276,7 @@ public class TransportActionController extends Application {
             }
         }
         else if ((ta.isWalking() || ta.isBicycle()) && ta.isPublicTransport() && ta.isCar()) {
-            int passengers = Integer.parseInt(ta.getCarPassengers());
+            int passengers = ta.getCarPassengers();
             if (passengers>0) {
                 temp = temp + 7;
             }

@@ -145,7 +145,7 @@ public class EnergyActionFragment extends Fragment {
                 if (sa != null) {
                    // Log.i("mano", "DABARTINIS SA: min:  " + min_etn.getText());
                     String showerTime = "0:0";
-                    String devices = "0";
+                    int devices = 0;
                     boolean shower = shower_cb.isChecked();
                     boolean bath = bath_cb.isChecked();
                     if (noWater_cb.isChecked()) {
@@ -168,7 +168,7 @@ public class EnergyActionFragment extends Fragment {
                         }
                     }
                     if (devices_etn.getText().toString().length() != 0) {
-                        devices = devices_etn.getText().toString();
+                        devices = Integer.parseInt(devices_etn.getText().toString());
                     }
                     SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
                     Date date = new Date(System.currentTimeMillis());
@@ -244,7 +244,7 @@ public class EnergyActionFragment extends Fragment {
                     else {
                         bath_cb.setChecked(false);
                     }
-                    devices_etn.setText(EAData.get(0).getDevicesOff());
+                    devices_etn.setText(Integer.toString(EAData.get(0).getDevicesOff()));
                 }
                 else {
                 }
