@@ -46,6 +46,7 @@ public class UserActivity extends AppCompatActivity {
     static String userID;
     static String id1 = "1";
     static String id2 = "2";
+    static String id3 = "3";
     String category;
     String breakfastTime = "";
     String lunchTime = "";
@@ -80,6 +81,19 @@ public class UserActivity extends AppCompatActivity {
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
+            if (fragment.equals("MyResultsFragment")) {
+                Log.i("mano", "fragmentas3..." + fragment);
+                //openFragment(new TasksFragment());
+                //openFragment(TasksFragment.newInstance("", ""));
+                Fragment frag = new MyResultsFragment();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                Bundle bundle = new Bundle();
+                bundle.putString("userID", userID);
+                frag.setArguments(bundle);
+                transaction.replace(R.id.container, frag);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
         }
         catch (Exception e) {
             Log.i("mano", "NEfragmentas...");
@@ -92,6 +106,7 @@ public class UserActivity extends AppCompatActivity {
         getUsersSustainableActions();
         createNotificationChannel(id1);
         createNotificationChannel(id2);
+        createNotificationChannel(id3);
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
        // openFragment(WheelFragment.newInstance("", ""));
@@ -323,6 +338,9 @@ public class UserActivity extends AppCompatActivity {
         resultIntent.putExtra("userID", userID);
         if (id.equals(id2)) {
             resultIntent.putExtra("fragment", "TasksFragment");
+        }
+        if (id.equals(id3)) {
+            resultIntent.putExtra("fragment", "MyResultsFragment");
         }
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntentWithParentStack(resultIntent);

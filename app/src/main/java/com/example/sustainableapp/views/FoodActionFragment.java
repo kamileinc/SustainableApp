@@ -83,15 +83,19 @@ public class FoodActionFragment extends Fragment {
         badge1Edited.setListener(new BooVariable.ChangeListener() {
             @Override
             public void onChange() {
+                UserActivity.sendNotification(view.getContext(), "3", "Ženklelis", "Valio! Surinkote maksimalų taškų skaičių mitybos srityje pirmą kartą, todėl gaunate ženklelį!", false);
+
                 //toast
-                Toast.makeText(view.getContext(), "Valio! Surinkote maksimalų taškų skaičių mitybos srityje pirmą kartą, todėl gaunate ženklelį!", Toast.LENGTH_LONG).show();
+                //Toast.makeText(view.getContext(), "Valio! Surinkote maksimalų taškų skaičių mitybos srityje pirmą kartą, todėl gaunate ženklelį!", Toast.LENGTH_LONG).show();
             }});
         badge0Edited = new BooVariable();
         badge0Edited.setListener(new BooVariable.ChangeListener() {
             @Override
             public void onChange() {
+                UserActivity.sendNotification(view.getContext(), "3", "Ženklelis", "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", false);
+
                 //toast
-                Toast.makeText(view.getContext(), "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(view.getContext(), "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", Toast.LENGTH_SHORT).show();
             }});
 
         foundProfile = new IntVariable();

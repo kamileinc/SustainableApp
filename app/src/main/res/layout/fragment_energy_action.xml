@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.EnergyActionFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        tools:context=".views.FoodActionFragment"
+        android:id="@+id/scrollView"
 
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,11 +33,17 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="75dp"
+            android:layout_height="wrap_content"
             android:text="Būsto užduotys"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="match_parent"
+            android:layout_height="86dp"
+            android:src="@drawable/bustas" />
 
         <TextView
             android:id="@+id/textView5"
@@ -45,7 +64,7 @@
                     android:id="@+id/noWater_cb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="🌿🌿🌿Nesimaudžiau" />
+                    android:text="🌿🌿🌿🌿Nesimaudžiau" />
             </TableRow>
 
             <TableRow
@@ -57,7 +76,7 @@
                     android:layout_width="160dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="🌿🌿duše" />
+                    android:text="🌿🌿🌿duše" />
 
                 <TextView
                     android:id="@+id/textView10"
@@ -102,7 +121,17 @@
                     android:layout_width="40dp"
                     android:layout_height="wrap_content" />
             </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
+                <TextView
+                    android:id="@+id/shower_points_tv"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="(🌿🌿🌿 mažiau nei 5 min, \n🌿🌿 5-10 min, 🌿 10 min ir daugiau)"/>
+            </TableRow>
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
@@ -143,7 +172,7 @@
                     android:id="@+id/textView12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="el. prietaisų iš elektros lizdo \n 🌿1-5, 🌿🌿-6-9, 🌿🌿🌿10 ir daugiau"
+                    android:text="el. prietaisų iš elektros lizdo \n \n (🌿1-5, 🌿🌿6-9, 🌿🌿🌿10 ir daugiau)"
                     android:textColor="@color/black" />
             </TableRow>
 
@@ -177,4 +206,5 @@
         </TableLayout>
 
     </LinearLayout>
+    </ScrollView>
 </FrameLayout>

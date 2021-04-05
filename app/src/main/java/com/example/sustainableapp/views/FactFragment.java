@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sustainableapp.R;
@@ -30,6 +31,7 @@ public class FactFragment extends Fragment {
     String userID;
     String category;
     TextView title_tv, fact_tv;
+    ImageView imageview;
     static ArrayList<Fact> factsList = new ArrayList<>();
     private static BooVariable factsListReturned;
     public FactFragment() {
@@ -112,15 +114,19 @@ public class FactFragment extends Fragment {
         fact_tv = getView().findViewById(R.id.fact_tv);
         FactController fc = new FactController();
         fc.getFacts(category);
+        imageview = getView().findViewById(R.id.imageView);
         title_tv.setText("Šios savaitės kategorija - ");
         if (category.equals("Transport")) {
             title_tv.setText("Šios savaitės kategorija - TRANSPORTAS");
+            imageview.setImageResource(R.drawable.dviratis);
         }
         else  if (category.equals("Food")) {
             title_tv.setText("Šios savaitės kategorija - MAISTAS");
+            imageview.setImageResource(R.drawable.morka);
         }
         else  if (category.equals("Energy")) {
             title_tv.setText("Šios savaitės kategorija - BŪSTAS");
+            imageview.setImageResource(R.drawable.bustas);
         }
     }
     public void openTasksFragment(View view) {

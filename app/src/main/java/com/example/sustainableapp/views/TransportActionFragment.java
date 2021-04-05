@@ -1,5 +1,8 @@
 package com.example.sustainableapp.views;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -12,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +38,7 @@ import java.util.List;
 
 public class TransportActionFragment extends Fragment {
     String userID;
+    NotificationManager notificationManager;
     CheckBox noTravelling_cb, walking_cb, bicycling_cb, publicTransport_cb, drivingCar_cb;
     EditText walking_etn, bicycling_etn, publicTransport_etn, drivingCar_etn, givingALift_etn, people_etn;
     TextView walkingKm_tv, bicyclingKm_tv, publicTransportKm_tv,drivingCarKm_tv, drivingCar_tv, drivingCar_tv2, drivingCarKm_tv2, drivingCarPeople_tv;
@@ -82,16 +87,19 @@ public class TransportActionFragment extends Fragment {
         badge0Edited.setListener(new BooVariable.ChangeListener() {
             @Override
             public void onChange() {
+                UserActivity.sendNotification(view.getContext(), "3", "Ženklelis", "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", false);
+
                 //toast
-                Toast.makeText(view.getContext(), "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(view.getContext(), "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", Toast.LENGTH_SHORT).show();
             }});
 
         badge2Edited = new BooVariable();
         badge2Edited.setListener(new BooVariable.ChangeListener() {
             @Override
             public void onChange() {
+                UserActivity.sendNotification(view.getContext(), "3", "Ženklelis", "Valio! Surinkote maksimalų taškų skaičių transporto srityje pirmą kartą, todėl gaunate ženklelį!", false);
                 //toast
-                Toast.makeText(view.getContext(), "Valio! Surinkote maksimalų taškų skaičių transporto srityje pirmą kartą, todėl gaunate ženklelį!", Toast.LENGTH_LONG).show();
+                //Toast.makeText(view.getContext(), "Valio! Surinkote maksimalų taškų skaičių transporto srityje pirmą kartą, todėl gaunate ženklelį!", Toast.LENGTH_LONG).show();
             }});
         foundProfile = new IntVariable();
         foundProfile.setListener(new IntVariable.ChangeListener() {
@@ -410,48 +418,48 @@ public class TransportActionFragment extends Fragment {
     }
     public void setInvisibleTravellingFields(View view) {
         noTravelling_cb.setVisibility(View.VISIBLE);
-        walking_cb.setVisibility(View.INVISIBLE);
-        bicycling_cb.setVisibility(View.INVISIBLE);
-        publicTransport_cb.setVisibility(View.INVISIBLE);
-        drivingCar_cb.setVisibility(View.INVISIBLE);
-        walking_etn.setVisibility(View.INVISIBLE);
-        bicycling_etn.setVisibility(View.INVISIBLE);
-        publicTransport_etn.setVisibility(View.INVISIBLE);
-        drivingCar_etn.setVisibility(View.INVISIBLE);
-        givingALift_etn.setVisibility(View.INVISIBLE);
-        people_etn.setVisibility(View.INVISIBLE);
-        walkingKm_tv.setVisibility(View.INVISIBLE);
-        bicyclingKm_tv.setVisibility(View.INVISIBLE);
-        publicTransportKm_tv.setVisibility(View.INVISIBLE);
-        drivingCarKm_tv.setVisibility(View.INVISIBLE);
-        drivingCar_tv.setVisibility(View.INVISIBLE);
-        drivingCar_tv2.setVisibility(View.INVISIBLE);
-        drivingCarKm_tv2.setVisibility(View.INVISIBLE);
-        drivingCarPeople_tv.setVisibility(View.INVISIBLE);
+        walking_cb.setVisibility(View.GONE);
+        bicycling_cb.setVisibility(View.GONE);
+        publicTransport_cb.setVisibility(View.GONE);
+        drivingCar_cb.setVisibility(View.GONE);
+        walking_etn.setVisibility(View.GONE);
+        bicycling_etn.setVisibility(View.GONE);
+        publicTransport_etn.setVisibility(View.GONE);
+        drivingCar_etn.setVisibility(View.GONE);
+        givingALift_etn.setVisibility(View.GONE);
+        people_etn.setVisibility(View.GONE);
+        walkingKm_tv.setVisibility(View.GONE);
+        bicyclingKm_tv.setVisibility(View.GONE);
+        publicTransportKm_tv.setVisibility(View.GONE);
+        drivingCarKm_tv.setVisibility(View.GONE);
+        drivingCar_tv.setVisibility(View.GONE);
+        drivingCar_tv2.setVisibility(View.GONE);
+        drivingCarKm_tv2.setVisibility(View.GONE);
+        drivingCarPeople_tv.setVisibility(View.GONE);
     }
     public void setVisibleWalkingFields(View view) {
         walking_etn.setVisibility(View.VISIBLE);
         walkingKm_tv.setVisibility(View.VISIBLE);
     }
     public void setInvisibleWalkingFields(View view) {
-        walking_etn.setVisibility(View.INVISIBLE);
-        walkingKm_tv.setVisibility(View.INVISIBLE);
+        walking_etn.setVisibility(View.GONE);
+        walkingKm_tv.setVisibility(View.GONE);
     }
     public void setVisibleBicyclingFields(View view) {
         bicycling_etn.setVisibility(View.VISIBLE);
         bicyclingKm_tv.setVisibility(View.VISIBLE);
     }
     public void setInvisibleBicyclingFields(View view) {
-        bicycling_etn.setVisibility(View.INVISIBLE);
-        bicyclingKm_tv.setVisibility(View.INVISIBLE);
+        bicycling_etn.setVisibility(View.GONE);
+        bicyclingKm_tv.setVisibility(View.GONE);
     }
     public void setVisiblePublicTransportFields(View view) {
         publicTransport_etn.setVisibility(View.VISIBLE);
         publicTransportKm_tv.setVisibility(View.VISIBLE);
     }
     public void setInvisiblePublicTransportFields(View view) {
-        publicTransport_etn.setVisibility(View.INVISIBLE);
-        publicTransportKm_tv.setVisibility(View.INVISIBLE);
+        publicTransport_etn.setVisibility(View.GONE);
+        publicTransportKm_tv.setVisibility(View.GONE);
     }
     public void setVisibleDrivingCarFields(View view) {
         drivingCar_etn.setVisibility(View.VISIBLE);
@@ -464,30 +472,30 @@ public class TransportActionFragment extends Fragment {
         drivingCarPeople_tv.setVisibility(View.VISIBLE);
     }
     public void setInvisibleDrivingCarFields(View view) {
-        drivingCar_etn.setVisibility(View.INVISIBLE);
-        givingALift_etn.setVisibility(View.INVISIBLE);
-        people_etn.setVisibility(View.INVISIBLE);
-        drivingCarKm_tv.setVisibility(View.INVISIBLE);
-        drivingCar_tv.setVisibility(View.INVISIBLE);
-        drivingCar_tv2.setVisibility(View.INVISIBLE);
-        drivingCarKm_tv2.setVisibility(View.INVISIBLE);
-        drivingCarPeople_tv.setVisibility(View.INVISIBLE);
+        drivingCar_etn.setVisibility(View.GONE);
+        givingALift_etn.setVisibility(View.GONE);
+        people_etn.setVisibility(View.GONE);
+        drivingCarKm_tv.setVisibility(View.GONE);
+        drivingCar_tv.setVisibility(View.GONE);
+        drivingCar_tv2.setVisibility(View.GONE);
+        drivingCarKm_tv2.setVisibility(View.GONE);
+        drivingCarPeople_tv.setVisibility(View.GONE);
     }
     public void setInvisibleETandTVFields(View view) {
-        walking_etn.setVisibility(View.INVISIBLE);
-        bicycling_etn.setVisibility(View.INVISIBLE);
-        publicTransport_etn.setVisibility(View.INVISIBLE);
-        drivingCar_etn.setVisibility(View.INVISIBLE);
-        givingALift_etn.setVisibility(View.INVISIBLE);
-        people_etn.setVisibility(View.INVISIBLE);
-        walkingKm_tv.setVisibility(View.INVISIBLE);
-        bicyclingKm_tv.setVisibility(View.INVISIBLE);
-        publicTransportKm_tv.setVisibility(View.INVISIBLE);
-        drivingCarKm_tv.setVisibility(View.INVISIBLE);
-        drivingCar_tv.setVisibility(View.INVISIBLE);
-        drivingCar_tv2.setVisibility(View.INVISIBLE);
-        drivingCarKm_tv2.setVisibility(View.INVISIBLE);
-        drivingCarPeople_tv.setVisibility(View.INVISIBLE);
+        walking_etn.setVisibility(View.GONE);
+        bicycling_etn.setVisibility(View.GONE);
+        publicTransport_etn.setVisibility(View.GONE);
+        drivingCar_etn.setVisibility(View.GONE);
+        givingALift_etn.setVisibility(View.GONE);
+        people_etn.setVisibility(View.GONE);
+        walkingKm_tv.setVisibility(View.GONE);
+        bicyclingKm_tv.setVisibility(View.GONE);
+        publicTransportKm_tv.setVisibility(View.GONE);
+        drivingCarKm_tv.setVisibility(View.GONE);
+        drivingCar_tv.setVisibility(View.GONE);
+        drivingCar_tv2.setVisibility(View.GONE);
+        drivingCarKm_tv2.setVisibility(View.GONE);
+        drivingCarPeople_tv.setVisibility(View.GONE);
     }
     public void getUsersSustainableActions() {
         SustainableActionController sac = new SustainableActionController();

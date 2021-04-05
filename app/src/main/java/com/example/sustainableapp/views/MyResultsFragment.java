@@ -198,7 +198,7 @@ public class MyResultsFragment extends Fragment {
                                     ImageView imageview = new ImageView(view.getContext());
                                     LinearLayout.LayoutParams params = new LinearLayout
                                             .LayoutParams(150, 150);
-                                    imageview.setImageResource(R.drawable.badge0);
+                                    imageview.setImageResource(R.drawable.badge1);
                                     imageview.setLayoutParams(params);
                                     TextView textView = new TextView(view.getContext());
                                     textView.setTextColor(Color.BLACK);
@@ -216,7 +216,7 @@ public class MyResultsFragment extends Fragment {
                                     ImageView imageview = new ImageView(view.getContext());
                                     LinearLayout.LayoutParams params = new LinearLayout
                                             .LayoutParams(150, 150);
-                                    imageview.setImageResource(R.drawable.badge1);
+                                    imageview.setImageResource(R.drawable.badge2);
                                     imageview.setLayoutParams(params);
                                     TextView textView = new TextView(view.getContext());
                                     textView.setTextColor(Color.BLACK);
@@ -234,7 +234,7 @@ public class MyResultsFragment extends Fragment {
                                     ImageView imageview = new ImageView(view.getContext());
                                     LinearLayout.LayoutParams params = new LinearLayout
                                             .LayoutParams(150, 150);
-                                    imageview.setImageResource(R.drawable.badge2);
+                                    imageview.setImageResource(R.drawable.badge3);
                                     imageview.setLayoutParams(params);
                                     TextView textView = new TextView(view.getContext());
                                     textView.setTextColor(Color.BLACK);
@@ -252,7 +252,7 @@ public class MyResultsFragment extends Fragment {
                                     ImageView imageview = new ImageView(view.getContext());
                                     LinearLayout.LayoutParams params = new LinearLayout
                                             .LayoutParams(150, 150);
-                                    imageview.setImageResource(R.drawable.badge3);
+                                    imageview.setImageResource(R.drawable.badge4);
                                     imageview.setLayoutParams(params);
                                     TextView textView = new TextView(view.getContext());
                                     textView.setTextColor(Color.BLACK);

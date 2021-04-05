@@ -22,7 +22,7 @@
         <TextView
             android:id="@+id/title_tv"
             android:layout_width="match_parent"
-            android:layout_height="102dp"
+            android:layout_height="80dp"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="30sp" />
@@ -30,8 +30,7 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="438dp"
-            android:layout_height="186dp"
-            android:src="@drawable/tastewise_sustainability_900" />
+            android:layout_height="120dp" />
 
         <TextView
             android:id="@+id/textView7"

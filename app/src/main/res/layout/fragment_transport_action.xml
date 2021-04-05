@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.TransportActionFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        tools:context=".views.FoodActionFragment"
+        android:id="@+id/scrollView"
 
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,11 +33,17 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="68dp"
+            android:layout_height="wrap_content"
             android:text="Transporto užduotys"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="297dp"
+            android:layout_height="79dp"
+            android:src="@drawable/dviratis" />
 
         <TextView
             android:id="@+id/textView15"
@@ -35,7 +54,7 @@
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="353dp">
+            android:layout_height="wrap_content">
 
             <TableRow
                 android:layout_width="match_parent"
@@ -43,7 +62,6 @@
 
                 <CheckBox
                     android:id="@+id/noTravelling_cb"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="🌿🌿🌿🌿Nekeliavau" />
             </TableRow>
@@ -60,7 +78,7 @@
 
                 <EditText
                     android:id="@+id/walking_etn"
-                    android:layout_width="50dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
@@ -191,6 +209,7 @@
             </TableRow>
 
             <TableRow
+                android:id="@+id/tablerow_7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -222,11 +241,12 @@
             </TableRow>
 
         </TableLayout>
+
         <TextView
             android:id="@+id/textView19"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="____________ \n Kuo daugiau 🌿 turi veikla, tuo ji tvaresnė. \n"
+            android:layout_height="55dp"
+            android:text="____________ \n Kuo daugiau 🌿 turi veikla, tuo ji tvaresnė"
             android:textColor="@color/black" />
         <Button
             android:id="@+id/saveTA_b"
@@ -236,6 +256,6 @@
             android:text="Saugoti" />
 
 
-
     </LinearLayout>
+    </ScrollView>
 </FrameLayout>

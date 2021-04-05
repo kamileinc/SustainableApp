@@ -491,7 +491,7 @@ public void drawTable(View view) {
                     if (pointsList.get(i-1).getUserID().equals(userID)) {
                         textArray[i].setTypeface(null, Typeface. BOLD);
                         TextView user_place_tv = view.findViewById(R.id.user_place_tv);
-                        user_place_tv.setText("❁❁❁ Šioje kategorijoje jūs užimate " + i + " vietą! ❁❁❁");
+                        user_place_tv.setText("\uD83C\uDF3F\uD83C\uDF3F\uD83C\uDF3F Šioje kategorijoje jūs užimate " + i + " vietą! \uD83C\uDF3F\uD83C\uDF3F\uD83C\uDF3F");
                     }
                     else {
                         textArray[i].setTypeface(null, Typeface. NORMAL);

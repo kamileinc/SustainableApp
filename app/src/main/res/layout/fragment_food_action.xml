@@ -37,11 +37,17 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="66dp"
+            android:layout_height="wrap_content"
             android:text="Mitybos užduotys"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="69dp"
+            android:src="@drawable/morka" />
 
         <TextView
             android:id="@+id/textView32"

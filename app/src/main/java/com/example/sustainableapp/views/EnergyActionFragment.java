@@ -37,7 +37,7 @@ import java.util.Date;
 import java.util.List;
 
 public class EnergyActionFragment extends Fragment {
-    TextView min_tv, s_tv;
+    TextView min_tv, s_tv, shower_points_tv;
     EditText min_etn, s_etn, devices_etn;
     CheckBox shower_cb, bath_cb, noWater_cb;
     Button save_energy_action_b;
@@ -104,16 +104,20 @@ public class EnergyActionFragment extends Fragment {
         badge3Edited.setListener(new BooVariable.ChangeListener() {
             @Override
             public void onChange() {
+                UserActivity.sendNotification(view.getContext(), "3", "Ženklelis", "Valio! Surinkote maksimalų taškų skaičių būsto srityje pirmą kartą, todėl gaunate ženklelį!", false);
+
                 //toast
-                Toast.makeText(view.getContext(), "Valio! Surinkote maksimalų taškų skaičių būsto srityje pirmą kartą, todėl gaunate ženklelį!", Toast.LENGTH_LONG).show();
+                //Toast.makeText(view.getContext(), "Valio! Surinkote maksimalų taškų skaičių būsto srityje pirmą kartą, todėl gaunate ženklelį!", Toast.LENGTH_LONG).show();
             }});
 
         badge0Edited = new BooVariable();
         badge0Edited.setListener(new BooVariable.ChangeListener() {
             @Override
             public void onChange() {
+                UserActivity.sendNotification(view.getContext(), "3", "Ženklelis", "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", false);
+
                 //toast
-                Toast.makeText(view.getContext(), "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(view.getContext(), "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", Toast.LENGTH_SHORT).show();
             }});
 
         shower_cb =(CheckBox) view.findViewById(R.id.shower_cb);
@@ -256,6 +260,7 @@ public class EnergyActionFragment extends Fragment {
         s_etn = getView().findViewById(R.id.s_etn);
         min_tv = getView().findViewById(R.id.min_tv);
         s_tv = getView().findViewById(R.id.s_tv);
+        shower_points_tv = getView().findViewById(R.id.shower_points_tv);
         devices_etn = getView().findViewById(R.id.devices_etn);
         save_energy_action_b = getView().findViewById(R.id.save_energy_action_b);
         //shower_cb = getView().findViewById(R.id.shower_cb);
@@ -265,8 +270,9 @@ public class EnergyActionFragment extends Fragment {
     }
     public void setInvisibleShowerAndBathFields(View view) {
         setInvisibleShowerFields(view);
-        shower_cb.setVisibility(View.INVISIBLE);
-        bath_cb.setVisibility(View.INVISIBLE);
+        shower_cb.setVisibility(View.GONE);
+        bath_cb.setVisibility(View.GONE);
+
     }
     public void setVisibleShowerAndBathFields(View view) {
         setVisibleShowerFields(view);
@@ -274,16 +280,26 @@ public class EnergyActionFragment extends Fragment {
         bath_cb.setVisibility(View.VISIBLE);
     }
     public void setVisibleShowerFields(View view) {
-        min_etn.setVisibility(View.VISIBLE);
-        s_etn.setVisibility(View.VISIBLE);
-        min_tv.setVisibility(View.VISIBLE);
-        s_tv.setVisibility(View.VISIBLE);
+        if (shower_cb.isChecked()) {
+            min_etn.setVisibility(View.VISIBLE);
+            s_etn.setVisibility(View.VISIBLE);
+            min_tv.setVisibility(View.VISIBLE);
+            s_tv.setVisibility(View.VISIBLE);
+            shower_points_tv.setVisibility(View.VISIBLE);
+        }
+        else {
+            setInvisibleShowerFields(view);
+        }
+
     }
     public void setInvisibleShowerFields(View view) {
-        min_etn.setVisibility(View.INVISIBLE);
-        s_etn.setVisibility(View.INVISIBLE);
-        min_tv.setVisibility(View.INVISIBLE);
-        s_tv.setVisibility(View.INVISIBLE);
+
+        min_etn.setVisibility(View.GONE);
+        s_etn.setVisibility(View.GONE);
+        min_tv.setVisibility(View.GONE);
+        s_tv.setVisibility(View.GONE);
+        shower_points_tv.setVisibility(View.GONE);
+
     }
     public void getUsersSustainableActions() {
         SustainableActionController sac = new SustainableActionController();
