@@ -358,6 +358,7 @@ public class UserActivity extends AppCompatActivity {
         bigStyle.setBigContentTitle(title);
         bigStyle.bigText(message);
         builder.setStyle(bigStyle);
+        builder.setAutoCancel(true);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(Integer.parseInt(id), builder.build());
         if (sendNextDay) {

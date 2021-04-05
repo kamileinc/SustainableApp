@@ -118,15 +118,15 @@ public class FactFragment extends Fragment {
         title_tv.setText("Šios savaitės kategorija - ");
         if (category.equals("Transport")) {
             title_tv.setText("Šios savaitės kategorija - TRANSPORTAS");
-            imageview.setImageResource(R.drawable.dviratis);
+            imageview.setImageResource(R.drawable.wheel_transport);
         }
         else  if (category.equals("Food")) {
-            title_tv.setText("Šios savaitės kategorija - MAISTAS");
-            imageview.setImageResource(R.drawable.morka);
+            title_tv.setText("Šios savaitės kategorija - MITYBA");
+            imageview.setImageResource(R.drawable.wheel_food);
         }
         else  if (category.equals("Energy")) {
             title_tv.setText("Šios savaitės kategorija - BŪSTAS");
-            imageview.setImageResource(R.drawable.bustas);
+            imageview.setImageResource(R.drawable.wheel_energy);
         }
     }
     public void openTasksFragment(View view) {
