@@ -49,7 +49,7 @@
         <TextView
             android:id="@+id/fact_tv"
             android:layout_width="match_parent"
-            android:layout_height="57dp"
+            android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/black" />
 

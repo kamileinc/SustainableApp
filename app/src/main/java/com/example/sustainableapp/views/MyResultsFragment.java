@@ -3,7 +3,9 @@ package com.example.sustainableapp.views;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.opengl.EGLConfig;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -11,9 +13,12 @@ import android.opengl.GLU;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -40,6 +45,12 @@ import com.example.sustainableapp.models.IntVariable;
 import com.example.sustainableapp.models.SustainableAction;
 import com.example.sustainableapp.models.TransportAction;
 import com.example.sustainableapp.models.User;
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.jjoe64.graphview.GridLabelRenderer;
@@ -51,6 +62,9 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.Series;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,6 +73,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MyResultsFragment extends Fragment {
     String userID;
@@ -592,15 +608,9 @@ public class MyResultsFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SEND);
-                //change the type of data you need to share,
-                //for image use "image/*"
-                intent.setType("text/plain");
-                double total = EAPoints + TAPoints + FAPoints;
-                String data = "Renkuosi TVARIAU. Jau surinkau " + new DecimalFormat("##.##").format(total) + " taškų. Prisijunk ir tu prie programėlės TVARIAU.";
-                intent.putExtra(Intent.EXTRA_TEXT, data);
-                startActivity(Intent.createChooser(intent, "Share"));
+                Log.i("mano", "share button pressed");
+                takeScreenshot();
+
             }
         });
         return view;
@@ -829,6 +839,85 @@ public class MyResultsFragment extends Fragment {
         bitmap = bmp;
         photoReturned.setBoo(true);
         photoReturned.getListener().onChange();
+
+    }
+    private void takeScreenshot() {
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+
+            // create bitmap screen capture
+            View v1 = getActivity().getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            openScreenshot(imageFile);
+            Log.i("mano", "share open screenshot");
+        } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
+            e.printStackTrace();
+        }
+    }
+    private void openScreenshot(File imageFile) {
+        /*Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        Uri uri = Uri.fromFile(imageFile);
+        intent.setDataAndType(uri, "image/*");
+        startActivity(intent);
+        */
+        //Bitmap image = imageFile;
+        Log.i("mano", "share open screenshot pradzia");
+        String filePath = imageFile.getPath();
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        SharePhoto photo = new SharePhoto.Builder()
+                .setBitmap(bitmap)
+                .build();
+        SharePhotoContent content = new SharePhotoContent.Builder()
+                .addPhoto(photo)
+                .build();
+/*
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        //change the type of data you need to share,
+        //for image use "image/*"
+        //intent.setType("text/plain");
+        intent.setType("image/*");
+        //intent.setDataAndType(uri, "image/*");
+        double total = EAPoints + TAPoints + FAPoints;
+        String data = "Renkuosi TVARIAU. Jau surinkau " + new DecimalFormat("##.##").format(total) + " taškų. Prisijunk ir tu prie programėlės TVARIAU.";
+        intent.putExtra(Intent.EXTRA_TEXT, data);
+
+       // Uri photoURI = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext().getPackageName() + ".provider", imageFile);
+        //intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(Intent.createChooser(intent, "Share"));
+        */
+        ShareDialog shareDialog;
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        shareDialog = new ShareDialog(this);
+
+        ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                .setContentTitle("Title")
+                .setContentDescription(
+                        "\"Body Of Test Post\"")
+                .setContentUrl(Uri.parse("http://someurl.com/here"))
+                .build();
+
+        shareDialog.show(content);
+        Log.i("mano", "share open screenshot pabaiga");
 
     }
 }
