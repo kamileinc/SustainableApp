@@ -216,11 +216,6 @@ public class AllResultsFragment extends Fragment {
                 }
             }
         });
-        //GAUTI VISUS VARTOTOJUS
-        //GAUTI VISUS SA
-        //GAUTI VISUS FA
-        //GAUTI VISUS TA
-        //GAUTI VISUS EA
         return view;
     }
     public static void checkAllUsersFound(List<User> list) {
@@ -288,125 +283,7 @@ public class AllResultsFragment extends Fragment {
         photosReturned.getListener().onChange();
 
     }
-    /*
-@SuppressLint("ResourceType")
-public void drawTable(View view) {
-    TableLayout tl = (TableLayout) view.findViewById(R.id.main_table);
 
-    TextView[] textArray = new TextView[7];
-    TableRow[] tr_head = new TableRow[pointsList.size()+1];
-
-    for(int i=0; i<=pointsList.size();i++){
-        if (i == 0) {
-            tr_head[i] = new TableRow(view.getContext());
-            tr_head[i].setId(10);
-
-            tr_head[i].setBackgroundColor(Color.GRAY);        // part1
-            tr_head[i].setLayoutParams(new TableLayout.LayoutParams(
-                    TableLayout.LayoutParams.MATCH_PARENT,
-                    TableLayout.LayoutParams.WRAP_CONTENT));
-            textArray[i] = new TextView(view.getContext());
-            textArray[i].setId(i + 333);
-            textArray[i].setText("Vartotojo vardas");
-            textArray[i].setTextColor(Color.WHITE);
-            textArray[i].setPadding(30, 5, 30, 5);
-            tr_head[i].addView(textArray[i]);
-
-            textArray[i+1] = new TextView(view.getContext());
-            textArray[i+1].setId(i + 444);
-            textArray[i+1].setText("Mityba");
-            textArray[i+1].setTextColor(Color.WHITE);
-            textArray[i+1].setPadding(30, 5, 30, 5);
-            tr_head[i].addView(textArray[i+1]);
-
-            textArray[i+2] = new TextView(view.getContext());
-            textArray[i+2].setId(i + 444);
-            textArray[i+2].setText("Transportas");
-            textArray[i+2].setTextColor(Color.WHITE);
-            textArray[i+2].setPadding(30, 5, 30, 5);
-            tr_head[i].addView(textArray[i+2]);
-
-            textArray[i+3] = new TextView(view.getContext());
-            textArray[i+3].setId(i + 444);
-            textArray[i+3].setText("Būstas");
-            textArray[i+3].setTextColor(Color.WHITE);
-            textArray[i+3].setPadding(30, 5, 30, 5);
-            tr_head[i].addView(textArray[i+3]);
-
-            textArray[i+4] = new TextView(view.getContext());
-            textArray[i+4].setId(i + 444);
-            textArray[i+4].setText("Bendras");
-            textArray[i+4].setTextColor(Color.WHITE);
-            textArray[i+4].setPadding(30, 5, 30, 5);
-            tr_head[i].addView(textArray[i+4]);
-
-            tl.addView(tr_head[i], new TableLayout.LayoutParams(
-                    TableLayout.LayoutParams.MATCH_PARENT,
-                    TableLayout.LayoutParams.WRAP_CONTENT));
-        }
-        else {
-            //Create the tablerows
-            tr_head[i] = new TableRow(view.getContext());
-            tr_head[i].setId(i + 1);
-            tr_head[i].setBackgroundColor(Color.GRAY);
-            tr_head[i].setLayoutParams(new ViewGroup.LayoutParams(
-                    TableLayout.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT));
-
-            // Here create the TextView dynamically
-
-            textArray[i] = new TextView(view.getContext());
-            textArray[i].setId(i + 111);
-            textArray[i].setText(pointsList.get(i-1).getUserName());
-            textArray[i].setTextColor(Color.WHITE);
-            textArray[i].setPadding(30, 5, 30, 5);
-            tr_head[i].addView(textArray[i]);
-
-
-            textArray[i] = new TextView(view.getContext());
-            textArray[i].setId(i + 222);
-            textArray[i].setText(new DecimalFormat("##.##").format(pointsList.get(i-1).getFaPoints()));
-            textArray[i].setTextColor(Color.WHITE);
-            textArray[i].setPadding(30, 5, 30, 5);
-            tr_head[i].addView(textArray[i]);
-
-            textArray[i] = new TextView(view.getContext());
-            textArray[i].setId(i + 222);
-            textArray[i].setText(new DecimalFormat("##.##").format(pointsList.get(i-1).getTaPoints()));
-            textArray[i].setTextColor(Color.WHITE);
-            textArray[i].setPadding(30, 5, 30, 5);
-            tr_head[i].addView(textArray[i]);
-
-
-            textArray[i] = new TextView(view.getContext());
-            textArray[i].setId(i + 222);
-            textArray[i].setText(new DecimalFormat("##.##").format(pointsList.get(i-1).getEaPoints()));
-            textArray[i].setTextColor(Color.WHITE);
-            textArray[i].setPadding(30, 5, 30, 5);
-            tr_head[i].addView(textArray[i]);
-
-            textArray[i] = new TextView(view.getContext());
-            textArray[i].setId(i + 222);
-            textArray[i].setText("NEZINAU");
-            textArray[i].setTextColor(Color.WHITE);
-            textArray[i].setPadding(30, 5, 30, 5);
-            tr_head[i].addView(textArray[i]);
-
-
-
-
-            tl.addView(tr_head[i], new TableLayout.LayoutParams(
-                    TableLayout.LayoutParams.MATCH_PARENT,
-                    TableLayout.LayoutParams.WRAP_CONTENT));
-        }
-
-    } // end of for loop
-    for (int i = 0; i< usersList.size();i++){
-        Log.i("mano", "POINTS: " + pointsList.get(i).toString());
-
-    }
-}
-*/
     @SuppressLint("ResourceType")
     public void drawTableForCategory(View view, String category) {
         dialog.hide();
@@ -422,9 +299,7 @@ public void drawTable(View view) {
                     tr_head[i] = new TableRow(view.getContext());
                     tr_head[i].setId(10);
 
-                    tr_head[i].setBackgroundColor(0xFF6200EE);        // part1
-                    // tr_head[i].setLayoutParams(new TableLayout.LayoutParams(200,200));
-
+                    tr_head[i].setBackgroundColor(0xFF6200EE);
                     tr_head[i].setLayoutParams(new TableLayout.LayoutParams(
                             TableLayout.LayoutParams.WRAP_CONTENT,
                             TableLayout.LayoutParams.WRAP_CONTENT));
@@ -463,8 +338,6 @@ public void drawTable(View view) {
                             TableLayout.LayoutParams.WRAP_CONTENT));
                 }
                 else {
-                    //Create the tablerows
-
                     if (i%2==0) {
                         tr_head[i] = new TableRow(view.getContext());
                         tr_head[i].setId(i + 1);
@@ -481,8 +354,6 @@ public void drawTable(View view) {
                                 TableLayout.LayoutParams.WRAP_CONTENT,
                                 TableRow.LayoutParams.WRAP_CONTENT));
                     }
-                    // Here create the TextView dynamically
-
                     textArray[i] = new TextView(view.getContext());
                     textArray[i].setId(i + 111);
                     textArray[i].setText(Integer.toString(i));
@@ -499,17 +370,6 @@ public void drawTable(View view) {
                     tr_head[i].addView(textArray[i]);
 
                     ImageView iv = new ImageView(view.getContext());
-                /*
-                Log.i("mano", "userIDList: " + userIDList.size());
-                Log.i("mano", "usersList: " + usersList.size());
-                Log.i("mano", "bitmapList: " + bitmapList.size());
-                for (int j = 0; j<userIDList.size(); j++) {
-                    if (userIDList.get(j).equals(usersList.get((i-1)).getId())) {
-                        iv.setImageBitmap(bitmapList.get(j));
-                    }
-                }
-                */
-                    //iv.setImageResource(R.drawable.badge0);
                     iv.setImageBitmap(pointsList.get(i-1).getBitmap());
                     tr_head[i].addView(iv, 100, 100);
 
@@ -561,7 +421,7 @@ public void drawTable(View view) {
                             TableLayout.LayoutParams.WRAP_CONTENT));
                 }
 
-            } // end of for loop
+            }
             for (int i = 0; i< usersList.size();i++){
                 Log.i("mano", "POINTS: " + pointsList.get(i).toString());
 

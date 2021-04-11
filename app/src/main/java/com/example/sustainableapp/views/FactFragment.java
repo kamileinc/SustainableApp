@@ -74,6 +74,7 @@ public class FactFragment extends Fragment {
             @Override
             public void onChange() {
                 if (factsListReturned.isBoo()) {
+                    /*
                     int pickedFactInt = 0;
                     SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
                     Date d = new Date();
@@ -100,7 +101,9 @@ public class FactFragment extends Fragment {
                     else if (dayOfTheWeek.equals("Sunday")) {
                         pickedFactInt = 6;
                     }
-                    fact_tv.setText(factsList.get(pickedFactInt).getText());
+
+                     */
+                    fact_tv.setText(factsList.get(0).getText());
                 }
                 else {
 

@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -240,6 +241,7 @@ public class UserActivity extends AppCompatActivity {
     public void logout(Context context) {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
+        Toast.makeText(getApplicationContext(),"Sėkmingai atsijungėte",Toast. LENGTH_SHORT).show();
         finish();
     }
     public void createBroadcast(String h, String min, String action) {

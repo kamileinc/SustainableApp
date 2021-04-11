@@ -10,6 +10,7 @@ import com.example.sustainableapp.models.Database;
 import com.example.sustainableapp.models.EnergyAction;
 import com.example.sustainableapp.models.FoodAction;
 import com.example.sustainableapp.models.SustainableAction;
+import com.example.sustainableapp.models.TransportAction;
 import com.example.sustainableapp.models.User;
 import com.example.sustainableapp.views.AllResultsFragment;
 import com.example.sustainableapp.views.EditProfileFragment;
@@ -272,5 +273,65 @@ public class EnergyActionController extends Application {
 
         }
     }
+    public static ArrayList<Double> EAPointsForGraph(List<EnergyAction> EAData) {
+        ArrayList<Double> arr = new ArrayList<Double>();
+        //int numberOfActivity = 0;
+        Date today = new Date(System.currentTimeMillis());
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        String todayStr = formatter.format(today);
+        Date dateToCheck = new Date();
 
+        for (int i = 0; i<EAData.size();i++) {
+            double temp = 0;
+            SustainableActionController sac = new SustainableActionController();
+            try {
+                dateToCheck = formatter.parse(EAData.get(i).getDate());
+            } catch (Exception e) {
+
+            }
+            if (sac.isDateInDates(dateToCheck, EAData.get(0).getDate(), todayStr)) {
+               // numberOfActivity++;
+
+                if (EAData.get(i).isNoWater()) {
+                    temp = temp + 10;
+                }
+                else if (EAData.get(i).isShower() && !EAData.get(i).isBath()) {
+                    String[] sArr = EAData.get(i).getShowerTime().split(":", 5);
+                    int m1 = Integer.parseInt(sArr[0]);
+                    //int s1 = Integer.parseInt(sArr[1]);
+                    if (m1<5) {
+                        temp = temp + 7.5;
+                    }
+                    else if (m1>=5 && m1<10) {
+                        temp = temp + 5;
+                    }
+                    else if (m1>10) {
+                        temp = temp + 2.5;
+                    }
+                }
+                else if (!EAData.get(i).isShower() && EAData.get(i).isBath()) {
+                    temp = temp + 2.5;
+                }
+                else if (EAData.get(i).isShower() && EAData.get(i).isBath()) {
+                    temp = temp + 1;
+                }
+                int devicesOff = EAData.get(i).getDevicesOff();
+                if (devicesOff > 0 && devicesOff <= 5) {
+                    temp = temp + 5;
+                }
+                else if (devicesOff > 5 && devicesOff <= 8) {
+                    temp = temp + 7.5;
+                }
+                else if (devicesOff >10) {
+                    temp = temp + 10;
+                }
+                //////////////////////////////////
+                if (temp != 0) {
+                    temp = temp / 2;
+                }
+                arr.add(temp);
+            }
+        }
+        return arr;
+    }
 }

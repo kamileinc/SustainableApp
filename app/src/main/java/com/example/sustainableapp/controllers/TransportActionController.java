@@ -301,4 +301,72 @@ public class TransportActionController extends Application {
             }
         }
     }
+    public static ArrayList<Double> TAPointsForGraph(List<TransportAction> TAData) {
+        ArrayList<Double> arr = new ArrayList<Double>();
+       // int numberOfActivity = 0;
+        Date today = new Date(System.currentTimeMillis());
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        String todayStr = formatter.format(today);
+        Date dateToCheck = new Date();
+
+        for (int i = 0; i<TAData.size();i++) {
+            double temp = 0;
+            SustainableActionController sac = new SustainableActionController();
+            try {
+                dateToCheck = formatter.parse(TAData.get(i).getDate());
+            } catch (Exception e) {
+
+            }
+            if (sac.isDateInDates(dateToCheck, TAData.get(0).getDate(), todayStr)) {
+               // numberOfActivity++;
+                if (TAData.get(i).isNoTravelling()) {
+                    temp = temp + 10;
+                }
+                else if (TAData.get(i).isWalking() && !TAData.get(i).isBicycle() && !TAData.get(i).isPublicTransport() && !TAData.get(i).isCar()) {
+                    temp = temp + 10;
+                }
+                else if (TAData.get(i).isBicycle() && !TAData.get(i).isWalking() && !TAData.get(i).isPublicTransport() && !TAData.get(i).isCar()) {
+                    temp = temp + 10;
+                }
+                else if (TAData.get(i).isPublicTransport() && !TAData.get(i).isBicycle() && !TAData.get(i).isWalking() && !TAData.get(i).isCar()) {
+                    temp = temp + 7.5;
+                }
+                else if ((TAData.get(i).isWalking() || TAData.get(i).isBicycle()) && TAData.get(i).isPublicTransport() && !TAData.get(i).isCar()) {
+                    temp = temp + 8.5;
+                }
+                else if (!TAData.get(i).isWalking() && !TAData.get(i).isBicycle() && !TAData.get(i).isPublicTransport() && TAData.get(i).isCar()) {
+                    int passengers = TAData.get(i).getCarPassengers();
+                    if (passengers>0) {
+                        temp = temp + 5;
+                    }
+                    else {
+                        temp = temp + 2.5;
+                    }
+                }
+                else if (!TAData.get(i).isWalking() && !TAData.get(i).isBicycle() && TAData.get(i).isPublicTransport() && TAData.get(i).isCar()) {
+                    int passengers = TAData.get(i).getCarPassengers();
+                    if (passengers>0) {
+                        temp = temp + 6;
+                    }
+                    else {
+                        temp = temp + 3.5;
+                    }
+                }
+                else if ((TAData.get(i).isWalking() || TAData.get(i).isBicycle()) && TAData.get(i).isPublicTransport() && TAData.get(i).isCar()) {
+                    int passengers = TAData.get(i).getCarPassengers();
+                    if (passengers>0) {
+                        temp = temp + 7;
+                    }
+                    else {
+                        temp = temp + 4.5;
+                    }
+                }
+                //////////////////////////////////
+                Log.i("mano", "temp: " + temp);
+                arr.add(temp);
+            }
+        }
+        return arr;
+    }
+
 }

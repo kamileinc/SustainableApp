@@ -25,6 +25,7 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.sustainableapp.R;
 import com.example.sustainableapp.controllers.UserController;
@@ -43,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class EditProfileFragment extends Fragment {
     private static IntVariable foundProfile;
@@ -138,6 +140,7 @@ public class EditProfileFragment extends Fragment {
                 }
                 else {
                     Log.i("mano", "user to check: " + userToCheck.toString());
+                    Toast.makeText(getApplicationContext(), "Duomenys sėkmingai išsaugoti", Toast.LENGTH_SHORT).show();
                     uc.editUser(userToCheck);
                 }
             }

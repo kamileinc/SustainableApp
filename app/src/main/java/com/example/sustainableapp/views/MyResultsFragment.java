@@ -80,11 +80,8 @@ public class MyResultsFragment extends Fragment {
     String userID;
     static ArrayList<SustainableAction> saList = new ArrayList<>();
     private static BooVariable saListReturned;
-    private static IntVariable foundFA;
     static ArrayList<FoodAction> FAData  = null;
-    private static IntVariable foundEA;
     static ArrayList<EnergyAction> EAData  = null;
-    private static IntVariable foundTA;
     static ArrayList<TransportAction> TAData = null;
     private static IntVariable foundProfile;
     static ArrayList<User> profileData;
@@ -140,10 +137,6 @@ public class MyResultsFragment extends Fragment {
         TransportActionController tac = new TransportActionController();
         tac.getAllTransportPoints(userID, "AllTA");
         TabLayout tabs = (TabLayout) view.findViewById(R.id.tabs);
-        TabItem food_tab = view.findViewById(R.id.food_tab);
-        TabItem all_tab = view.findViewById(R.id.all_tab);
-        TabItem transport_tab = view.findViewById(R.id.transport_tab);
-        TabItem energy_tab = view.findViewById(R.id.energy_tab);
         noData = view.findViewById(R.id.noData_tv);
         photoReturned = new BooVariable();
         photoReturned.setListener(new BooVariable.ChangeListener() {
@@ -162,7 +155,7 @@ public class MyResultsFragment extends Fragment {
             @Override
             public void onChange() {
 
-                food_tv.setText("Maistas: "  + new DecimalFormat("##.##").format(FAPoints) + " taškai");
+                food_tv.setText("Mityba: "  + new DecimalFormat("##.##").format(FAPoints) + " taškai");
                 //allPoints = allPoints + FAPoints;
                 allPointsReturned.setNumber(allPointsReturned.getNumber()+1);
             }
@@ -209,76 +202,25 @@ public class MyResultsFragment extends Fragment {
                                 Log.i("mano", "badge "+ i + ": " + profileData.get(0).getBadges().get(i));
                                 linearLayout = view.findViewById(R.id.linearLayout2);
                                 if (i == 0) {
-                                    LinearLayout ll = new LinearLayout(view.getContext());
-                                    ll.setOrientation(linearLayout.HORIZONTAL);
-                                    ImageView imageview = new ImageView(view.getContext());
-                                    LinearLayout.LayoutParams params = new LinearLayout
-                                            .LayoutParams(150, 150);
-                                    imageview.setImageResource(R.drawable.badge1);
-                                    imageview.setLayoutParams(params);
-                                    TextView textView = new TextView(view.getContext());
-                                    textView.setTextColor(Color.BLACK);
-                                    //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                    //textView.setGravity(Gravity.CENTER_HORIZONTAL);
-                                    textView.setText("\n - Už pirmą užduoties išsaugojimą");
-                                    ll.addView(imageview);
-                                    ll.addView(textView);
-                                    linearLayout.addView(ll);
                                     badges = "";
+                                    String badgeText = "\n - Už pirmą užduoties išsaugojimą";
+                                    drawBadge(view,1, badgeText);
                                 }
                                 if (i == 1) {
-                                    LinearLayout ll = new LinearLayout(view.getContext());
-                                    ll.setOrientation(linearLayout.HORIZONTAL);
-                                    ImageView imageview = new ImageView(view.getContext());
-                                    LinearLayout.LayoutParams params = new LinearLayout
-                                            .LayoutParams(150, 150);
-                                    imageview.setImageResource(R.drawable.badge2);
-                                    imageview.setLayoutParams(params);
-                                    TextView textView = new TextView(view.getContext());
-                                    textView.setTextColor(Color.BLACK);
-                                    //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                    //textView.setGravity(Gravity.CENTER_HORIZONTAL);
-                                    textView.setText("\n - Už pirmą maksimalų taškų mitybos kategorijoje surinkimą");
-                                    ll.addView(imageview);
-                                    ll.addView(textView);
-                                    linearLayout.addView(ll);
                                     badges = "";
+                                    String badgeText = "\n - Už pirmą maksimalų taškų mitybos kategorijoje surinkimą";
+                                    drawBadge(view,2, badgeText);
+
                                 }
                                 if (i == 2) {
-                                    LinearLayout ll = new LinearLayout(view.getContext());
-                                    ll.setOrientation(linearLayout.HORIZONTAL);
-                                    ImageView imageview = new ImageView(view.getContext());
-                                    LinearLayout.LayoutParams params = new LinearLayout
-                                            .LayoutParams(150, 150);
-                                    imageview.setImageResource(R.drawable.badge3);
-                                    imageview.setLayoutParams(params);
-                                    TextView textView = new TextView(view.getContext());
-                                    textView.setTextColor(Color.BLACK);
-                                    //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                    //textView.setGravity(Gravity.CENTER_HORIZONTAL);
-                                    textView.setText("\n - Už pirmą maksimalų taškų transporto kategorijoje surinkimą");
-                                    ll.addView(imageview);
-                                    ll.addView(textView);
-                                    linearLayout.addView(ll);
                                     badges = "";
+                                    String badgeText = "\n - Už pirmą maksimalų taškų transporto kategorijoje surinkimą";
+                                    drawBadge(view,3, badgeText);
                                 }
                                 if (i == 3) {
-                                    LinearLayout ll = new LinearLayout(view.getContext());
-                                    ll.setOrientation(linearLayout.HORIZONTAL);
-                                    ImageView imageview = new ImageView(view.getContext());
-                                    LinearLayout.LayoutParams params = new LinearLayout
-                                            .LayoutParams(150, 150);
-                                    imageview.setImageResource(R.drawable.badge4);
-                                    imageview.setLayoutParams(params);
-                                    TextView textView = new TextView(view.getContext());
-                                    textView.setTextColor(Color.BLACK);
-                                    //textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                                    //textView.setGravity(Gravity.CENTER_HORIZONTAL);
-                                    textView.setText("\n - Už pirmą maksimalų taškų būsto kategorijoje surinkimą");
-                                    ll.addView(imageview);
-                                    ll.addView(textView);
-                                    linearLayout.addView(ll);
                                     badges = "";
+                                    String badgeText = "\n - Už pirmą maksimalų taškų būsto kategorijoje surinkimą";
+                                    drawBadge(view,4, badgeText);
                                 }
 
 
@@ -320,61 +262,9 @@ public class MyResultsFragment extends Fragment {
                     setVisibilityForGraphTab(view);
                     if (FAData != null) {
                         noData.setVisibility(View.GONE);
-
-                        ArrayList<Double> arr = new ArrayList<Double>();
-                        int numberOfActivity = 0;
-                        Date today = new Date(System.currentTimeMillis());
-                        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
-                        String todayStr = formatter.format(today);
-                        Date dateToCheck = new Date();
-
-                        for (int i = 0; i<FAData.size();i++) {
-                            double temp = 0;
-                            SustainableActionController sac = new SustainableActionController();
-                            try {
-                                dateToCheck = formatter.parse(FAData.get(i).getDate());
-                            } catch (Exception e) {
-
-                            }
-                            if (sac.isDateInDates(dateToCheck, FAData.get(0).getDate(), todayStr)) {
-                                numberOfActivity++;
-                                if (FAData.get(i).getBreakfastFood()==0) {
-                                    temp = temp + 10;
-                                } else if (FAData.get(i).getBreakfastFood()==1) {
-                                    temp = temp + 7.5;
-                                } else if (FAData.get(i).getBreakfastFood()==2) {
-                                    temp = temp + 5;
-                                } else if (FAData.get(i).getBreakfastFood()==3) {
-                                    temp = temp + 2.5;
-                                }
-
-                                if (FAData.get(i).getLunchFood()==0) {
-                                    temp = temp + 10;
-                                } else if (FAData.get(i).getLunchFood()==1) {
-                                    temp = temp + 7.5;
-                                } else if (FAData.get(i).getLunchFood()==2) {
-                                    temp = temp + 5;
-                                } else if (FAData.get(i).getLunchFood()==3) {
-                                    temp = temp + 2.5;
-                                }
-
-                                if (FAData.get(i).getDinnerFood()==0) {
-                                    temp = temp + 10;
-                                } else if (FAData.get(i).getDinnerFood()==1) {
-                                    temp = temp + 7.5;
-                                } else if (FAData.get(i).getDinnerFood()==2) {
-                                    temp = temp + 5;
-                                } else if (FAData.get(i).getDinnerFood()==3) {
-                                    temp = temp + 2.5;
-                                }
-                                if (temp != 0) {
-                                    temp = temp / 3;
-                                }
-                                arr.add(temp);
-                            }
-                        }
+                        ArrayList<Double> arr = fac.FAPointsForGraph(FAData);
                         String[] dates = new String[]{ FAData.get(0).getDate(), FAData.get(1).getDate(), FAData.get(2).getDate(), FAData.get(3).getDate(), FAData.get(4).getDate(), FAData.get(5).getDate(), FAData.get(6).getDate(), ""};
-                        drawFAgraph(view, arr, numberOfActivity, dates);
+                        drawFAgraph(view, arr, arr.size(), dates);
                     }
                     else {
                         empty_tv.setVisibility(View.VISIBLE);
@@ -384,73 +274,11 @@ public class MyResultsFragment extends Fragment {
                     setVisibilityForGraphTab(view);
                     if (TAData != null) {
                         noData.setVisibility(View.GONE);
-                        ArrayList<Double> arr = new ArrayList<Double>();
-                        int numberOfActivity = 0;
-                        Date today = new Date(System.currentTimeMillis());
-                        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
-                        String todayStr = formatter.format(today);
-                        Date dateToCheck = new Date();
+                        ArrayList<Double> arr = tac.TAPointsForGraph(TAData);
 
-                        for (int i = 0; i<TAData.size();i++) {
-                            double temp = 0;
-                            SustainableActionController sac = new SustainableActionController();
-                            try {
-                                dateToCheck = formatter.parse(TAData.get(i).getDate());
-                            } catch (Exception e) {
-
-                            }
-                            if (sac.isDateInDates(dateToCheck, TAData.get(0).getDate(), todayStr)) {
-                                numberOfActivity++;
-                                if (TAData.get(i).isNoTravelling()) {
-                                    temp = temp + 10;
-                                }
-                                else if (TAData.get(i).isWalking() && !TAData.get(i).isBicycle() && !TAData.get(i).isPublicTransport() && !TAData.get(i).isCar()) {
-                                    temp = temp + 10;
-                                }
-                                else if (TAData.get(i).isBicycle() && !TAData.get(i).isWalking() && !TAData.get(i).isPublicTransport() && !TAData.get(i).isCar()) {
-                                    temp = temp + 10;
-                                }
-                                else if (TAData.get(i).isPublicTransport() && !TAData.get(i).isBicycle() && !TAData.get(i).isWalking() && !TAData.get(i).isCar()) {
-                                    temp = temp + 7.5;
-                                }
-                                else if ((TAData.get(i).isWalking() || TAData.get(i).isBicycle()) && TAData.get(i).isPublicTransport() && !TAData.get(i).isCar()) {
-                                    temp = temp + 8.5;
-                                }
-                                else if (!TAData.get(i).isWalking() && !TAData.get(i).isBicycle() && !TAData.get(i).isPublicTransport() && TAData.get(i).isCar()) {
-                                    int passengers = TAData.get(i).getCarPassengers();
-                                    if (passengers>0) {
-                                        temp = temp + 5;
-                                    }
-                                    else {
-                                        temp = temp + 2.5;
-                                    }
-                                }
-                                else if (!TAData.get(i).isWalking() && !TAData.get(i).isBicycle() && TAData.get(i).isPublicTransport() && TAData.get(i).isCar()) {
-                                    int passengers = TAData.get(i).getCarPassengers();
-                                    if (passengers>0) {
-                                        temp = temp + 6;
-                                    }
-                                    else {
-                                        temp = temp + 3.5;
-                                    }
-                                }
-                                else if ((TAData.get(i).isWalking() || TAData.get(i).isBicycle()) && TAData.get(i).isPublicTransport() && TAData.get(i).isCar()) {
-                                    int passengers = TAData.get(i).getCarPassengers();
-                                    if (passengers>0) {
-                                        temp = temp + 7;
-                                    }
-                                    else {
-                                        temp = temp + 4.5;
-                                    }
-                                }
-                                //////////////////////////////////
-                                Log.i("mano", "temp: " + temp);
-                                arr.add(temp);
-                            }
-                        }
                         String[] dates = new String[]{ TAData.get(0).getDate(), TAData.get(1).getDate(), TAData.get(2).getDate(), TAData.get(3).getDate(), TAData.get(4).getDate(), TAData.get(5).getDate(), TAData.get(6).getDate(), ""};
 
-                        drawFAgraph(view, arr, numberOfActivity, dates);
+                        drawFAgraph(view, arr, arr.size(), dates);
                     }
                     else {
                         empty_tv.setVisibility(View.VISIBLE);
@@ -461,67 +289,11 @@ public class MyResultsFragment extends Fragment {
                     setVisibilityForGraphTab(view);
                     if (EAData != null) {
                         noData.setVisibility(View.GONE);
-                        ArrayList<Double> arr = new ArrayList<Double>();
-                        int numberOfActivity = 0;
-                        Date today = new Date(System.currentTimeMillis());
-                        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
-                        String todayStr = formatter.format(today);
-                        Date dateToCheck = new Date();
+                        ArrayList<Double> arr = eac.EAPointsForGraph(EAData);
 
-                        for (int i = 0; i<EAData.size();i++) {
-                            double temp = 0;
-                            SustainableActionController sac = new SustainableActionController();
-                            try {
-                                dateToCheck = formatter.parse(EAData.get(i).getDate());
-                            } catch (Exception e) {
-
-                            }
-                            if (sac.isDateInDates(dateToCheck, EAData.get(0).getDate(), todayStr)) {
-                                numberOfActivity++;
-
-                                if (EAData.get(i).isNoWater()) {
-                                    temp = temp + 10;
-                                }
-                                else if (EAData.get(i).isShower() && !EAData.get(i).isBath()) {
-                                    String[] sArr = EAData.get(i).getShowerTime().split(":", 5);
-                                    int m1 = Integer.parseInt(sArr[0]);
-                                    //int s1 = Integer.parseInt(sArr[1]);
-                                    if (m1<5) {
-                                        temp = temp + 7.5;
-                                    }
-                                    else if (m1>=5 && m1<10) {
-                                        temp = temp + 5;
-                                    }
-                                    else if (m1>10) {
-                                        temp = temp + 2.5;
-                                    }
-                                }
-                                else if (!EAData.get(i).isShower() && EAData.get(i).isBath()) {
-                                    temp = temp + 2.5;
-                                }
-                                else if (EAData.get(i).isShower() && EAData.get(i).isBath()) {
-                                    temp = temp + 1;
-                                }
-                                int devicesOff = EAData.get(i).getDevicesOff();
-                                if (devicesOff > 0 && devicesOff <= 5) {
-                                    temp = temp + 5;
-                                }
-                                else if (devicesOff > 5 && devicesOff <= 8) {
-                                    temp = temp + 7.5;
-                                }
-                                else if (devicesOff >10) {
-                                    temp = temp + 10;
-                                }
-                                //////////////////////////////////
-                                if (temp != 0) {
-                                    temp = temp / 2;
-                                }
-                                arr.add(temp);
-                            }
-                        }
                         String[] dates = new String[]{ EAData.get(0).getDate(), EAData.get(1).getDate(), EAData.get(2).getDate(), EAData.get(3).getDate(), EAData.get(4).getDate(), EAData.get(5).getDate(), EAData.get(6).getDate(), ""};
 
-                        drawFAgraph(view, arr, numberOfActivity, dates);
+                        drawFAgraph(view, arr, arr.size(), dates);
                     }
                     else {
                         empty_tv.setVisibility(View.VISIBLE);
@@ -569,28 +341,6 @@ public class MyResultsFragment extends Fragment {
             }
         });
 
-        foundFA = new IntVariable();
-        foundFA.setListener(new IntVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                Log.i("mano", "cia");
-
-            }});
-        foundEA = new IntVariable();
-        foundEA.setListener(new IntVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                Log.i("mano", "cia");
-            }});
-
-        foundTA = new IntVariable();
-        foundTA.setListener(new IntVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                Log.i("mano", "cia");
-
-            }});
-
         allPointsReturned = new IntVariable();
         allPointsReturned.setListener(new IntVariable.ChangeListener() {
             @Override
@@ -618,25 +368,15 @@ public class MyResultsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         graph = (GraphView) view.findViewById(R.id.graph);
         graph.setVisibility(View.INVISIBLE);
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
-        TabItem food_tab = view.findViewById(R.id.food_tab);
-        TabItem all_tab = view.findViewById(R.id.all_tab);
-        TabItem transport_tab = view.findViewById(R.id.transport_tab);
-        TabItem energy_tab = view.findViewById(R.id.energy_tab);
         food_tv = view.findViewById(R.id.food_tv);
         transport2_tv = view.findViewById(R.id.transport2_tv);
         energy_tv = view.findViewById(R.id.energy_tv);
         badges_tv = view.findViewById(R.id.badges_tv);
         total_tv = view.findViewById(R.id.total_tv);
-        //firstName2_tv = view.findViewById(R.id.firstName2_tv);
-        //lastName2_tv = view.findViewById(R.id.lastName2_tv);
         username2_tv = view.findViewById(R.id.username2_tv);
         image_iv = view.findViewById(R.id.image_iv);
         empty_tv = view.findViewById(R.id.empty_tv);
         linearLayout = view.findViewById(R.id.linearLayout2);
-        //firstName2_tv.setVisibility(View.GONE);
-        //lastName2_tv.setVisibility(View.GONE);
-        //image_iv.setVisibility(View.GONE);
 
         setVisibilityForAllTab(view);
     }
@@ -650,7 +390,6 @@ public class MyResultsFragment extends Fragment {
         badges_tv.setVisibility(View.VISIBLE);
         total_tv.setVisibility(View.VISIBLE);
         linearLayout.setVisibility(View.VISIBLE);
-        //firstName2_tv.setVisibility(View.GONE);
     }
     public void setVisibilityForGraphTab(View view) {
         noData.setVisibility(View.VISIBLE);
@@ -688,16 +427,6 @@ public class MyResultsFragment extends Fragment {
     public static void checkFAFound(List<FoodAction> list) {
         Log.i("mano", "radom FA............" + list.size() + "...."  +  list.get(0).toString());
         FAData = (ArrayList<FoodAction>) list;
-        if (!list.isEmpty()) {
-            foundFA.setID(String.valueOf(list.size()));
-            if (foundFA.getListener() != null) {
-                foundFA.getListener().onChange();
-                list = null;
-            }
-        }
-        else {
-            checkFANotFound(list);
-        }
     }
     public static void checkFAPoints(double points) {
         FAPoints = points;
@@ -728,16 +457,6 @@ public class MyResultsFragment extends Fragment {
     public static void checkEAFound(List<EnergyAction> list) {
         Log.i("mano", "radom EA............" + list.size() + "...."  +  list.get(0).toString());
         EAData = (ArrayList<EnergyAction>) list;
-        if (!list.isEmpty()) {
-            foundEA.setID(String.valueOf(list.size()));
-            if (foundEA.getListener() != null) {
-                foundEA.getListener().onChange();
-                list = null;
-            }
-        }
-        else {
-            checkEANotFound(list);
-        }
     }
     public static void checkTANotFound(List<TransportAction> list) {
         Log.i("mano", "neradom TA..........................");
@@ -745,33 +464,11 @@ public class MyResultsFragment extends Fragment {
     public static void checkTAFound(List<TransportAction> list) {
         Log.i("mano", "radom TA............" + list.size() + "...."  +  list.get(0).toString());
         TAData = (ArrayList<TransportAction>) list;
-        if (!list.isEmpty()) {
-            foundTA.setID(String.valueOf(list.size()));
-            if (foundTA.getListener() != null) {
-                foundTA.getListener().onChange();
-                list = null;
-            }
-        }
-        else {
-            checkTANotFound(list);
-        }
     }
     public void drawFAgraph(View view, ArrayList<Double> arr, int numberOfActivity, String[] dates) {
         graph.setVisibility(View.VISIBLE);
         Log.i("mano", "onviewcreated graph: " + graph);
         try {
-            /*
-            LineGraphSeries<DataPoint> series = new LineGraphSeries < > (new DataPoint[] {
-                    new DataPoint(1, fa1),
-                    new DataPoint(2, fa2),
-                    new DataPoint(3, fa3),
-                    new DataPoint(4, fa4),
-                    new DataPoint(5, fa5),
-                    new DataPoint(6, fa6),
-                    new DataPoint(7, fa7),
-            });
-
-             */
             DataPoint[] dp = new DataPoint[numberOfActivity];
             for (int i=0;i<numberOfActivity;i++) {
                 dp[i] = new DataPoint((i+1), arr.get(i));
@@ -791,8 +488,6 @@ public class MyResultsFragment extends Fragment {
             graph.getViewport().setMaxY(10.0);
             graph.getViewport().setYAxisBoundsManual(true);
             graph.getViewport().setXAxisBoundsManual(true);
-
-            //graph.setTitle("pavadinimas");
             graph.getGridLabelRenderer().setVerticalAxisTitle("Taškai");
             graph.getGridLabelRenderer().setHorizontalLabelsVisible(true);
             graph.getGridLabelRenderer().setNumHorizontalLabels(8);
@@ -871,15 +566,7 @@ public class MyResultsFragment extends Fragment {
         }
     }
     private void openScreenshot(File imageFile) {
-        /*Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-        Uri uri = Uri.fromFile(imageFile);
-        intent.setDataAndType(uri, "image/*");
-        startActivity(intent);
-        */
-        //Bitmap image = imageFile;
+
         Log.i("mano", "share open screenshot pradzia");
         String filePath = imageFile.getPath();
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
@@ -889,22 +576,6 @@ public class MyResultsFragment extends Fragment {
         SharePhotoContent content = new SharePhotoContent.Builder()
                 .addPhoto(photo)
                 .build();
-/*
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        //change the type of data you need to share,
-        //for image use "image/*"
-        //intent.setType("text/plain");
-        intent.setType("image/*");
-        //intent.setDataAndType(uri, "image/*");
-        double total = EAPoints + TAPoints + FAPoints;
-        String data = "Renkuosi TVARIAU. Jau surinkau " + new DecimalFormat("##.##").format(total) + " taškų. Prisijunk ir tu prie programėlės TVARIAU.";
-        intent.putExtra(Intent.EXTRA_TEXT, data);
-
-       // Uri photoURI = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext().getPackageName() + ".provider", imageFile);
-        //intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity(Intent.createChooser(intent, "Share"));
-        */
         ShareDialog shareDialog;
         FacebookSdk.sdkInitialize(getApplicationContext());
         shareDialog = new ShareDialog(this);
@@ -918,6 +589,33 @@ public class MyResultsFragment extends Fragment {
 
         shareDialog.show(content);
         Log.i("mano", "share open screenshot pabaiga");
+
+    }
+    public void drawBadge(View view, int badgeNumber, String badgeText) {
+        LinearLayout ll = new LinearLayout(view.getContext());
+        ll.setOrientation(linearLayout.HORIZONTAL);
+        ImageView imageview = new ImageView(view.getContext());
+        LinearLayout.LayoutParams params = new LinearLayout
+                .LayoutParams(150, 150);
+        if (badgeNumber==1) {
+            imageview.setImageResource(R.drawable.badge1);
+        }
+        else if (badgeNumber==2) {
+            imageview.setImageResource(R.drawable.badge2);
+        }
+        else if (badgeNumber==3) {
+            imageview.setImageResource(R.drawable.badge3);
+        }
+        if (badgeNumber==4) {
+            imageview.setImageResource(R.drawable.badge4);
+        }
+        imageview.setLayoutParams(params);
+        TextView textView = new TextView(view.getContext());
+        textView.setTextColor(Color.BLACK);
+        textView.setText(badgeText);
+        ll.addView(imageview);
+        ll.addView(textView);
+        linearLayout.addView(ll);
 
     }
 }

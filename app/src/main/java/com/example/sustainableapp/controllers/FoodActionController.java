@@ -153,6 +153,61 @@ public class FoodActionController extends Application {
         }
         return points;
     }
+    public static ArrayList<Double> FAPointsForGraph(List<FoodAction> FAData) {
+        ArrayList<Double> arr = new ArrayList<Double>();
+        //int numberOfActivity = 0;
+        Date today = new Date(System.currentTimeMillis());
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        String todayStr = formatter.format(today);
+        Date dateToCheck = new Date();
+
+        for (int i = 0; i<FAData.size();i++) {
+            double temp = 0;
+            SustainableActionController sac = new SustainableActionController();
+            try {
+                dateToCheck = formatter.parse(FAData.get(i).getDate());
+            } catch (Exception e) {
+
+            }
+            if (sac.isDateInDates(dateToCheck, FAData.get(0).getDate(), todayStr)) {
+                //numberOfActivity++;
+                if (FAData.get(i).getBreakfastFood()==0) {
+                    temp = temp + 10;
+                } else if (FAData.get(i).getBreakfastFood()==1) {
+                    temp = temp + 7.5;
+                } else if (FAData.get(i).getBreakfastFood()==2) {
+                    temp = temp + 5;
+                } else if (FAData.get(i).getBreakfastFood()==3) {
+                    temp = temp + 2.5;
+                }
+
+                if (FAData.get(i).getLunchFood()==0) {
+                    temp = temp + 10;
+                } else if (FAData.get(i).getLunchFood()==1) {
+                    temp = temp + 7.5;
+                } else if (FAData.get(i).getLunchFood()==2) {
+                    temp = temp + 5;
+                } else if (FAData.get(i).getLunchFood()==3) {
+                    temp = temp + 2.5;
+                }
+
+                if (FAData.get(i).getDinnerFood()==0) {
+                    temp = temp + 10;
+                } else if (FAData.get(i).getDinnerFood()==1) {
+                    temp = temp + 7.5;
+                } else if (FAData.get(i).getDinnerFood()==2) {
+                    temp = temp + 5;
+                } else if (FAData.get(i).getDinnerFood()==3) {
+                    temp = temp + 2.5;
+                }
+                if (temp != 0) {
+                    temp = temp / 3;
+                }
+                arr.add(temp);
+            }
+        }
+        return arr;
+    }
     public void checkForBadge1(FoodAction fa, User u) {
         double temp = 0;
         double points = 0;
