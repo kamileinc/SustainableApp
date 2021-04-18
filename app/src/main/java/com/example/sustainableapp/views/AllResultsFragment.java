@@ -1,52 +1,33 @@
 package com.example.sustainableapp.views;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.annotation.ColorRes;
 import androidx.fragment.app.Fragment;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.sustainableapp.R;
 import com.example.sustainableapp.controllers.EnergyActionController;
 import com.example.sustainableapp.controllers.FoodActionController;
-import com.example.sustainableapp.controllers.SustainableActionController;
 import com.example.sustainableapp.controllers.TransportActionController;
 import com.example.sustainableapp.controllers.UserController;
 import com.example.sustainableapp.models.BooVariable;
-import com.example.sustainableapp.models.Database;
-import com.example.sustainableapp.models.FoodAction;
 import com.example.sustainableapp.models.IntVariable;
 import com.example.sustainableapp.models.Points;
-import com.example.sustainableapp.models.SustainableAction;
 import com.example.sustainableapp.models.User;
 import com.google.android.material.tabs.TabLayout;
-
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-
 
 public class AllResultsFragment extends Fragment {
     String userID;
@@ -59,35 +40,26 @@ public class AllResultsFragment extends Fragment {
     private static IntVariable allPointsReturned;
     private static BooVariable photoReturned;
     private static BooVariable photosReturned;
-    private static ArrayList<Bitmap> bitmapList = new ArrayList<>();
-    private static ArrayList<String> userIDList = new ArrayList<>();
     ProgressDialog dialog;
-    TableLayout t1;
     public AllResultsFragment() {
-        // Required empty public constructor
     }
-
-    public static AllResultsFragment newInstance(String param1, String param2) {
+    public static AllResultsFragment newInstance() {
         AllResultsFragment fragment = new AllResultsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             userID = bundle.getString("userID", "0");
-            Log.i("mano", "user id: " + userID);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_all_results, container, false);
         dialog = new ProgressDialog(view.getContext());
         dialog.setMessage("Kraunama informacija...");
@@ -95,137 +67,93 @@ public class AllResultsFragment extends Fragment {
         pointsList = new ArrayList<>();
         UserController uc = new UserController();
         uc.getAllUsers();
-        TabLayout tabs = (TabLayout) view.findViewById(R.id.tabs);
+        TabLayout tabs = view.findViewById(R.id.tabs);
         foundUsers = new IntVariable();
-        foundUsers.setListener(new IntVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                Log.i("mano", "RASTI USERS: " + usersList.size());
-                if (pointsList.size()==0) {
-                    //UserController uc = new UserController();
-                   // uc.getAllPhotos(usersList, "AllResultsTable");
-                    for (int i = 0; i < usersList.size(); i++) {
-                        pointsList.add(new Points(usersList.get(i).getId(), usersList.get(i).getUsername(), usersList.get(i).getPhoto()));
-                        FoodActionController fac = new FoodActionController();
-                        String purpose = "AllResults";
-                        fac.getAllFoodPoints(usersList.get(i).getId(), purpose);
-
-                        TransportActionController tac = new TransportActionController();
-                        tac.getAllTransportPoints(usersList.get(i).getId(), purpose);
-
-                        EnergyActionController eac = new EnergyActionController();
-                        eac.getAllEnergyPoints(usersList.get(i).getId(), purpose);
-
-                        uc.loadImageForView(usersList.get(i).getId() ,usersList.get(i).getId() + ".jpg", purpose);
-
-                    }
+        foundUsers.setListener(() -> {
+            if (pointsList.size()==0) {
+                for (int i = 0; i < usersList.size(); i++) {
+                    pointsList.add(new Points(usersList.get(i).getId(), usersList.get(i).getUsername(), usersList.get(i).getPhoto()));
+                    FoodActionController fac = new FoodActionController();
+                    String purpose = "AllResults";
+                    fac.getAllFoodPoints(usersList.get(i).getId(), purpose);
+                    TransportActionController tac = new TransportActionController();
+                    tac.getAllTransportPoints(usersList.get(i).getId(), purpose);
+                    EnergyActionController eac = new EnergyActionController();
+                    eac.getAllEnergyPoints(usersList.get(i).getId(), purpose);
+                    uc.loadImageForView(usersList.get(i).getId() ,usersList.get(i).getId() + ".jpg", purpose);
                 }
-                Log.i("mano", "POINTS LIST: " + pointsList.size() + ",  " + pointsList.get(0).getEaPoints());
-            }});
+            }
+        });
         FAPointsReturned = new BooVariable();
-        FAPointsReturned.setListener(new BooVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                allPointsReturned.setNumber(allPointsReturned.getNumber()+1);
-            }
-        });
+        FAPointsReturned.setListener(() -> allPointsReturned.setNumber(allPointsReturned.getNumber()+1));
         EAPointsReturned = new BooVariable();
-        EAPointsReturned.setListener(new BooVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                allPointsReturned.setNumber(allPointsReturned.getNumber()+1);
-            }
-        });
+        EAPointsReturned.setListener(() -> allPointsReturned.setNumber(allPointsReturned.getNumber()+1));
         TAPointsReturned = new BooVariable();
-        TAPointsReturned.setListener(new BooVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                allPointsReturned.setNumber(allPointsReturned.getNumber()+1);
-            }
-        });
-
+        TAPointsReturned.setListener(() -> allPointsReturned.setNumber(allPointsReturned.getNumber()+1));
         allPointsReturned = new IntVariable();
-        allPointsReturned.setListener(new IntVariable.ChangeListener() {
-            @SuppressLint("ResourceType")
-            @Override
-            public void onChange() {
-                if (allPointsReturned.getNumber()>=(usersList.size()*4)) {
-                    Log.i("mano", "visi SA gauti");
-                    int temp =0;
-                    for (int i = 0; i< usersList.size();i++){
-                        //Log.i("mano", "POINTS: " + pointsList.get(i).toString());
-                        if (pointsList.get(i).getEaPoints()==-1 || pointsList.get(i).getFaPoints()==-1 || pointsList.get(i).getTaPoints()==-1 || pointsList.get(i).getBitmap()== null) {
-                            temp++;
-                        }
-                    }
-                    if (temp==0) {
-                        // parodyt rez lentelej
-                        Collections.sort(pointsList, new Points.SortByTotal());
-                        drawTableForCategory(view, "Bendra");
-                        allPointsReturned.setNumber(0);
+        allPointsReturned.setListener(() -> {
+            if (allPointsReturned.getNumber()>=(usersList.size()*4)) {
+                int temp =0;
+                for (int i = 0; i< usersList.size();i++){
+                    if (pointsList.get(i).getEaPoints()==-1 || pointsList.get(i).getFaPoints()==-1 || pointsList.get(i).getTaPoints()==-1 || pointsList.get(i).getBitmap()== null) {
+                        temp++;
                     }
                 }
-            }});
+                if (temp==0) {
+                    pointsList.sort(new Points.SortByTotal());
+                    drawTableForCategory(view, "Bendra");
+                    allPointsReturned.setNumber(0);
+                }
+            }
+        });
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int selectedTabPosition = tabs.getSelectedTabPosition();
                 if (selectedTabPosition==0) {
-                    Collections.sort(pointsList, new Points.SortByTotal());
+                    pointsList.sort(new Points.SortByTotal());
                     drawTableForCategory(view, "Bendra");
                 }
                 else if (selectedTabPosition==1) {
-                    Collections.sort(pointsList, new Points.SortByFA());
+                    pointsList.sort(new Points.SortByFA());
                     drawTableForCategory(view, "Mityba");
                 }
                 else if (selectedTabPosition==2) {
-                    Collections.sort(pointsList, new Points.SortByTA());
+                    pointsList.sort(new Points.SortByTA());
                     drawTableForCategory(view, "Transportas");
                 }
                 else if (selectedTabPosition==3) {
-                    Collections.sort(pointsList, new Points.SortByEA());
+                    pointsList.sort(new Points.SortByEA());
                     drawTableForCategory(view, "Būstas");
                 }
             }
-
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
-
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
         photoReturned = new BooVariable();
-        photoReturned.setListener(new BooVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                if (photoReturned.isBoo()) {
-                    allPointsReturned.setNumber(allPointsReturned.getNumber()+1);
-                }
+        photoReturned.setListener(() -> {
+            if (photoReturned.isBoo()) {
+                allPointsReturned.setNumber(allPointsReturned.getNumber()+1);
             }
         });
         photosReturned = new BooVariable();
-        photosReturned.setListener(new BooVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                if (photoReturned.isBoo()) {
-                    allPointsReturned.setNumber(allPointsReturned.getNumber()+1);
-                }
+        photosReturned.setListener(() -> {
+            if (photoReturned.isBoo()) {
+                allPointsReturned.setNumber(allPointsReturned.getNumber()+1);
             }
         });
         return view;
     }
     public static void checkAllUsersFound(List<User> list) {
-
         usersList = (ArrayList<User>) list;
         if (!list.isEmpty()) {
             foundUsers.setID(String.valueOf(list.size()));
             if (foundUsers.getListener() != null) {
                 foundUsers.getListener().onChange();
-                list = null;
             }
         }
     }
@@ -233,7 +161,6 @@ public class AllResultsFragment extends Fragment {
         for (int i =0;i<pointsList.size();i++) {
             if (pointsList.get(i).getUserID().equals(userID)) {
                 pointsList.get(i).setFaPoints(points);
-                Log.i("mano", "settina " + points +" fa points to: " + pointsList.get(i).getUserName());
             }
         }
         FAPointsReturned.setBoo(true);
@@ -241,12 +168,10 @@ public class AllResultsFragment extends Fragment {
             FAPointsReturned.getListener().onChange();
         }
     }
-
     public static void checkEAPointsForUser(double points, String userID) {
         for (int i =0;i<pointsList.size();i++) {
             if (pointsList.get(i).getUserID().equals(userID)) {
                 pointsList.get(i).setEaPoints(points);
-                Log.i("mano", "settina " + points +" ea points to: " + pointsList.get(i).getUserName());
             }
         }
         EAPointsReturned.setBoo(true);
@@ -258,7 +183,6 @@ public class AllResultsFragment extends Fragment {
         for (int i =0;i<pointsList.size();i++) {
             if (pointsList.get(i).getUserID().equals(userID)) {
                 pointsList.get(i).setTaPoints(points);
-                Log.i("mano", "settina " + points +" Ta points to: " + pointsList.get(i).getUserName());
             }
         }
         TAPointsReturned.setBoo(true);
@@ -276,66 +200,46 @@ public class AllResultsFragment extends Fragment {
         photoReturned.getListener().onChange();
 
     }
-    public static void checkAllPhotosReturned(ArrayList<Bitmap> bmpList, ArrayList<String> uList) {
-        bitmapList = bmpList;
-        userIDList = uList;
-        photosReturned.setBoo(true);
-        photosReturned.getListener().onChange();
-
-    }
-
     @SuppressLint("ResourceType")
     public void drawTableForCategory(View view, String category) {
         dialog.hide();
         if (pointsList!=null) {
-            Log.i("mano", "pointslistas dabar: " + pointsList.size());
-            TableLayout tl = (TableLayout) view.findViewById(R.id.main_table);
+            TableLayout tl = view.findViewById(R.id.main_table);
             tl.removeAllViews();
             TextView[] textArray = new TextView[pointsList.size()+7];
             TableRow[] tr_head = new TableRow[pointsList.size()+1];
-
             for(int i=0; i<=pointsList.size();i++){
                 if (i == 0) {
                     tr_head[i] = new TableRow(view.getContext());
                     tr_head[i].setId(10);
-
                     tr_head[i].setBackgroundColor(0xFF6200EE);
                     tr_head[i].setLayoutParams(new TableLayout.LayoutParams(
                             TableLayout.LayoutParams.WRAP_CONTENT,
                             TableLayout.LayoutParams.WRAP_CONTENT));
-
-
                     textArray[i] = new TextView(view.getContext());
                     textArray[i].setId(i + 333);
-                    textArray[i].setText("Vieta");
+                    textArray[i].setText(getString(R.string.place));
                     textArray[i].setTextColor(Color.WHITE);
                     textArray[i].setPadding(30, 5, 30, 5);
                     tr_head[i].addView(textArray[i]);
-
                     textArray[i+1] = new TextView(view.getContext());
                     textArray[i+1].setId(i + 444);
-                    textArray[i+1].setText("Nuotrauka");
+                    textArray[i+1].setText(getString(R.string.photo));
                     textArray[i+1].setTextColor(Color.WHITE);
                     textArray[i+1].setPadding(30, 5, 30, 5);
                     tr_head[i].addView(textArray[i+1]);
-
                     textArray[i+2] = new TextView(view.getContext());
                     textArray[i+2].setId(i + 444);
-                    textArray[i+2].setText("Vartotojo vardas");
+                    textArray[i+2].setText(getString(R.string.username));
                     textArray[i+2].setTextColor(Color.WHITE);
                     textArray[i+2].setPadding(30, 5, 30, 5);
                     tr_head[i].addView(textArray[i+2]);
-
                     textArray[i+3] = new TextView(view.getContext());
                     textArray[i+3].setId(i + 444);
                     textArray[i+3].setText(category);
                     textArray[i+3].setTextColor(Color.WHITE);
                     textArray[i+3].setPadding(30, 5, 30, 5);
                     tr_head[i].addView(textArray[i+3]);
-
-                    tl.addView(tr_head[i], new TableLayout.LayoutParams(
-                            TableLayout.LayoutParams.WRAP_CONTENT,
-                            TableLayout.LayoutParams.WRAP_CONTENT));
                 }
                 else {
                     if (i%2==0) {
@@ -356,23 +260,23 @@ public class AllResultsFragment extends Fragment {
                     }
                     textArray[i] = new TextView(view.getContext());
                     textArray[i].setId(i + 111);
-                    textArray[i].setText(Integer.toString(i));
+                    String userPlace = Integer.toString(i);
+                    textArray[i].setText(userPlace);
                     textArray[i].setTextColor(Color.BLACK);
                     textArray[i].setPadding(30, 5, 30, 5);
                     if (pointsList.get(i-1).getUserID().equals(userID)) {
                         textArray[i].setTypeface(null, Typeface. BOLD);
                         TextView user_place_tv = view.findViewById(R.id.user_place_tv);
-                        user_place_tv.setText("\uD83C\uDF3F\uD83C\uDF3F\uD83C\uDF3F Šioje kategorijoje jūs užimate " + i + " vietą! \uD83C\uDF3F\uD83C\uDF3F\uD83C\uDF3F");
+                        String userGetsAPlace = getString(R.string.inThisCategory) + " " +  i + " " +  getString(R.string.usersPlace);
+                        user_place_tv.setText(userGetsAPlace);
                     }
                     else {
                         textArray[i].setTypeface(null, Typeface. NORMAL);
                     }
                     tr_head[i].addView(textArray[i]);
-
                     ImageView iv = new ImageView(view.getContext());
                     iv.setImageBitmap(pointsList.get(i-1).getBitmap());
                     tr_head[i].addView(iv, 100, 100);
-
                     textArray[i] = new TextView(view.getContext());
                     textArray[i].setId(i + 111);
                     textArray[i].setText(pointsList.get(i-1).getUserName());
@@ -386,21 +290,22 @@ public class AllResultsFragment extends Fragment {
                     }
                     tr_head[i].addView(textArray[i]);
                     String points = "";
-                    if (category.equals("Mityba")) {
-                        points = new DecimalFormat("##.##").format(pointsList.get(i-1).getFaPoints());
-                    }
-                    else if (category.equals("Būstas")) {
-                        points = new DecimalFormat("##.##").format(pointsList.get(i-1).getEaPoints());
-                    }
-                    else if (category.equals("Transportas")) {
-                        points = new DecimalFormat("##.##").format(pointsList.get(i-1).getTaPoints());
+                    switch (category) {
+                        case "Mityba":
+                            points = new DecimalFormat("##.##").format(pointsList.get(i - 1).getFaPoints());
+                            break;
+                        case "Būstas":
+                            points = new DecimalFormat("##.##").format(pointsList.get(i - 1).getEaPoints());
+                            break;
+                        case "Transportas":
+                            points = new DecimalFormat("##.##").format(pointsList.get(i - 1).getTaPoints());
 
-                    }
-                    else if (category.equals("Bendra")) {
-                        points = new DecimalFormat("##.##").format(pointsList.get(i-1).getFaPoints() + pointsList.get(i-1).getEaPoints() + pointsList.get(i-1).getTaPoints());
+                            break;
+                        case "Bendra":
+                            points = new DecimalFormat("##.##").format(pointsList.get(i - 1).getFaPoints() + pointsList.get(i - 1).getEaPoints() + pointsList.get(i - 1).getTaPoints());
 
+                            break;
                     }
-
                     textArray[i] = new TextView(view.getContext());
                     textArray[i].setId(i + 222);
                     textArray[i].setText(points);
@@ -413,25 +318,15 @@ public class AllResultsFragment extends Fragment {
                         textArray[i].setTypeface(null, Typeface. NORMAL);
                     }
                     tr_head[i].addView(textArray[i]);
-
-
-
-                    tl.addView(tr_head[i], new TableLayout.LayoutParams(
-                            TableLayout.LayoutParams.WRAP_CONTENT,
-                            TableLayout.LayoutParams.WRAP_CONTENT));
                 }
-
-            }
-            for (int i = 0; i< usersList.size();i++){
-                Log.i("mano", "POINTS: " + pointsList.get(i).toString());
-
+                tl.addView(tr_head[i], new TableLayout.LayoutParams(
+                        TableLayout.LayoutParams.WRAP_CONTENT,
+                        TableLayout.LayoutParams.WRAP_CONTENT));
             }
         }
         else {
-            Toast.makeText(view.getContext(), "Nera duomenu", Toast.LENGTH_LONG).show();
-
+            Toast.makeText(view.getContext(), "Nėra duomenų", Toast.LENGTH_LONG).show();
         }
-
     }
 
 }

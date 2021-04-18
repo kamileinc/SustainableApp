@@ -1,27 +1,20 @@
 package com.example.sustainableapp.views;
 
-import android.graphics.Color;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.sustainableapp.R;
 import com.example.sustainableapp.controllers.EnergyActionController;
-import com.example.sustainableapp.controllers.FactController;
 import com.example.sustainableapp.controllers.SustainableActionController;
 import com.example.sustainableapp.controllers.UserController;
 import com.example.sustainableapp.models.BooVariable;
@@ -29,12 +22,11 @@ import com.example.sustainableapp.models.EnergyAction;
 import com.example.sustainableapp.models.IntVariable;
 import com.example.sustainableapp.models.SustainableAction;
 import com.example.sustainableapp.models.User;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class EnergyActionFragment extends Fragment {
     TextView min_tv, s_tv, shower_points_tv;
@@ -51,29 +43,24 @@ public class EnergyActionFragment extends Fragment {
     static ArrayList<SustainableAction> saList = new ArrayList<>();
     private static BooVariable saListReturned;
     SustainableAction sa = new SustainableAction();
-    private static IntVariable foundProfile;
     static ArrayList<User> profileData;
     public EnergyActionFragment() {
-        // Required empty public constructor
     }
-
-    public static EnergyActionFragment newInstance(String param1, String param2) {
+    public static EnergyActionFragment newInstance() {
         EnergyActionFragment fragment = new EnergyActionFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             userID = bundle.getString("userID", "0");
-            Log.i("mano", "user id: " + userID);
         }
     }
-
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,205 +68,143 @@ public class EnergyActionFragment extends Fragment {
         getUsersSustainableActions();
         UserController uc = new UserController();
         uc.getProfile(userID, "EAFragment");
-        foundProfile = new IntVariable();
-        foundProfile.setListener(new IntVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                Log.i("mano", "cia");
-                if (profileData != null) {
-                }
-                else {
-                }
-            }});
-        actionEdited = new BooVariable();
-        actionEdited.setListener(new BooVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                //toast
-                Toast.makeText(view.getContext(),"Sėkmingai išsaugoti pakeitimai",Toast. LENGTH_SHORT).show();
-                //ijungt menu komponenta is naujo
-                getActivity().findViewById(R.id.ic_tasks).performClick();
-            }});
-        badge3Edited = new BooVariable();
-        badge3Edited.setListener(new BooVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                UserActivity.sendNotification(view.getContext(), "3", "Ženklelis", "Valio! Surinkote maksimalų taškų skaičių būsto srityje pirmą kartą, todėl gaunate ženklelį!", false);
 
-                //toast
-                //Toast.makeText(view.getContext(), "Valio! Surinkote maksimalų taškų skaičių būsto srityje pirmą kartą, todėl gaunate ženklelį!", Toast.LENGTH_LONG).show();
-            }});
+        actionEdited = new BooVariable();
+        actionEdited.setListener(() -> {
+            Toast.makeText(view.getContext(),"Sėkmingai išsaugoti pakeitimai",Toast. LENGTH_SHORT).show();
+            Objects.requireNonNull(getActivity()).findViewById(R.id.ic_tasks).performClick();
+        });
+        badge3Edited = new BooVariable();
+        badge3Edited.setListener(() -> UserActivity.sendNotification(view.getContext(), "3", "Ženklelis", "Valio! Surinkote maksimalų taškų skaičių būsto srityje pirmą kartą, todėl gaunate ženklelį!", false));
 
         badge0Edited = new BooVariable();
-        badge0Edited.setListener(new BooVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                UserActivity.sendNotification(view.getContext(), "3", "Ženklelis", "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", false);
+        badge0Edited.setListener(() -> UserActivity.sendNotification(view.getContext(), "3", "Ženklelis", "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", false));
 
-                //toast
-                //Toast.makeText(view.getContext(), "Valio! Išsaugojote savo pirmąją užduotį, todėl gaunate ženklelį!", Toast.LENGTH_SHORT).show();
-            }});
-
-        shower_cb =(CheckBox) view.findViewById(R.id.shower_cb);
-        shower_cb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (shower_cb.isChecked()) {
-                    setVisibleShowerFields(view);
-                } else {
-                    setInvisibleShowerFields(view);
-                }
+        shower_cb = view.findViewById(R.id.shower_cb);
+        shower_cb.setOnClickListener(v -> {
+            if (shower_cb.isChecked()) {
+                setVisibleShowerFields();
+            } else {
+                setInvisibleShowerFields();
             }
-                });
-        noWater_cb =(CheckBox) view.findViewById(R.id.noWater_cb);
-        noWater_cb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        });
+        noWater_cb = view.findViewById(R.id.noWater_cb);
+        noWater_cb.setOnClickListener(v -> {
+            if (noWater_cb.isChecked()) {
+                setInvisibleShowerAndBathFields();
+            } else {
+                setVisibleShowerAndBathFields();
+            }
+        });
+        save_energy_action_b = view.findViewById(R.id.save_energy_action_b);
+        save_energy_action_b.setOnClickListener(v -> {
+            if (sa != null) {
+                String showerTime = "0:0";
+                int devices = 0;
+                boolean shower = shower_cb.isChecked();
+                boolean bath = bath_cb.isChecked();
                 if (noWater_cb.isChecked()) {
-                    setInvisibleShowerAndBathFields(view);
-                } else {
-                    setVisibleShowerAndBathFields(view);
+                    bath = false;
+                    shower = false;
                 }
-            }
-        });
-        save_energy_action_b = (Button) view.findViewById(R.id.save_energy_action_b);
-        save_energy_action_b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (sa != null) {
-                   // Log.i("mano", "DABARTINIS SA: min:  " + min_etn.getText());
-                    String showerTime = "0:0";
-                    int devices = 0;
-                    boolean shower = shower_cb.isChecked();
-                    boolean bath = bath_cb.isChecked();
-                    if (noWater_cb.isChecked()) {
-                        bath = false;
-                        shower = false;
-                    }
-                    else {
-                        if (shower_cb.isChecked()) {
-                            if (!min_etn.getText().toString().equals("")) {
-                                showerTime = min_etn.getText().toString();
-                            } else {
-                                showerTime = "0";
-                            }
-                            showerTime = showerTime + ":";
-                            if (!s_etn.getText().toString().equals("")) {
-                                showerTime = showerTime + s_etn.getText().toString();
-                            } else {
-                                showerTime = showerTime + "0";
-                            }
+                else {
+                    if (shower_cb.isChecked()) {
+                        if (!min_etn.getText().toString().equals("")) {
+                            showerTime = min_etn.getText().toString();
+                        } else {
+                            showerTime = "0";
+                        }
+                        showerTime = showerTime + ":";
+                        if (!s_etn.getText().toString().equals("")) {
+                            showerTime = showerTime + s_etn.getText().toString();
+                        } else {
+                            showerTime = showerTime + "0";
                         }
                     }
-                    if (devices_etn.getText().toString().length() != 0) {
-                        devices = Integer.parseInt(devices_etn.getText().toString());
+                }
+                if (devices_etn.getText().toString().length() != 0) {
+                    devices = Integer.parseInt(devices_etn.getText().toString());
+                }
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+                Date date = new Date(System.currentTimeMillis());
+                String dateStr = formatter.format(date);
+                EnergyAction ea = new EnergyAction(sa.getId(), sa.getCategory(), sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), dateStr, noWater_cb.isChecked(), shower, showerTime, bath, devices);
+                EnergyActionController eac = new EnergyActionController();
+                errors = (ArrayList<String>) eac.validateEA(ea);
+                int howManyErr = 0;
+                for (int i = 0; i < errors.size(); i++) {
+                    if (!errors.get(i).equals("")) {
+                        howManyErr = howManyErr + 1;
                     }
-                    SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
-                    Date date = new Date(System.currentTimeMillis());
-                    String dateStr = formatter.format(date);
-                    EnergyAction ea = new EnergyAction(sa.getId(), sa.getCategory(), sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), dateStr, noWater_cb.isChecked(), shower, showerTime, bath, devices);
-                    EnergyActionController eac = new EnergyActionController();
-                    errors = (ArrayList<String>) eac.validateEA(ea);
-                    int howManyErr = 0;
-                    for (int i = 0; i < errors.size(); i++) {
-                        if (!errors.get(i).equals("")) {
-                            howManyErr = howManyErr + 1;
-                        }
-                    }
-                    showErrors();
-                    if (howManyErr == 0) {
-                        //eac.addEnergyActionToDB(ea);
-                        //UPDATE
-                        Log.i("mano", "UPDATE, ERRORS: " + errors.get(0) +errors.get(1) +errors.get(2));
-                        eac.updateEnergyActionInDB(ea);
-                        eac.checkForBadge3(ea, profileData.get(0));
-
-                    }
-                }}
-        });
+                }
+                showErrors();
+                if (howManyErr == 0) {
+                    eac.updateEnergyActionInDB(ea);
+                    eac.checkForBadge3(ea, profileData.get(0));
+                }
+            }});
         saListReturned = new BooVariable();
-        saListReturned.setListener(new BooVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                if (saListReturned.isBoo()) {
-                    Log.i("mano", "sa kiekis: " + saList.size() + "OBJ: " + saList.get(0));
-
-                    //jei data atitinka dabartine, rodyt faktus
-                    String beginDate = saList.get((saList.size()-1)).getDateBegin();
-                    String endDate = saList.get((saList.size()-1)).getDateEnd();
-                    SustainableActionController sac = new SustainableActionController();
-                    if (sac.isTodayInDates(beginDate, endDate)) {
-                        sa = saList.get((saList.size()-1));
-                    }
+        saListReturned.setListener(() -> {
+            if (saListReturned.isBoo()) {
+                String beginDate = saList.get((saList.size()-1)).getDateBegin();
+                String endDate = saList.get((saList.size()-1)).getDateEnd();
+                SustainableActionController sac = new SustainableActionController();
+                if (sac.isTodayInDates(beginDate, endDate)) {
+                    sa = saList.get((saList.size()-1));
                 }
-
             }
         });
         EnergyActionController eac = new EnergyActionController();
         eac.getEAForEAFragment(userID, "EnergyActionFragment");
         foundEA = new IntVariable();
-        foundEA.setListener(new IntVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                Log.i("mano", "cia");
-                if (EAData != null) {
-                    String[] sArr = EAData.get(0).getShowerTime().split(":", 5);
-                    //int m1 = Integer.parseInt(sArr[0]);
-                    //int s1 = Integer.parseInt(sArr[1]);
-                    min_etn.setText(sArr[0]);
-                    s_etn.setText(sArr[1]);
-                    if (EAData.get(0).isNoWater()) {
-                        noWater_cb.setChecked(true);
-                    }
-                    if (noWater_cb.isChecked()) {
-                        setInvisibleShowerAndBathFields(view);
-                    }
-                    if (EAData.get(0).isShower()) {
-                        shower_cb.setChecked(true);
-                        setVisibleShowerFields(view);
-                    }
-                    else {
-                        shower_cb.setChecked(false);
-                        setInvisibleShowerFields(view);
-                    }
-                    if (EAData.get(0).isBath()) {
-                        bath_cb.setChecked(true);
-                    }
-                    else {
-                        bath_cb.setChecked(false);
-                    }
-                    devices_etn.setText(Integer.toString(EAData.get(0).getDevicesOff()));
+        foundEA.setListener(() -> {
+            if (EAData != null) {
+                String[] sArr = EAData.get(0).getShowerTime().split(":", 5);
+                min_etn.setText(sArr[0]);
+                s_etn.setText(sArr[1]);
+                if (EAData.get(0).isNoWater()) {
+                    noWater_cb.setChecked(true);
+                }
+                if (noWater_cb.isChecked()) {
+                    setInvisibleShowerAndBathFields();
+                }
+                if (EAData.get(0).isShower()) {
+                    shower_cb.setChecked(true);
+                    setVisibleShowerFields();
                 }
                 else {
+                    shower_cb.setChecked(false);
+                    setInvisibleShowerFields();
                 }
-            }});
+                bath_cb.setChecked(EAData.get(0).isBath());
+                devices_etn.setText(Integer.toString(EAData.get(0).getDevicesOff()));
+            }
+        });
         return view;
     }
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        min_etn = getView().findViewById(R.id.min_etn);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        min_etn = Objects.requireNonNull(getView()).findViewById(R.id.min_etn);
         s_etn = getView().findViewById(R.id.s_etn);
         min_tv = getView().findViewById(R.id.min_tv);
         s_tv = getView().findViewById(R.id.s_tv);
         shower_points_tv = getView().findViewById(R.id.shower_points_tv);
         devices_etn = getView().findViewById(R.id.devices_etn);
         save_energy_action_b = getView().findViewById(R.id.save_energy_action_b);
-        //shower_cb = getView().findViewById(R.id.shower_cb);
         noWater_cb = getView().findViewById(R.id.noWater_cb);
         bath_cb = getView().findViewById(R.id.bath_cb);
-        setInvisibleShowerFields(view);
+        setInvisibleShowerFields();
     }
-    public void setInvisibleShowerAndBathFields(View view) {
-        setInvisibleShowerFields(view);
+    public void setInvisibleShowerAndBathFields() {
+        setInvisibleShowerFields();
         shower_cb.setVisibility(View.GONE);
         bath_cb.setVisibility(View.GONE);
-
     }
-    public void setVisibleShowerAndBathFields(View view) {
-        setVisibleShowerFields(view);
+    public void setVisibleShowerAndBathFields() {
+        setVisibleShowerFields();
         shower_cb.setVisibility(View.VISIBLE);
         bath_cb.setVisibility(View.VISIBLE);
     }
-    public void setVisibleShowerFields(View view) {
+    public void setVisibleShowerFields() {
         if (shower_cb.isChecked()) {
             min_etn.setVisibility(View.VISIBLE);
             s_etn.setVisibility(View.VISIBLE);
@@ -288,18 +213,16 @@ public class EnergyActionFragment extends Fragment {
             shower_points_tv.setVisibility(View.VISIBLE);
         }
         else {
-            setInvisibleShowerFields(view);
+            setInvisibleShowerFields();
         }
 
     }
-    public void setInvisibleShowerFields(View view) {
-
+    public void setInvisibleShowerFields() {
         min_etn.setVisibility(View.GONE);
         s_etn.setVisibility(View.GONE);
         min_tv.setVisibility(View.GONE);
         s_tv.setVisibility(View.GONE);
         shower_points_tv.setVisibility(View.GONE);
-
     }
     public void getUsersSustainableActions() {
         SustainableActionController sac = new SustainableActionController();
@@ -307,18 +230,14 @@ public class EnergyActionFragment extends Fragment {
         sac.getUsersSustainableActions(userID, purpose);
     }
     public static void checkUsersSAFound(ArrayList<SustainableAction> sa) {
-        Log.i("mano", "radom:" + sa.size());
         saList = sa;
         saListReturned.setBoo(true);
         saListReturned.getListener().onChange();
-
     }
     public static void checkUsersSANotFound(ArrayList<SustainableAction> sa) {
-        Log.i("mano", "neradom:" + sa.size());
         saList = sa;
         saListReturned.setBoo(false);
         saListReturned.getListener().onChange();
-
     }
     public void showErrors() {
         if (!errors.get(0).equals("")) {
@@ -349,41 +268,16 @@ public class EnergyActionFragment extends Fragment {
             badge0Edited.getListener().onChange();
         }
     }
-    public static void checkEANotFound(List<EnergyAction> list) {
-        Log.i("mano", "neradom");
-    }
     public static void checkEAFound(List<EnergyAction> list) {
-        Log.i("mano", "radom " + list.size() + "...."  +  list.get(0).toString());
         EAData = (ArrayList<EnergyAction>) list;
         if (!list.isEmpty()) {
             foundEA.setID(list.get(0).getId());
             if (foundEA.getListener() != null) {
                 foundEA.getListener().onChange();
-                list = null;
             }
-        }
-        else {
-            checkEANotFound(list);
         }
     }
     public static void checkUserFound(List<User> list) {
-        Log.i("mano", "radom " + list.size() + "...."  +  list.get(0).toString());
         profileData = (ArrayList<User>) list;
-        if (!list.isEmpty()) {
-            foundProfile.setID(list.get(0).getId());
-            if (foundProfile.getListener() != null) {
-                foundProfile.getListener().onChange();
-                list = null;
-            }
-        }
-        else {
-            checkUserNotFound(list);
-        }
-    }
-
-    public static void checkUserNotFound(List<User> list) {
-        //errors = err;
-        Log.i("mano", "neradom");
-        //notFoundUser.getListener().onChange();
     }
 }

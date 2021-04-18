@@ -1,32 +1,21 @@
 package com.example.sustainableapp.models;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class User
 {
-
     private String id;
     private String firstName;
     private String lastName;
     private String username;
     private String photo;
-   // private String address;
-    //private String diet;
-    //private String dietChange;
     private String breakfastTime;
     private String lunchTime;
     private String dinnerTime;
     private String wakingUpTime;
     private String sleepingTime;
-    //private String transport;
-    //private String workingDayTrips;
-    //private String workingDayTransport;
-    //private String weekendDayTrips;
-    //private String weekendDayTransport;
-    //private String takingShowerPerWeek;
-    //private String showerTime;
-   // private String takingBathPerWeek;
     private String password;
     private ArrayList<Boolean> badges;
 
@@ -68,6 +57,7 @@ public class User
         this.badges = arr;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "User{" +
@@ -89,96 +79,42 @@ public class User
     public ArrayList<Boolean> getBadges() {
         return badges;
     }
-
-    public void setBadges(ArrayList<Boolean> badges) {
-        this.badges = badges;
-    }
-
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
-
     public String getFirstName() {
         return firstName;
     }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getLastName() {
         return lastName;
     }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getUsername() {
         return username;
     }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPhoto() {
         return photo;
     }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
     public String getBreakfastTime() {
         return breakfastTime;
     }
-
-    public void setBreakfastTime(String breakfastTime) {
-        this.breakfastTime = breakfastTime;
-    }
-
     public String getLunchTime() {
         return lunchTime;
     }
-
-    public void setLunchTime(String lunchTime) {
-        this.lunchTime = lunchTime;
-    }
-
     public String getDinnerTime() {
         return dinnerTime;
     }
-
-    public void setDinnerTime(String dinnerTime) {
-        this.dinnerTime = dinnerTime;
-    }
-
-
     public String getWakingUpTime() {
         return wakingUpTime;
     }
-
-    public void setWakingUpTime(String gettingUpTime) {
-        this.wakingUpTime = gettingUpTime;
-    }
-
     public String getSleepingTime() {
         return sleepingTime;
     }
-
-    public void setSleepingTime(String sleepingTime) {
-        this.sleepingTime = sleepingTime;
-    }
-
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }

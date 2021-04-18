@@ -5,23 +5,23 @@
     <item
         android:id="@+id/ic_wheel"
         android:icon="@drawable/ic_baseline_pie_chart_24"
-        android:title="Ratas"/>
+        android:title="@string/wheel"/>
     <item
         android:id="@+id/ic_tasks"
         android:icon="@drawable/ic_baseline_assignment_turned_in_24"
-        android:title="Užduotys"/>
+        android:title="@string/tasks"/>
 
 
     <item
         android:id="@+id/ic_all_results"
         android:icon="@drawable/ic_baseline_table_chart_24"
-        android:title="Visų rezultatai"/>
+        android:title="@string/allResults"/>
     <item
         android:id="@+id/ic_my_results"
         android:icon="@drawable/ic_baseline_show_chart_24"
-        android:title="Mano rezultatai"/>
+        android:title="@string/myResults"/>
     <item
         android:id="@+id/ic_profile"
         android:icon="@drawable/ic_baseline_face_24"
-        android:title="Profilis"/>
+        android:title="@string/profile"/>
 </menu>

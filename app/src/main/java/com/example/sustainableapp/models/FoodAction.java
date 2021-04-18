@@ -1,5 +1,7 @@
 package com.example.sustainableapp.models;
 
+import androidx.annotation.NonNull;
+
 public class FoodAction extends SustainableAction{
     private String faID;
     private String date;
@@ -28,6 +30,7 @@ public class FoodAction extends SustainableAction{
         this.dinnerFood = dinnerFood;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "FoodAction{" +
@@ -42,40 +45,19 @@ public class FoodAction extends SustainableAction{
     public String getFaID() {
         return faID;
     }
-
-    public void setFaID(String id) {
-        this.faID = faID;
-    }
-
     public String getDate() {
         return date;
     }
-
     public void setDate(String date) {
         this.date = date;
     }
-
     public int getBreakfastFood() {
         return breakfastFood;
     }
-
-    public void setBreakfastFood(int breakfastFood) {
-        this.breakfastFood = breakfastFood;
-    }
-
     public int getLunchFood() {
         return lunchFood;
     }
-
-    public void setLunchFood(int lunchFood) {
-        this.lunchFood = lunchFood;
-    }
-
     public int getDinnerFood() {
         return dinnerFood;
-    }
-
-    public void setDinnerFood(int dinnerFood) {
-        this.dinnerFood = dinnerFood;
     }
 }

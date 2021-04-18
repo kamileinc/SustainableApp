@@ -10,7 +10,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp">
+        android:layout_marginLeft="30dp"
+        tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/textView"
@@ -20,7 +21,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="62dp"
-            android:text="Visų rezultatai"
+            android:text="@string/allResults"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="30sp" />
@@ -33,25 +34,25 @@
                 android:id="@+id/all_res_all_tab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bendra" />
+                android:text="@string/totalCategory"/>
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/all_res_food_tab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mityba" />
+                android:text="@string/food" />
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/all_res_transport_tab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Trans- portas" />
+                android:text="@string/transportForTable" />
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/all_res_energy_tab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Būstas" />
+                android:text="@string/energy" />
         </com.google.android.material.tabs.TabLayout>
 
         <TextView
@@ -79,7 +80,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="0dp"
-                android:stretchColumns="*">
+                android:stretchColumns="*"
+                tools:ignore="ScrollViewSize">
             </TableLayout>
         </ScrollView>
     </LinearLayout>

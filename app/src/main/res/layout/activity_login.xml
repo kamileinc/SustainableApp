@@ -32,7 +32,7 @@
             android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="98dp"
-            android:text="Prisijungimas"
+            android:text="@string/login"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="24sp" />
@@ -47,8 +47,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingLeft="30dp"
-                android:text="Vartotojo vardas" />
+                android:paddingStart="30dp"
+                android:text="@string/username"
+                tools:ignore="RtlSymmetry" />
 
             <EditText
                 android:id="@+id/username_et"
@@ -57,7 +58,9 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="vartotojas3" />
+                android:text="@string/usernamePlaceholder"
+                android:autofillHints=""
+                tools:ignore="LabelFor" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,8 +73,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingLeft="30dp"
-                android:text="Slaptažodis" />
+                android:paddingStart="30dp"
+                android:text="@string/password"
+                tools:ignore="RtlSymmetry" />
 
             <EditText
                 android:id="@+id/password_et"
@@ -80,7 +84,9 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPassword"
-                android:text="123456aZ*" />
+                android:text="@string/passwordPlaceholder"
+                android:autofillHints=""
+                tools:ignore="LabelFor" />
 
         </LinearLayout>
 
@@ -97,7 +103,7 @@
                 android:background="@drawable/roundcorner"
                 android:gravity="center"
                 android:onClick="checkUser"
-                android:text="Prisijungti"
+                android:text="@string/toLogin"
                 android:textAlignment="center"
                 android:textSize="18sp" />
 
@@ -117,7 +123,7 @@
                 android:background="@drawable/roundcorner"
                 android:gravity="center"
                 android:onClick="openRegisterActivity"
-                android:text="Užsiregistruoti"
+                android:text="@string/toRegister"
                 android:textAlignment="center"
                 android:textSize="18sp" />
         </LinearLayout>

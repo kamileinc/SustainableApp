@@ -1,33 +1,24 @@
 package com.example.sustainableapp.controllers;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
-import android.graphics.Bitmap;
-import android.util.Log;
-
 import com.example.sustainableapp.models.Database;
-import com.example.sustainableapp.models.EnergyAction;
 import com.example.sustainableapp.models.SustainableAction;
-import com.example.sustainableapp.views.EditProfileFragment;
 import com.example.sustainableapp.views.EnergyActionFragment;
 import com.example.sustainableapp.views.FoodActionFragment;
 import com.example.sustainableapp.views.MyResultsFragment;
-import com.example.sustainableapp.views.ProfileFragment;
 import com.example.sustainableapp.views.TasksFragment;
 import com.example.sustainableapp.views.TransportActionFragment;
 import com.example.sustainableapp.views.UserActivity;
 import com.example.sustainableapp.views.WheelFragment;
-
-import java.io.StringBufferInputStream;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 public class SustainableActionController extends Application {
     public SustainableAction addNewCategory(String userID, String newCategory) {
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
         Date dateBegin = new Date(System.currentTimeMillis());
         Calendar c = Calendar.getInstance();
         String beginDateStr = formatter.format(dateBegin);
@@ -44,53 +35,57 @@ public class SustainableActionController extends Application {
         db.getUsersSustainableActions(userID, purpose);
     }
     public static void checkUsersSAFound(ArrayList<SustainableAction> sa, String purpose) {
-        if (purpose.equals("TasksFragment")) {
-            TasksFragment.checkUsersSAFound(sa);
-        }
-        else if (purpose.equals("WheelFragment")) {
-            WheelFragment.checkUsersSAFound(sa);
-        }
-        else if (purpose.equals("EnergyActionFragment")) {
-            EnergyActionFragment.checkUsersSAFound(sa);
-        }
-        else if (purpose.equals("TransportActionFragment")) {
-            TransportActionFragment.checkUsersSAFound(sa);
-        }
-        else if (purpose.equals("FoodActionFragment")) {
-            FoodActionFragment.checkUsersSAFound(sa);
-        }
-        else if (purpose.equals("UserActivity")) {
-            UserActivity.checkUsersSAFound(sa);
-        }
-        else if (purpose.equals("MyResultsFragment")) {
-            MyResultsFragment.checkUsersSAFound(sa);
+        switch (purpose) {
+            case "TasksFragment":
+                TasksFragment.checkUsersSAFound(sa);
+                break;
+            case "WheelFragment":
+                WheelFragment.checkUsersSAFound(sa);
+                break;
+            case "EnergyActionFragment":
+                EnergyActionFragment.checkUsersSAFound(sa);
+                break;
+            case "TransportActionFragment":
+                TransportActionFragment.checkUsersSAFound(sa);
+                break;
+            case "FoodActionFragment":
+                FoodActionFragment.checkUsersSAFound(sa);
+                break;
+            case "UserActivity":
+                UserActivity.checkUsersSAFound(sa);
+                break;
+            case "MyResultsFragment":
+                MyResultsFragment.checkUsersSAFound(sa);
+                break;
         }
     }
     public static void checkUsersSANotFound(ArrayList<SustainableAction> sa, String purpose) {
-        if (purpose.equals("TasksFragment")) {
-            TasksFragment.checkUsersSANotFound(sa);
-        }
-        else if (purpose.equals("WheelFragment")) {
-            WheelFragment.checkUsersSANotFound(sa);
-        }
-        else if (purpose.equals("EnergyActionFragment")) {
-            EnergyActionFragment.checkUsersSANotFound(sa);
-        }
-        else if (purpose.equals("TransportActionFragment")) {
-            TransportActionFragment.checkUsersSANotFound(sa);
-        }
-        else if (purpose.equals("FoodActionFragment")) {
-            FoodActionFragment.checkUsersSANotFound(sa);
-        }
-        else if (purpose.equals("UserActivity")) {
-            UserActivity.checkUsersSANotFound(sa);
-        }
-        else if (purpose.equals("MyResultsFragment")) {
-            MyResultsFragment.checkUsersSANotFound(sa);
+        switch (purpose) {
+            case "TasksFragment":
+                TasksFragment.checkUsersSANotFound(sa);
+                break;
+            case "WheelFragment":
+                WheelFragment.checkUsersSANotFound(sa);
+                break;
+            case "EnergyActionFragment":
+                EnergyActionFragment.checkUsersSANotFound(sa);
+                break;
+            case "TransportActionFragment":
+                TransportActionFragment.checkUsersSANotFound(sa);
+                break;
+            case "FoodActionFragment":
+                FoodActionFragment.checkUsersSANotFound(sa);
+                break;
+            case "UserActivity":
+                UserActivity.checkUsersSANotFound(sa);
+                break;
+            case "MyResultsFragment":
+                MyResultsFragment.checkUsersSANotFound(sa);
+                break;
         }
     }
     public boolean isTodayInDates(String beginDate, String endDate) {
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
         Date today = new Date(System.currentTimeMillis());
         Date dateBegin = new Date();
         Date dateEnd = new Date();
@@ -101,20 +96,10 @@ public class SustainableActionController extends Application {
         catch(Exception e) {
             e.getStackTrace();
         }
-        Log.i("mano", "today: " + today.toString());
-        Log.i("mano", "dateBegin: " + dateBegin.toString());
-        Log.i("mano", "dateEng: " + dateEnd.toString());
-        if((today.after(dateBegin) && today.before(dateEnd)) || today.equals(dateBegin) || today.equals(dateEnd)) {
-            // In between
-            return true;
-        }
-        else {
-            return false;
-        }
+        return (today.after(dateBegin) && today.before(dateEnd)) || today.equals(dateBegin) || today.equals(dateEnd);
     }
     public boolean isDateInDates(Date date, String beginDate, String endDate) {
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
-        //Date today = new Date(System.currentTimeMillis());
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
         Date dateBegin = new Date();
         Date dateEnd = new Date();
         String dateStr = formatter.format(date);
@@ -126,18 +111,6 @@ public class SustainableActionController extends Application {
         catch(Exception e) {
             e.getStackTrace();
         }
-        Log.i("mano", "date: " + date.toString());
-        Log.i("mano", "dateBegin: " + dateBegin.toString());
-        Log.i("mano", "dateEng: " + dateEnd.toString());
-        if((date.after(dateBegin) && date.before(dateEnd)) || date.equals(dateBegin) || date.equals(dateEnd)) {
-            // In between
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    public void checkForBadges() {
-
+        return (date.after(dateBegin) && date.before(dateEnd)) || date.equals(dateBegin) || date.equals(dateEnd);
     }
 }

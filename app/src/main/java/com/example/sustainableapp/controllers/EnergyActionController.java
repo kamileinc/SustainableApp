@@ -1,25 +1,15 @@
 package com.example.sustainableapp.controllers;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
-import android.os.Handler;
-import android.provider.ContactsContract;
-import android.util.Log;
-import android.view.View;
-
 import com.example.sustainableapp.models.Database;
 import com.example.sustainableapp.models.EnergyAction;
-import com.example.sustainableapp.models.FoodAction;
 import com.example.sustainableapp.models.SustainableAction;
 import com.example.sustainableapp.models.TransportAction;
 import com.example.sustainableapp.models.User;
 import com.example.sustainableapp.views.AllResultsFragment;
-import com.example.sustainableapp.views.EditProfileFragment;
 import com.example.sustainableapp.views.EnergyActionFragment;
-import com.example.sustainableapp.views.LoginActivity;
 import com.example.sustainableapp.views.MyResultsFragment;
-import com.example.sustainableapp.views.ProfileFragment;
-import com.example.sustainableapp.views.RegisterActivity;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,15 +27,12 @@ public class EnergyActionController extends Application {
         EnergyActionFragment.checkBadge0Edited();
     }
     public void addEnergyActionsToDB(SustainableAction sa) {
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(System.currentTimeMillis());
         Calendar c = Calendar.getInstance();
-        String dateStr = formatter.format(date);
         c.setTime(date);
-        ArrayList<EnergyAction> eaList = new ArrayList<>();
         Database db = new Database();
         for (int i= 0; i< 7;i++) {
-
             String date2 = formatter.format(c.getTime());
             EnergyAction ea = new EnergyAction(sa.getId(), sa.getCategory(),sa.getUserID(), sa.getDateBegin(), sa.getDateEnd(), date2, false, false, "0:0", false, 0);
             db.saveEA(ea);
@@ -57,18 +44,13 @@ public class EnergyActionController extends Application {
         db.editEA(ea);
     }
     public List<String> validateEA(EnergyAction ea) {
-        ArrayList<String> errors = new ArrayList();
-        //jei shower checked min ir s negali but 0
-        //devices nuo 0 iki 100
-        //s nuo 0 iki 60
+        ArrayList<String> errors = new ArrayList<>();
         errors.add(validateShowerMin(ea.isShower(), ea.getShowerTime()));
         errors.add(validateShowerS(ea.isShower(), ea.getShowerTime()));
         errors.add(validateDevices(ea.getDevicesOff()));
-
         return errors;
     }
     private String validateDevices(int s) {
-
         if (s > 100 || s < 0) {
             return "Skaičius negali būti mažesnis nei 0 ar didesnis nei 100";
         }
@@ -77,13 +59,9 @@ public class EnergyActionController extends Application {
         }
     }
     private String validateShowerMin(boolean boo, String showerTime) {
-        if (boo == true) {
+        if (boo) {
             String[] sArr = showerTime.split(":", 5);
-            Log.i("mano", "showertime: " + showerTime);
             int m1 = Integer.parseInt(sArr[0]);
-            int s1 = Integer.parseInt(sArr[1]);
-
-            Log.i("laikas", "m1 = " + m1 + ", s1 = " + s1);
             if (m1 == 0) {
                 return "Laikas negali būt lygus 0";
             }
@@ -92,47 +70,31 @@ public class EnergyActionController extends Application {
             }
         }
             return "";
-
     }
     private String validateShowerS(boolean boo, String showerTime) {
-        if (boo == true) {
+        if (boo) {
             String[] sArr = showerTime.split(":", 5);
-            int m1 = Integer.parseInt(sArr[0]);
             int s1 = Integer.parseInt(sArr[1]);
-            Log.i("laikas", "m1 = " + m1 + ", s1 = " + s1);
             if (s1 < 0 || s1 > 59) {
                 return "Laikas negali būt mažiau nei 0 ar daugiau nei 59";
             }
         }
         return "";
-
     }
-    public boolean getEAForMyResults(String userID, String purpose) {
+    public void getEAForMyResults(String userID, String purpose) {
         Database db = new Database();
         db.getEADataForMyResults(userID, purpose);
-        return true;
     }
-    public boolean getEAForEAFragment(String userId, String purpose) {
+    public void getEAForEAFragment(String userId, String purpose) {
         Database db = new Database();
-
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(System.currentTimeMillis());
         String dateStr = formatter.format(date);
         final String id = userId + dateStr;
-        Log.i("mano", "EA ID: "+ id);
         db.getEADataForEAFragment(id, purpose);
-        return true;
-
-
     }
-    public static void checkEANotFound(List<EnergyAction> list, String userID,  String purpose) {
-        if (purpose.equals("EnergyActionFragment")) {
-            EnergyActionFragment.checkEANotFound(list);
-        }
-        else if (purpose.equals("MyResultsFragment")) {
-            MyResultsFragment.checkEANotFound(list);
-        }
-        else if (purpose.equals("AllEA")) {
+    public static void checkEANotFound(String userID,  String purpose) {
+        if (purpose.equals("AllEA")) {
             double points = 0;
             MyResultsFragment.checkEAPoints(points);
         }
@@ -140,165 +102,114 @@ public class EnergyActionController extends Application {
             double points = 0;
             AllResultsFragment.checkEAPointsForUser(points, userID);
         }
-
     }
     public static void checkEAFound(List<EnergyAction> list, String userID, String purpose) {
-        if (purpose.equals("EnergyActionFragment")) {
-            EnergyActionFragment.checkEAFound(list);
-        }
-        else if (purpose.equals("MyResultsFragment")) {
-            MyResultsFragment.checkEAFound(list);
-        }
-        else if (purpose.equals("AllEA")) {
-            double points = 0;
-            points = sumAllEAPoints( list);
-            MyResultsFragment.checkEAPoints(points);
-        }
-        else if (purpose.equals("AllResults")) {
-            double points = 0;
-            points = sumAllEAPoints( list);
-            AllResultsFragment.checkEAPointsForUser(points, userID);
+        switch (purpose) {
+            case "EnergyActionFragment":
+                EnergyActionFragment.checkEAFound(list);
+                break;
+            case "MyResultsFragment":
+                MyResultsFragment.checkEAFound(list);
+                break;
+            case "AllEA": {
+                double points;
+                points = sumAllEAPoints(list);
+                MyResultsFragment.checkEAPoints(points);
+                break;
+            }
+            case "AllResults": {
+                double points;
+                points = sumAllEAPoints(list);
+                AllResultsFragment.checkEAPointsForUser(points, userID);
+                break;
+            }
         }
     }
     public void getAllEnergyPoints(String userID, String purpose) {
         Database db = new Database();
         db.getAllEA(userID, purpose);
     }
-    public static double sumAllEAPoints(List<EnergyAction> eaList) {
-        double points = 0;
-        if (eaList != null) {
-
-
-            for (int i = 0; i<eaList.size();i++) {
-                double temp = 0;
-
-                    if (eaList.get(i).isNoWater()) {
-                        temp = temp + 10;
-                    }
-                    else if (eaList.get(i).isShower() && !eaList.get(i).isBath()) {
-                        String[] sArr = eaList.get(i).getShowerTime().split(":", 5);
-                        int m1 = Integer.parseInt(sArr[0]);
-                        if (m1<5) {
-                            temp = temp + 7.5;
-                        }
-                        else if (m1>=5 && m1<10) {
-                            temp = temp + 5;
-                        }
-                        else if (m1>10) {
-                            temp = temp + 2.5;
-                        }
-                    }
-                    else if (!eaList.get(i).isShower() && eaList.get(i).isBath()) {
-                        temp = temp + 2.5;
-                    }
-                    else if (eaList.get(i).isShower() && eaList.get(i).isBath()) {
-                        temp = temp + 1;
-                    }
-                    int devicesOff = eaList.get(i).getDevicesOff();
-                    if (devicesOff > 0 && devicesOff <= 5) {
-                        temp = temp + 5;
-                    }
-                    else if (devicesOff > 5 && devicesOff <= 9) {
+    public static double getPoints(EnergyAction ea) {
+        double temp = 0;
+        if (ea != null) {
+                if (ea.isNoWater()) {
+                    temp = temp + 10;
+                }
+                else if (ea.isShower() && !ea.isBath()) {
+                    String[] sArr = ea.getShowerTime().split(":", 5);
+                    int m1 = Integer.parseInt(sArr[0]);
+                    if (m1<5) {
                         temp = temp + 7.5;
                     }
-                    else if (devicesOff >=10) {
-                        temp = temp + 10;
+                    else if (m1>=5 && m1<10) {
+                        temp = temp + 5;
                     }
-                    //////////////////////////////////
-                    if (temp != 0) {
-                        temp = temp / 2;
+                    else if (m1>10) {
+                        temp = temp + 2.5;
                     }
-                    points = points + temp;
+                }
+                else if (!ea.isShower() && ea.isBath()) {
+                    temp = temp + 2.5;
+                }
+                else if (ea.isShower() && ea.isBath()) {
+                    temp = temp + 1;
+                }
+                int devicesOff = ea.getDevicesOff();
+                if (devicesOff > 0 && devicesOff <= 5) {
+                    temp = temp + 5;
+                }
+                else if (devicesOff > 5 && devicesOff <= 9) {
+                    temp = temp + 7.5;
+                }
+                else if (devicesOff >=10) {
+                    temp = temp + 10;
+                }
+                if (temp != 0) {
+                    temp = temp / 2;
+                }
             }
+        return temp;
+    }
+    public static double sumAllEAPoints(List<EnergyAction> eaList) {
+        double points = 0;
+        for (int i = 0; i<eaList.size();i++) {
+            points = points + getPoints(eaList.get(i));
         }
         return points;
     }
     public void checkForBadge3(EnergyAction ea, User u) {
-        double temp = 0;
-        double points = 0;
-        if (ea.isNoWater()) {
-            temp = temp + 10;
-        }
-        else if (ea.isShower() && !ea.isBath()) {
-            String[] sArr = ea.getShowerTime().split(":", 5);
-            int m1 = Integer.parseInt(sArr[0]);
-            if (m1<5) {
-                temp = temp + 7.5;
-            }
-            else if (m1>=5 && m1<10) {
-                temp = temp + 5;
-            }
-            else if (m1>10) {
-                temp = temp + 2.5;
-            }
-        }
-        else if (!ea.isShower() && ea.isBath()) {
-            temp = temp + 2.5;
-        }
-        else if (ea.isShower() && ea.isBath()) {
-            temp = temp + 1;
-        }
-        int devicesOff = ea.getDevicesOff();
-        if (devicesOff > 0 && devicesOff <= 5) {
-            temp = temp + 5;
-        }
-        else if (devicesOff > 5 && devicesOff <= 9) {
-            temp = temp + 7.5;
-        }
-        else if (devicesOff >=10) {
-            temp = temp + 10;
-        }
-        //////////////////////////////////
-        if (temp != 0) {
-            temp = temp / 2;
-        }
-        points = points + temp;
-        //check if user has badge0
-        if (u.getBadges().get(0)==false) {
-            //if user does not have badge0
-            //give badge0
+        if (!u.getBadges().get(0)) {
             Database db = new Database();
             db.editBadge0(u, "EAController");
         }
-        if (points == 10) {
-
-            //check if user has badge3
-            if (u.getBadges().get(3)==false) {
-                //if user does not have badge3
-                //give badge3
+        if (getPoints(ea) == 10) {
+            if (!u.getBadges().get(3)) {
                 Database db = new Database();
                 db.editBadge3(u);
             }
-
-
         }
     }
     public static ArrayList<Double> EAPointsForGraph(List<EnergyAction> EAData) {
-        ArrayList<Double> arr = new ArrayList<Double>();
-        //int numberOfActivity = 0;
+        ArrayList<Double> arr = new ArrayList<>();
         Date today = new Date(System.currentTimeMillis());
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
         String todayStr = formatter.format(today);
         Date dateToCheck = new Date();
-
         for (int i = 0; i<EAData.size();i++) {
             double temp = 0;
             SustainableActionController sac = new SustainableActionController();
             try {
                 dateToCheck = formatter.parse(EAData.get(i).getDate());
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
             if (sac.isDateInDates(dateToCheck, EAData.get(0).getDate(), todayStr)) {
-               // numberOfActivity++;
-
                 if (EAData.get(i).isNoWater()) {
                     temp = temp + 10;
                 }
                 else if (EAData.get(i).isShower() && !EAData.get(i).isBath()) {
                     String[] sArr = EAData.get(i).getShowerTime().split(":", 5);
                     int m1 = Integer.parseInt(sArr[0]);
-                    //int s1 = Integer.parseInt(sArr[1]);
                     if (m1<5) {
                         temp = temp + 7.5;
                     }
@@ -325,7 +236,6 @@ public class EnergyActionController extends Application {
                 else if (devicesOff >10) {
                     temp = temp + 10;
                 }
-                //////////////////////////////////
                 if (temp != 0) {
                     temp = temp / 2;
                 }

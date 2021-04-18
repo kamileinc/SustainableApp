@@ -13,13 +13,15 @@
         android:fillViewport="true"
         android:scrollbars="vertical"
         android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        tools:ignore="UselessParent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp">
+        android:layout_marginLeft="30dp"
+        tools:ignore="ScrollViewSize">
 
         <TextView
             android:id="@+id/textView"
@@ -29,7 +31,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Profilio informacija"
+            android:text="@string/profileInformation"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="30sp" />
@@ -50,9 +52,10 @@
                     android:id="@+id/textView25"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.001"
                     android:paddingStart="30dp"
-                    android:text="Nuotrauka" />
+                    android:text="@string/photo"
+                    tools:ignore="RtlSymmetry" />
 
                 <ImageView
                     android:id="@+id/photo_iv"
@@ -60,13 +63,15 @@
                     android:layout_height="300px"
                     android:layout_weight="1"
                     android:src="@android:drawable/gallery_thumb"
-                    app:srcCompat="@drawable/ic_launcher_background" />
+                    app:srcCompat="@drawable/ic_launcher_background"
+                    tools:ignore="ContentDescription,PxUsage" />
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="225px"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="5"
+                    tools:ignore="PxUsage" />
 
             </TableRow>
             <TableRow
@@ -78,15 +83,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="30dp"
-                    android:text="Vardas" />
+                    android:paddingStart="30dp"
+                    android:text="@string/firstName"
+                    tools:ignore="RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/firstName_et"
                     android:layout_width="181dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="textPersonName" />
+                     />
             </TableRow>
 
             <TableRow
@@ -98,15 +104,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="30dp"
-                    android:text="Pavardė" />
+                    android:paddingStart="30dp"
+                    android:text="@string/lastName"
+                    tools:ignore="RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/lastName_et"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="textPersonName" />
+                     />
             </TableRow>
 
             <TableRow
@@ -118,15 +125,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="30dp"
-                    android:text="Vartotojo vardas" />
+                    android:paddingStart="30dp"
+                    android:text="@string/username"
+                    tools:ignore="RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/username_et"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="textPersonName" />
+                     />
             </TableRow>
 
 
@@ -139,8 +147,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="30dp"
-                    android:text="Pusryčių laikas" />
+                    android:paddingStart="30dp"
+                    android:text="@string/breakfastTime"
+                    tools:ignore="RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/breakfast_et"
@@ -158,8 +167,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="30dp"
-                    android:text="Pietų laikas" />
+                    android:paddingStart="30dp"
+                    android:text="@string/lunchTime"
+                    tools:ignore="RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/lunch_et"
@@ -177,8 +187,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="30dp"
-                    android:text="Vakarienės laikas" />
+                    android:paddingStart="30dp"
+                    android:text="@string/dinnerTime"
+                    tools:ignore="RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/dinner_et"
@@ -196,8 +207,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="30dp"
-                    android:text="Atsibudimo laikas" />
+                    android:paddingStart="30dp"
+                    android:text="@string/wakingUpTime"
+                    tools:ignore="RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/wakingUpTime_et"
@@ -215,8 +227,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="30dp"
-                    android:text="Miego laikas" />
+                    android:paddingStart="30dp"
+                    android:text="@string/sleepingTime"
+                    tools:ignore="RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/sleepingTime_et"
@@ -239,7 +252,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcorner"
-                    android:text="Keisti"
+                    android:text="@string/change"
                     android:textSize="18sp" />
 
             </TableRow>

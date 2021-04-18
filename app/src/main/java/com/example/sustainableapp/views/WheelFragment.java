@@ -1,31 +1,24 @@
 package com.example.sustainableapp.views;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
-
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.sustainableapp.R;
 import com.example.sustainableapp.controllers.EnergyActionController;
 import com.example.sustainableapp.controllers.FoodActionController;
 import com.example.sustainableapp.controllers.SustainableActionController;
 import com.example.sustainableapp.controllers.TransportActionController;
-import com.example.sustainableapp.controllers.UserController;
 import com.example.sustainableapp.models.BooVariable;
 import com.example.sustainableapp.models.SustainableAction;
 
@@ -38,67 +31,44 @@ public class WheelFragment extends Fragment {
     static ArrayList<SustainableAction> saList = new ArrayList<>();
     private static BooVariable saListReturned;
     public WheelFragment() {
-        // Required empty public constructor
     }
-
-    public static WheelFragment newInstance(String param1, String param2) {
+    public static WheelFragment newInstance() {
         WheelFragment fragment = new WheelFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             userID = bundle.getString("userID", "0");
-            Log.i("mano", "user id: " + userID);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wheel, container, false);
         getUsersSustainableActions();
-        Button wheel_b = (Button) view.findViewById(R.id.wheel_b);
-        wheel_b.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                selectCategory(saList);
-            }
-        });
+        Button wheel_b = view.findViewById(R.id.wheel_b);
+        wheel_b.setOnClickListener(v -> selectCategory(saList));
         saListReturned = new BooVariable();
-        saListReturned.setListener(new BooVariable.ChangeListener() {
-            @Override
-            public void onChange() {
-                if (saListReturned.isBoo()) {
-                    Log.i("mano", "sa kiekis: " + saList.size() + "OBJ: " + saList.get(0));
-
-                    //jei data atitinka dabartine, rodyt faktus
-                    String beginDate = saList.get((saList.size()-1)).getDateBegin();
-                    String endDate = saList.get((saList.size()-1)).getDateEnd();
-                    SustainableActionController sac = new SustainableActionController();
-                    if (sac.isTodayInDates(beginDate, endDate)) {
-                        //siandiena ieina i tas dienas
-                        category = saList.get((saList.size()-1)).getCategory();
-                        Log.i("mano", "YES, DATA IEINA");
-                        openFactFragment(view);
-                    }
-                    else {
-                        Log.i("mano", "DATA neIEINA");
-                        setVisibilityWheelItems();
-                    }
-                    //kitu atveju leist sukt.
+        saListReturned.setListener(() -> {
+            if (saListReturned.isBoo()) {
+                String beginDate = saList.get((saList.size()-1)).getDateBegin();
+                String endDate = saList.get((saList.size()-1)).getDateEnd();
+                SustainableActionController sac = new SustainableActionController();
+                if (sac.isTodayInDates(beginDate, endDate)) {
+                    category = saList.get((saList.size()-1)).getCategory();
+                    openFactFragment();
                 }
                 else {
-                    Log.i("mano", "DEJA: " + saList.size());
                     setVisibilityWheelItems();
                 }
+            }
+            else {
+                setVisibilityWheelItems();
             }
         });
         return view;
@@ -115,8 +85,8 @@ public class WheelFragment extends Fragment {
         wheel_b.setVisibility(View.INVISIBLE);
         explain_tv.setVisibility(View.INVISIBLE);
     }
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        wheel_iv = getView().findViewById(R.id.wheel_iv);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        wheel_iv = Objects.requireNonNull(getView()).findViewById(R.id.wheel_iv);
         wheel_tv = getView().findViewById(R.id.wheel_tv);
         wheel_b = getView().findViewById(R.id.wheel_b);
         explain_tv = getView().findViewById(R.id.explain_tv);
@@ -134,10 +104,9 @@ public class WheelFragment extends Fragment {
         categories.add("Food");
         categories.add("Energy");
 
-        int pickedCategory = -1;
+        int pickedCategory;
         String newCategory = "";
         Random rand = new Random();
-        //if hasn't have any, random number from 3
         if (categoriesFromDB.size() == 0) {
             pickedCategory = rand.nextInt(3);
             if (pickedCategory == 0) {
@@ -171,7 +140,6 @@ public class WheelFragment extends Fragment {
             }
         }
         else if (categoriesFromDB.size() == 2) {
-            Log.i("random", "array size 2");
             for (int j = 0; j < categoriesFromDB.size(); j++) {
 
                 if (categoriesFromDB.get(j).getCategory().equals(categories.get(0))) {
@@ -197,7 +165,6 @@ public class WheelFragment extends Fragment {
             newCategory = categories.get(0);
         }
         else {
-            Log.i("random", "array size > 2");
             newCategory = categoriesFromDB.get(categoriesFromDB.size()-3).getCategory();
         }
         SustainableActionController sac = new SustainableActionController();
@@ -214,34 +181,36 @@ public class WheelFragment extends Fragment {
             FoodActionController fac = new FoodActionController();
             fac.addFoodActionsToDB(sa);
         }
-        Log.i("random", "išrinkta kategorija: " + newCategory);
         getUsersSustainableActions();
     }
     public static void checkUsersSAFound(ArrayList<SustainableAction> sa) {
-        Log.i("mano", "radom:" + sa.size());
         saList = sa;
         saListReturned.setBoo(true);
         saListReturned.getListener().onChange();
 
     }
     public static void checkUsersSANotFound(ArrayList<SustainableAction> sa) {
-        Log.i("mano", "neradom:" + sa.size());
         saList = sa;
         saListReturned.setBoo(false);
         saListReturned.getListener().onChange();
-
     }
-    public void openFactFragment(View view) {
+    public void openFactFragment() {
 
         androidx.fragment.app.FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = null;
+        if (fragmentManager != null) {
+            fragmentTransaction = fragmentManager.beginTransaction();
+        }
         FactFragment fragment = new FactFragment();
         Bundle bundle = new Bundle();
         bundle.putString("userID", userID);
         bundle.putString("category", category);
         fragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.container, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        if (fragmentTransaction != null) {
+            fragmentTransaction.replace(R.id.container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+
     }
 }

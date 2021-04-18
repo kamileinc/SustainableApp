@@ -1,5 +1,7 @@
 package com.example.sustainableapp.models;
 
+import androidx.annotation.NonNull;
+
 public class TransportAction extends SustainableAction{
     private String taID;
     private String date;
@@ -52,6 +54,7 @@ public class TransportAction extends SustainableAction{
         this.carPassengers = getCarPassengers;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "TransportAction{" +
@@ -70,110 +73,46 @@ public class TransportAction extends SustainableAction{
                 ", carPassengers='" + carPassengers + '\'' +
                 '}';
     }
-
     public String getTaID() {
         return taID;
     }
-
-    public void setTaID(String taID) {
-        this.taID = taID;
-    }
-
     public String getDate() {
         return date;
     }
-
     public void setDate(String date) {
         this.date = date;
     }
-
     public boolean isNoTravelling() {
         return noTravelling;
     }
-
-    public void setNoTravelling(boolean noTravelling) {
-        this.noTravelling = noTravelling;
-    }
-
     public boolean isWalking() {
         return walking;
     }
-
-    public void setWalking(boolean walking) {
-        this.walking = walking;
-    }
-
-
     public boolean isBicycle() {
         return bicycle;
     }
-
-    public void setBicycle(boolean bicycle) {
-        this.bicycle = bicycle;
-    }
-
-
     public boolean isPublicTransport() {
         return publicTransport;
     }
-
-    public void setPublicTransport(boolean publicTransport) {
-        this.publicTransport = publicTransport;
-    }
-
     public boolean isCar() {
         return car;
     }
-
-    public void setCar(boolean car) {
-        this.car = car;
-    }
-
     public int getWalkingKM() {
         return walkingKM;
     }
-
-    public void setWalkingKM(int walkingKM) {
-        this.walkingKM = walkingKM;
-    }
-
     public int getBicycleKM() {
         return bicycleKM;
     }
-
-    public void setBicycleKM(int bicycleKM) {
-        this.bicycleKM = bicycleKM;
-    }
-
     public int getPublicTransportKM() {
         return publicTransportKM;
     }
-
-    public void setPublicTransportKM(int publicTransportKM) {
-        this.publicTransportKM = publicTransportKM;
-    }
-
     public int getCarKM() {
         return carKM;
     }
-
-    public void setCarKM(int carKM) {
-        this.carKM = carKM;
-    }
-
     public int getCarPassengersKM() {
         return carPassengersKM;
     }
-
-    public void setCarPassengersKM(int carPassengersKM) {
-        this.carPassengersKM = carPassengersKM;
-    }
-
     public int getCarPassengers() {
         return carPassengers;
-    }
-
-    public void setCarPassengers(int carPassengers) {
-        this.carPassengers = carPassengers;
     }
 }

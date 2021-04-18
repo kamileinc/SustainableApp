@@ -17,18 +17,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:fillViewport="true"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        tools:ignore="UselessParent">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".views.FoodActionFragment">
+        tools:context=".views.FoodActionFragment"
+        tools:ignore="ScrollViewSize">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="50dp">
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="50dp">
 
         <TextView
             android:id="@+id/textView"
@@ -38,7 +40,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mitybos užduotys"
+            android:text="@string/foodAction"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="30sp" />
@@ -47,13 +49,14 @@
             android:id="@+id/imageView3"
             android:layout_width="match_parent"
             android:layout_height="69dp"
-            android:src="@drawable/morka" />
+            android:src="@drawable/morka"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/textView32"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pusryčiams valgiau:"
+            android:text="@string/forBreakfastIAte"
             android:textColor="@color/black" />
 
         <TableLayout
@@ -73,25 +76,25 @@
                         android:id="@+id/breakfastVegan_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🌿🌿🌿🌿Veganiškai (jokios mėsos, žuvies, pieno produktų ir kiaušinių)" />
+                        android:text="@string/vegan" />
 
                     <RadioButton
                         android:id="@+id/breakfastVegetarian_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🌿🌿🌿Vegetariškai (jokios mėsos ir žuvies)" />
+                        android:text="@string/vegetarian" />
 
                     <RadioButton
                         android:id="@+id/breakfastLowImpactMeat_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🌿🌿Mažiau taršos išskiriančios mėsos: vištiena, kiauliena, kalakutiena, žuvis" />
+                        android:text="@string/meatWithLessCO2"/>
 
                     <RadioButton
                         android:id="@+id/breakfastHighImpactMeat_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🌿Daugiau taršos išskiriančios mėsos: jautine, ėriena, aviena, krevetės" />
+                        android:text="@string/meat" />
                 </RadioGroup>
             </TableRow>
 
@@ -106,7 +109,7 @@
             android:id="@+id/textView33"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pietums valgiau:"
+            android:text="@string/forLunchIAte"
             android:textColor="@color/black" />
 
         <TableLayout
@@ -125,25 +128,25 @@
                         android:id="@+id/lunchVegan_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🌿🌿🌿🌿Veganiškai (jokios mėsos, žuvies, pieno produktų ir kiaušinių)" />
+                        android:text="@string/vegan" />
 
                     <RadioButton
                         android:id="@+id/lunchVegetarian_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🌿🌿🌿Vegetariškai (jokios mėsos ir žuvies)" />
+                        android:text="@string/vegetarian" />
 
                     <RadioButton
                         android:id="@+id/lunchLowImpactMeat_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🌿🌿Mažiau taršos išskiriančios mėsos: vištiena, kiauliena, kalakutiena, žuvis" />
+                        android:text="@string/meatWithLessCO2" />
 
                     <RadioButton
                         android:id="@+id/lunchHighImpactMeat_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🌿Daugiau taršos išskiriančios mėsos: jautine, ėriena, aviena, krevetės" />
+                        android:text="@string/meat" />
                 </RadioGroup>
             </TableRow>
 
@@ -158,7 +161,7 @@
             android:id="@+id/textView34"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Vakarienei valgiau:"
+            android:text="@string/forDinnerIAte"
             android:textColor="@color/black" />
 
         <TableLayout
@@ -177,25 +180,25 @@
                         android:id="@+id/dinnerVegan_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🌿🌿🌿🌿Veganiškai (jokios mėsos, žuvies, pieno produktų ir kiaušinių)" />
+                        android:text="@string/vegan"/>
 
                     <RadioButton
                         android:id="@+id/dinnerVegetarian_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🌿🌿🌿Vegetariškai (jokios mėsos ir žuvies)" />
+                        android:text="@string/vegetarian" />
 
                     <RadioButton
                         android:id="@+id/dinnerLowImpactMeat_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🌿🌿Mažiau taršos išskiriančios mėsos: vištiena, kiauliena, kalakutiena, žuvis" />
+                        android:text="@string/meatWithLessCO2" />
 
                     <RadioButton
                         android:id="@+id/dinnerHighImpactMeat_rb"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🌿Daugiau taršos išskiriančios mėsos: jautine, ėriena, aviena, krevetės" />
+                        android:text="@string/meat"/>
                 </RadioGroup>
             </TableRow>
 
@@ -204,14 +207,14 @@
             android:id="@+id/textView19"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="____________ \n Kuo daugiau 🌿 turi veikla, tuo ji tvaresnė. \n"
+            android:text="@string/leafExplanation"
             android:textColor="@color/black" />
         <Button
             android:id="@+id/saveFA_b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/roundcorner"
-            android:text="Saugoti" />
+            android:text="@string/save"/>
 
 
     </LinearLayout>

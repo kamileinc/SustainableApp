@@ -1,5 +1,7 @@
 package com.example.sustainableapp.models;
 
+import androidx.annotation.NonNull;
+
 public class SustainableAction {
     private String id;
     private String category;
@@ -26,6 +28,7 @@ public class SustainableAction {
         this.dateEnd = dateEnd;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SustainableAction{" +
@@ -36,44 +39,28 @@ public class SustainableAction {
                 ", dateEnd='" + dateEnd + '\'' +
                 '}';
     }
-
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
-
     public String getCategory() {
         return category;
     }
-
     public void setCategory(String category) {
         this.category = category;
     }
-
     public String getUserID() {
         return userID;
     }
-
     public void setUserID(String userID) {
         this.userID = userID;
     }
-
     public String getDateBegin() {
         return dateBegin;
     }
-
-    public void setDateBegin(String dateBegin) {
-        this.dateBegin = dateBegin;
-    }
-
     public String getDateEnd() {
         return dateEnd;
-    }
-
-    public void setDateEnd(String dateEnd) {
-        this.dateEnd = dateEnd;
     }
 }

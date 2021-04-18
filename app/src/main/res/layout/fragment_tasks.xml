@@ -11,7 +11,8 @@
         android:orientation="vertical"
         android:gravity="center_horizontal"
         android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp">
+        android:layout_marginLeft="30dp"
+        tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/textView"
@@ -22,7 +23,7 @@
             android:id="@+id/title_tv"
             android:layout_width="match_parent"
             android:layout_height="87dp"
-            android:text="Užduotys"
+            android:text="@string/tasks"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="30sp" />
@@ -31,7 +32,7 @@
             android:id="@+id/text_tv"
             android:layout_width="match_parent"
             android:layout_height="62dp"
-            android:text="Savaitės kategorija dar nepasirinkta, norėdami pasirinkti, spauskite mygtuką"
+            android:text="@string/categoryNotChosen"
             android:textAlignment="center"
             android:textColor="@color/black" />
 
@@ -40,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/roundcorner"
-            android:text="Savaitės kategorijos pasirinkimas" />
+            android:text="@string/chooseCategory" />
     </LinearLayout>
 
 </FrameLayout>
